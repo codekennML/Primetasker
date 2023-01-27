@@ -53,9 +53,10 @@ const CustomText = ({
           type={passwordVisible ? "text" : type}
           {...field}
           {...props}
+          // onBlur={() => console.log("Hi")}
           className={`${invalid ? errorStyle : validStyle} ${
-            imgBfr ? "pl-9" : "pl-2"
-          } ${props.inputstyle} py-2 rounded-lg pr-3  w-full text-xs`}
+            imgBfr ? "pl-7" : "pl-2"
+          } ${props.inputstyle} `}
         />
         {imgAfter ? (
           <button

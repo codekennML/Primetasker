@@ -33,7 +33,7 @@ export const tasksApiCalls = apiSlice.injectEndpoints({
       },
 
       transformResponse: (responseData) => {
-        console.log(responseData);
+        // console.log(responseData);
         const { tasks, meta } = responseData.data;
         const loadedtasks = tasks.map((task) => {
           task.id = task._id;

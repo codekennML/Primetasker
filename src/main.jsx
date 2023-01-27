@@ -5,8 +5,7 @@ import "../src/styles/app.css";
 import { Provider } from "react-redux";
 import { store } from "./app/Store";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import { propertiesApiCalls } from "./features/properties/PropertySlice";
-// import { usersApiCalls } from "./features/users/UserApiSlice";
+import ModalProvider from "./features/modal/ModalProvide";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

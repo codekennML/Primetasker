@@ -1,26 +1,20 @@
-import React, { useEffect } from "react";
-
 import { userTableHeaders } from "../utils/userTableHeaders";
 
 import { useGetUsersQuery } from "../slices/UserApiSlice";
 
-// import { useSelector } from "react-redux";
-
-// import { pageInfo } from "../../pagination/paginate";
-import BasicTable from "../../tables/BasicTable";
+import TableUtilities from "../../tables/TableUtilities";
 import { filterList, sortList } from "../utils/userTableFilterSort";
 
 const usersList = () => {
-  // const pageData = useSelector(pageInfo); //Info of incoming page
-
   return (
-    <div>
-      <BasicTable
-        fetchTableData={useGetUsersQuery}
+    <div className="">
+      <TableUtilities
+        fetchData={useGetUsersQuery}
         headers={userTableHeaders}
         filterList={filterList}
         sortList={sortList}
-        // pageData={pageData}
+        tableTitle={`All Users`}
+        searchTitle={`Search all users`}
       />
     </div>
   );

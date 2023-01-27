@@ -128,7 +128,7 @@ const MultipleFileUpload = ({ name }) => {
       <section
         className={`
 
-h-[230px]
+h-[200px]
  relative border-dashed border-2 border-purple-400 w-full  max-h-full rounded-xl py-4 flex justify-center items-center "`}
         {...getRootProps()}
       >

@@ -32,8 +32,9 @@ const PersistLogin = () => {
           console.error(err);
         }
       };
-
+      console.log(token);
       if (!token && persist) verifyRefreshToken();
+      // console.log("red");
     }
 
     return () => (effectRan.current = true);
@@ -48,7 +49,7 @@ const PersistLogin = () => {
     content = <Outlet />;
   } else if (isLoading) {
     //persist: yes, token: no
-    // console.log('loading')
+
     content = <p>Loading...</p>;
   } else if (isError) {
     //persist: yes, token: no

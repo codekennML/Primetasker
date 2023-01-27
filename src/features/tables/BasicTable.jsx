@@ -19,7 +19,7 @@ import {
 } from "react-icons/hi";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { MdFilterList } from "react-icons/md";
-import { openModal } from "../modal/modalSlice";
+// import { openModal } from "../modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import GeneralModal from "../modal/GeneralModal";
 import EditUser from "../users/pages/EditUser";
@@ -28,7 +28,7 @@ import DeleteUser from "../users/pages/DeleteUser";
 import ModalContent from "../modal/ModalContent";
 import { Formik, Form } from "formik";
 import CustomText from "../../utils/CustomFieldComp/CustomText";
-import { ThreeCircles } from "react-loader-spinner";
+import TableUtilities from "./TableUtilities";
 import { CSVLink } from "react-csv";
 import { Listbox, Transition } from "@headlessui/react";
 import Spinner from "../../utils/Spinner";
@@ -55,27 +55,59 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   );
 });
 
-const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
-  const pageData = useSelector(pageInfo);
-
+const TableData = ({ fetchData, headers, params }) => {
+  const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
-  const [userId, setUserId] = useState();
-  const modalStatus = useSelector((state) => state.modal.openModalStatus);
-  const [sort, setSort] = useState("");
-  const [filter, setFilter] = useState("");
-  const [searchQuery, setSearchQuery] = useState(""); //Search Query for table
+  const {
+    data: tableData,
+    isLoading,
+    isFetching,
+    isSuccess,
+    isError,
+    error,
+  } = fetchData({
+    page: page,
+    ...params,
+  });
+  let tableContent = [];
+  useEffect(() => {
+    if (isSuccess) {
+      const { ids, entities } = tableData;
+      const entitiesMap = ids.map((id) => entities[id]);
+      setData([...entitiesMap]);
+    }
+  }, [tableData]);
 
-  const onSubmit = (values, actions) => {
-    values.searchQuery?.length
-      ? setSearchQuery(values.searchQuery)
-      : setSearchQuery("");
-    actions.resetForm();
-  };
+  return (
+    // <div>Hello World</div>
+    <Table
+      dataForTable={data}
+      headers={headers}
+      setPageIndex={setPage}
+      isLoading={isLoading}
+      isError={isError}
+      isFetching={isFetching}
+      error={error}
+    />
+  );
+};
+
+const Table = ({
+  dataForTable,
+  headers,
+  isLoading,
+  isFetching,
+  isError,
+  error,
+  setPageIndex,
+}) => {
+  const [userId, setUserId] = useState();
+  const pageData = useSelector(pageInfo);
+  const modalStatus = useSelector((state) => state.modal.openModalStatus);
 
   //>>>>>>>>>>>>>>>>>>>> Display the component >>>>>>>>>>>>>>>>>>>>>///
 
   const [clicked, setClicked] = useState({
-    create: false,
     edit: false,
     delete: false,
   });
@@ -87,7 +119,6 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
       ...prev,
       delete: true,
       edit: false,
-      create: false,
     }));
 
     setUserId(id);
@@ -106,17 +137,6 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
     dispatch(openModal());
   };
 
-  const handleCreate = () => {
-    setClicked((prev) => ({
-      ...prev,
-      edit: false,
-      delete: false,
-      create: true,
-    }));
-    setUserId(null);
-    dispatch(openModal());
-  };
-
   let content;
   //EDIT USER ON CLICK
   if (modalStatus && clicked.edit) {
@@ -132,14 +152,6 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
         <DeleteUser userId={userId} />
       </GeneralModal>
     );
-
-    // CREATE USER ON CLICK
-  } else if (modalStatus && clicked.create) {
-    content = (
-      <GeneralModal>
-        <ModalContent />
-      </GeneralModal>
-    );
   } else {
     content = "";
   }
@@ -147,6 +159,7 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
   //Table Data MUST  be an array
 
   const columns = useMemo(() => headers, []);
+  const data = useMemo(() => dataForTable, [dataForTable]);
 
   const tablehooks = (hooks) => {
     hooks.visibleColumns.push((columns) => [
@@ -191,7 +204,19 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
     ]);
   };
 
-  const tableInstance = useTable(
+  const {
+    getTableProps,
+    getTableBodyProps,
+    page,
+    prepareRow,
+    headerGroups,
+    canPreviousPage,
+    canNextPage,
+    pageCount,
+    nextPage,
+    previousPage,
+    state: { pageIndex },
+  } = useTable(
     {
       columns,
       data,
@@ -206,60 +231,19 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
     tablehooks
   );
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    page,
-    prepareRow,
-    headerGroups,
-
-    canPreviousPage,
-    canNextPage,
-
-    pageCount,
-    selectedFlatRows,
-    nextPage,
-    previousPage,
-
-    state: { pageIndex, selectedRowIds },
-  } = tableInstance;
-
-  const {
-    data: tableArray,
-    isLoading,
-    isFetching,
-    isSuccess,
-    isError,
-    error,
-  } = fetchTableData(
-    {
-      sort: sort,
-      page: pageIndex + 1,
-      search: searchQuery,
-      filter: filter,
-    }
-    // { refetchOnMountOrArgChange: true }
-  );
-
-  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Set the Data to be displayed into the tableData Array>>>>>>>//
+  //Create callback for updating page index in getPageData
 
   useEffect(() => {
-    let tableData = [];
+    setPageIndex(pageIndex + 1);
+  }, [pageIndex]);
 
-    if (isSuccess) {
-      const { ids, entities } = tableArray;
-      const entitiesMap = ids.map((id) => entities[id]);
-      tableData = [...entitiesMap];
-    }
-
-    setData([...tableData]);
-  }, [tableArray, pageIndex]);
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Set the Data to be displayed into the tableData Array>>>>>>>//
 
   let tableContent;
 
   if (isLoading || isFetching) {
     tableContent = (
-      <tr className="absolute left-1/2 space-y-4 mt-32">
+      <tr className="absolute left-2/4 space-y-4 mt-32">
         <td>
           <Spinner />
         </td>
@@ -267,12 +251,12 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
     );
   } else if (isError) {
     tableContent = (
-      <tr className="absolute left-1/2 space-y-4 mt-4">
+      <tr className="absolute left-1/3 space-y-4 mt-4">
         <td>
           <p>{error?.data?.message}</p>
           <button
             onClick={() => onSubmit("")}
-            className="mr-4 mt-12 flex values-center bg-indigo-700  py-1.5 px-6 ml-2 text-[15px] font-medium text-white  rounded-lg  hover:bg-indigo-800  focus:outline-none  dark:bg-violet-600 dark:hover:bg-violet-700 dark:text-white"
+            className="mr-4 mt-12 flex values-center bg-indigo-700 text-center  py-1.5 px-6 ml-2 text-[15px] font-medium text-white  rounded-lg  hover:bg-indigo-800  focus:outline-none  dark:bg-violet-600 dark:hover:bg-violet-700 dark:text-white"
           >
             Reset
           </button>
@@ -283,7 +267,12 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
     tableContent = page.map((row, i) => {
       prepareRow(row);
       return (
-        <tr {...row.getRowProps()}>
+        <tr
+          {...row.getRowProps()}
+          className={`${
+            !row.isSelected ? "transparent" : "bg-purple-100"
+          } text-gray-600 hover:bg-purple-50 hover:cursor-pointer  dark:hover:bg-gray-700 dark:text-gray-100`}
+        >
           {row.cells.map((cell) => {
             return (
               <td {...cell.getCellProps()} className="text-ellipsis">
@@ -297,233 +286,19 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
   }
 
   return (
-    <div className=" max-w-full overflow-x-hidden ">
-      {content}
-      <section className=" antialiased  text-gray-600 ">
-        <div className="h-full">
-          <div className="w-full  mx-auto bg-white rounded-sm border border-t-0 border-gray-100  max-w-full dark:bg-violet-600 dark:border-none">
-            <header className="pl-2 pr-5 py-2 border-b border-gray-100 flex items-center justify-between dark:border-none">
-              <div className="flex flex-1 values-center space-x-1.5 w-full">
-                <div className="pl-4 w-full">
-                  {/* TABLE HEADERS (FILTERS , SORT, EXPORT , SEARCH) */}
-                  <Formik
-                    initialValues={{
-                      searchQuery: "",
-                    }}
-                    onSubmit={onSubmit}
-                  >
-                    {({ values }) => (
-                      <Form className="flex flex-row  space-x-4 w-full ">
-                        <div className=" relative">
-                          <CustomText
-                            name="searchQuery"
-                            labelstyle={`hidden`}
-                            imgBfr={<FaSearch />}
-                            wrapperclass={`relative `}
-                            inputstyle={`py-2.5 w-96 outline-none text-[13px] caret-indigo-400  border-2 border-indigo-100 text-indigo-800 placeholder:text-indigo-800 `}
-                            placeholder={`Search users by ID or email`}
-                            svgclass={`text-[13px] text-indigo-800/30 font-thin absolute top-[32%] left-[3%]  z-10 `}
-                          />
-                        </div>
-
-                        <div className="relative flex values-center  px-2  rounded-md border-2 border-indigo-100  ">
-                          <button
-                            type="button"
-                            className=" px-3 py-2 cursor-not-allowed text-sm flex values-center  space-x-2 border-r-2 border-gray-200  text-indigo-800 font-medium"
-                          >
-                            <span className="text-xl ">
-                              <MdFilterList />
-                            </span>
-                          </button>
-
-                          <Listbox
-                            name="filter"
-                            value={filter}
-                            onChange={(filter) => setFilter(filter)}
-                          >
-                            {({ open }) => (
-                              <>
-                                <div className="relative  w-40">
-                                  <Listbox.Button className=" w-full flex items-center cursor-pointer  text-xs font-medium text-center relative   py-2 pl-3 pr-10 shadow-sm focus:outline-none  sm:text-sm">
-                                    <span className="text-indigo-700  ">
-                                      {filter ? filter : filterList[0].name}
-                                    </span>
-                                    <span className="absolute right-5">
-                                      <HiChevronUpDown className="w-5 h-5 text-violet-600 " />
-                                    </span>
-                                  </Listbox.Button>
-
-                                  <Transition
-                                    show={open}
-                                    as={Fragment}
-                                    leave="transition ease-in duration-100"
-                                    leaveFrom="opacity-100"
-                                    leaveTo="opacity-0"
-                                  >
-                                    <Listbox.Options className=" py-2  border-none focus:outline-none  mt-2] text-[20px] font-medium absolute z-10 w-full overflow-auto rounded-md bg-white  text-base shadow-lg ring-1 ring-black ring-opacity-5 sm:text-sm">
-                                      {filterList.map((item, idx) => (
-                                        <Listbox.Option
-                                          key={idx}
-                                          value={item.value}
-                                          className={({ active }) =>
-                                            `relative cursor-pointer select-none   py-2 pl-10 pr-4 ${
-                                              active
-                                                ? "bg-violet-100 text-blue-900"
-                                                : "text-gray-900"
-                                            }`
-                                          }
-                                        >
-                                          {({ value }) => (
-                                            <>
-                                              <span
-                                                className={`block truncate ${
-                                                  selected
-                                                    ? "font-medium"
-                                                    : "font-normal"
-                                                }`}
-                                              >
-                                                {item.name}
-                                              </span>
-                                              {value ? (
-                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-violet-600">
-                                                  <AiOutlineCheckCircle
-                                                    className="h-5 w-5"
-                                                    // aria-hidden="true"
-                                                  />
-                                                </span>
-                                              ) : null}
-                                            </>
-                                          )}
-                                          {item.name}
-                                        </Listbox.Option>
-                                      ))}
-                                    </Listbox.Options>
-                                  </Transition>
-                                </div>
-                              </>
-                            )}
-                          </Listbox>
-                        </div>
-
-                        <div className="relative flex values-centerr px-2 rounded-md   border-2 border-indigo-100   ">
-                          <button
-                            type="button"
-                            className=" px-3 py-2 flex text-sm  values-center space-x-1   border-r-2 border-gray-200  text-indigo-800 font-medium"
-                          >
-                            <span className="text-xl text-indigo-700">
-                              <HiSortDescending />
-                            </span>
-
-                            {/* <span>Sort By </span> */}
-                          </button>
-
-                          <Listbox
-                            name="sort"
-                            value={sort}
-                            onChange={(value) => setSort(value)}
-                          >
-                            {({ open }) => (
-                              <>
-                                <div className="relative  w-40">
-                                  <Listbox.Button className="w-full  text-xs font-medium text-center relative  py-2 pl-3 pr-10 shadow-sm focus:outline-none  sm:text-sm text-indigo-700 cursor-pointer ">
-                                    {sort ? sort : sortList[0].name}
-                                  </Listbox.Button>
-
-                                  <Transition
-                                    show={open}
-                                    as={Fragment}
-                                    leave="transition ease-in duration-100"
-                                    leaveFrom="opacity-100"
-                                    leaveTo="opacity-0"
-                                  >
-                                    <Listbox.Options className="  py-2  border-none focus:outline-none  mt-2] text-[20px] text-indigo-800 font-medium absolute z-10 w-full overflow-auto rounded-md bg-white  text-base shadow-lg ring-1 ring-black ring-opacity-5 sm:text-sm">
-                                      {sortList.map((item, idx) => (
-                                        <Listbox.Option
-                                          key={idx}
-                                          value={item.value}
-                                          className={({ active }) =>
-                                            `relative select-none py-2 pl-10 pr-4 cursor-pointer ${
-                                              active
-                                                ? "bg-violet-100 text-blue-900"
-                                                : "text-gray-900"
-                                            }`
-                                          }
-                                        >
-                                          {({ value }) => (
-                                            <>
-                                              <span
-                                                className={`block truncate ${
-                                                  selected
-                                                    ? "font-medium"
-                                                    : "font-normal"
-                                                }`}
-                                              >
-                                                {item.name}
-                                              </span>
-                                              {value ? (
-                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-violet-600">
-                                                  <AiOutlineCheckCircle
-                                                    className="h-5 w-5"
-                                                    aria-hidden="true"
-                                                  />
-                                                </span>
-                                              ) : null}
-                                            </>
-                                          )}
-                                          {item.name}
-                                        </Listbox.Option>
-                                      ))}
-                                    </Listbox.Options>
-                                  </Transition>
-                                </div>
-                              </>
-                            )}
-                          </Listbox>
-                        </div>
-                      </Form>
-                    )}
-                  </Formik>
-                </div>
-              </div>
-
-              <div className="space-x-3 flex ">
-                <CSVLink
-                  data={data}
-                  filename={"my-file.csv"}
-                  className="btn btn-primary"
-                  target="_blank"
-                >
-                  <button className=" mr-4 flex values-center py-1.5 px-3 ml-2 text-[15px] font-medium text-indigo-800 border-2 border-indigo-100  rounded-lg  hover:bg-gray-50  focus:outline-none  dark:bg-violet-600 dark:hover:bg-violet-700 dark:text-white">
-                    <span className="pr-2 text-[10px] ">
-                      <AiOutlineCloudDownload className="text-lg " />
-                    </span>
-                    Export
-                  </button>
-                </CSVLink>
-
-                <button
-                  onClick={() => handleCreate()}
-                  className="mr-4 flex values-center py-1.5 px-3 ml-2 text-[15px] font-medium text-violet-800 border-2 border-indigo-100  rounded-lg  hover:bg-gray-50  focus:outline-none  dark:bg-violet-600 dark:hover:bg-violet-700 dark:text-white"
-                >
-                  <span className="pr-2 text-[10px]">
-                    <AiOutlineUserAdd className="text-lg " />
-                  </span>
-                  Add New User
-                </button>
-              </div>
-            </header>
-            <div className="p-3">
+    <div className=" max-w-full overflow-x-hidden mb-5 ">
+      <section className=" antialiased  text-gray-600   ">
+        <div className="h-full ">
+          <div className="w-full  mx-auto bg-white dark:bg-gray-800 border border-t-0 border-gray-100  max-w-full  dark:border-none">
+            <div className="p-3 dark:bg-gray-800">
               <div className="overflow-x-auto  lg:max-w-screen-lg xl:max-w-[calc(80vw)] xl:w-full  min-h-[500px] scrollbar-hide ">
                 <table
                   {...getTableProps()}
-                  className="relative text-[13.5px] font-medium table-auto text-gray-700 whitespace-nowrap border-separate w-full min-w-full dark:bg-violet-600 dark:border-collapse dark:text-gray-200"
+                  className="relative text-[12px] font-medium table-auto text-gray-700 whitespace-nowrap border-collapse w-full min-w-full dark:bg-gray-800 dark:border-collapse dark:text-gray-400"
                 >
-                  <thead className="sticky top-0">
+                  <thead className=" dark:bg-gray-800 text-purple-700">
                     {headerGroups.map((headerGroup) => (
-                      <tr
-                        {...headerGroup.getHeaderGroupProps()}
-                        className="sticky top-0"
-                      >
+                      <tr {...headerGroup.getHeaderGroupProps()} className="">
                         {headerGroup.headers.map((column) => (
                           <th {...column.getHeaderProps()}>
                             {column.render("Header")}
@@ -547,7 +322,7 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
                 <button
                   onClick={() => previousPage()}
                   disabled={!canPreviousPage}
-                  className=" inline-flex items-center space-x-1 values-center disabled:bg-indigo-50 disabled:cursor-not-allowed bg-indigo-800 text-white hover:bg-indigo-900 px-6 py-2 font-medium rounded-lg"
+                  className=" inline-flex items-center space-x-1 values-center disabled:bg-indigo-50 disabled:cursor-not-allowed bg-purple-700  text-white hover:bg-purple-700 px-3 py-1.5 font-medium rounded-lg"
                 >
                   <span>
                     <HiArrowNarrowLeft />
@@ -555,17 +330,17 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
                   <span>Previous</span>
                 </button>
 
-                <div cl>
-                  <p>{`Showing Page ${pageIndex + 1} of ${pageCount} ~  ${
-                    pageData.totalDocs
-                  } entries`}</p>
+                <div>
+                  <p className="text-gray-600">{`Showing Page ${
+                    pageIndex + 1
+                  } of ${pageCount} ~  ${pageData.totalDocs} entries`}</p>
                   <p></p>
                 </div>
 
                 <button
                   onClick={() => nextPage()}
                   disabled={!canNextPage}
-                  className="border items-center  inline-flex space-x-1 values-center disabled:cursor-not-allowed disabled:bg-indigo-50    hover:bg-indigo-900 px-8 bg-indigo-800 text-white py-2 font-medium rounded-lg"
+                  className=" items-center  inline-flex space-x-1 values-center disabled:cursor-not-allowed disabled:bg-indigo-50    hover:bg-indigo-900 px-5 bg-purple-700 text-white py-1.5 font-medium rounded-lg"
                 >
                   <span>Next</span>
                   <span>
@@ -581,4 +356,4 @@ const BasicTable = ({ fetchTableData, headers, filterList, sortList }) => {
   );
 };
 
-export default BasicTable;
+export default TableData;

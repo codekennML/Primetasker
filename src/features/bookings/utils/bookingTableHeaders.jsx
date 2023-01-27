@@ -32,6 +32,7 @@ export const bookingTableHeaders = [
     Header: "Customer E-mail",
     accessor: "task_creator.email",
   },
+
   {
     Header: "Customer Phone",
     accessor: "task_creator.phone",
@@ -46,6 +47,7 @@ export const bookingTableHeaders = [
     Header: "Tasker E-mail",
     accessor: "tasker_details.email",
   },
+
   {
     Header: "Tasker Phone",
     accessor: "tasker_details.phone",
@@ -54,6 +56,10 @@ export const bookingTableHeaders = [
   {
     Header: "Task Type",
     accessor: `task_info.taskType`,
+  },
+  {
+    Header: "Task Category",
+    accessor: `bookingCategory.name`,
   },
 
   {

@@ -20,15 +20,9 @@ export const SignupSchema = yup.object().shape({
     })
     .required("Password is required"),
 
-  confirmPass: yup
-    .string()
-    .oneOf([yup.ref("password"), null], "Passwords do not match")
-    .required("This field is required"),
-
-  acceptedTos: yup
-    .boolean()
-    .oneOf([true], "Please acknowlege our terms of service to proceed")
-    .required(),
+  // role: yup
+  //   .string()
+  //   .oneOf(['Guest'], "Passwords do not match")
 
   // profession : yup.string().oneOf(['Developer', 'Architect' , 'Programiz'],'Please enter a profession').required('Select a profession'),
   //   rememberUser : yup.boolean(),

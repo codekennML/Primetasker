@@ -1,6 +1,6 @@
 export const filterList = [
   {
-    name: "All Filters",
+    name: "Filters",
     value: "",
   },
   {

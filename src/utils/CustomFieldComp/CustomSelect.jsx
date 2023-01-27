@@ -1,29 +1,65 @@
 import { useField } from "formik";
 import { Listbox, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { memo } from "react";
-const CustomSelect = ({ label, value, selectArray, onChange, ...props }) => {
-  const [field, meta, helpers] = useField(props);
+import { HiChevronUpDown } from "react-icons/hi2";
+
+const CustomSelect = ({
+  label,
+  labelstyle,
+  selectstyle,
+  name,
+  selectArray,
+  onChange,
+  isFilter,
+  imgBfr,
+  imgAfter,
+}) => {
+  const [selected] = useState(selectArray[0]);
+  const [field, meta, helpers] = useField(name);
+  const { setValue, setTouched } = helpers;
   const errorStyle = " border-red-600";
   const validStyle = "border-gray-400 ";
   const invalid = meta.touched && meta.error;
-  // console.log(field, meta);
-  console.log(value);
+
   return (
     <>
-      {/* <label
-        htmlFor={props.name}
-        className="block mb-2 text-[12px] font-medium text-gray-900 dark:text-white"
+      {label ? (
+        <label
+          htmlFor={label}
+          className={`${
+            labelstyle ? labelstyle : ""
+          } block my-2 text-[12px] font-medium text-gray-600 dark:text-white`}
+        >
+          {label}
+        </label>
+      ) : (
+        ""
+      )}
+      <Listbox
+        name={name}
+        onChange={onChange ? onChange : (selected) => setValue(selected)}
+        // value={field.value}
+        onBlur={(e) => handleBlur(e)}
       >
-        {label}
-      </label> */}
-
-      <Listbox value={value} onChange={onChange}>
         {({ open }) => (
           <>
-            <div className="relative w-56">
-              <Listbox.Button className="w-full  text-xs font-medium text-center relative  cursor-default  py-2 pl-3 pr-10 shadow-sm focus:outline-none  sm:text-sm">
-                {value ? value : selectArray[0].name}
+            <div
+              className={`relative dark:bg-gray-700 border-gray-400 dark:border-gray-600  rounded-lg text-gray-500 ${selectstyle} `}
+            >
+              <Listbox.Button className=" w-full flex space-x-1.5 h-full items-center py-2 px-6  justify-center cursor-pointer  text-xs font-medium text-center relative   focus:outline-none  sm:text-sm  dark:bg-gray-700 dark:text-gray-100">
+                {imgBfr ? <span className="inline-block"> {imgBfr} </span> : ""}
+
+                <span className="text-[13px] w-full inline-block ">
+                  {field.value ? field.value : selected.name}
+                </span>
+                {imgBfr ? (
+                  ""
+                ) : (
+                  <span>
+                    <HiChevronUpDown className="w-5 h-5 text-gray-600 dark:text-gray-200 " />
+                  </span>
+                )}
               </Listbox.Button>
 
               <Transition
@@ -33,29 +69,29 @@ const CustomSelect = ({ label, value, selectArray, onChange, ...props }) => {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Listbox.Options className="  py-2  border-none focus:outline-none  text-[20px] text-indigo-800 font-medium absolute z-10 w-full overflow-auto rounded-md bg-white  text-base shadow-lg ring-1 ring-black ring-opacity-5 sm:text-sm">
+                <Listbox.Options className=" dark:bg-gray-700 dark:text-gray-400   py-2  border-none focus:outline-none  text-[20px] text-indigo-800 font-medium absolute z-10 w-full overflow-auto rounded-md bg-white  text-sm shadow-lg ring-1 ring-black ring-opacity-5 sm:text-sm">
                   {selectArray.map((item, idx) => (
                     <Listbox.Option
                       key={idx}
                       value={item.value}
                       className={({ active }) =>
-                        `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                        `relative cursor-pointer dark:bg-gray-700 dark:text-gray-400 select-none py-2 px-6 ${
                           active
-                            ? "bg-violet-100 text-blue-900"
-                            : "text-gray-900"
+                            ? "bg-violet-100 text-blue-900 "
+                            : "text-gray-900 dark:text-gray-400"
                         }`
                       }
                     >
-                      {({ value }) => (
+                      {({ selected }) => (
                         <>
                           <span
                             className={`block truncate ${
-                              value ? "font-medium" : "font-normal"
+                              selected ? "font-medium" : "font-normal"
                             }`}
                           >
                             {item.name}
                           </span>
-                          {value ? (
+                          {selected ? (
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-violet-600">
                               <AiOutlineCheckCircle
                                 className="h-5 w-5"

@@ -19,19 +19,21 @@ const StatCard = ({
   return (
     <div
       className="tab cards border-2 
-  rounded-xl h-[120px] bg-white dark:bg-slate-400   p-2 text-sm text-gray-600  px-3"
+  rounded-xl h-[120px] bg-white dark:bg-gray-800 dark:border-gray-600  p-2 text-sm text-gray-600  px-3"
     >
       <article className="flex flex-row justify-between items-center text-gray-500  ">
-        <div className="   p-2 rounded-xl ">{Svg ? Svg : ""}</div>
+        <div className="  text-purple-800 p-2 rounded-xl ">
+          {Svg ? Svg : ""}
+        </div>
 
         <div className="flex-1 w-full px-2">
           <article className="flex items-center justify-between">
-            <h3 className="font-semibold text-lg text-gray-600 dark:text-gray-100">
+            <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-400">
               {title}
             </h3>
 
             <Menu as="div" className="relative   ">
-              <Menu.Button className="p-2 bg-violet-50 rounded-full text-gray-600">
+              <Menu.Button className="p-2  rounded-full text-purple-800">
                 {/* <button > */}
                 <FaEllipsisV />
                 {/* </button> */}
@@ -74,7 +76,7 @@ const StatCard = ({
           </article>
 
           <article className="flex flex-row items-center space-x-1 mt-2 ">
-            <h3 className="text-[18px] font-semibold mr-2 text-gray-600 dark:text-gray-100 ">
+            <h3 className="text-[18px] font-semibold mr-2 text-gray-800 dark:text-gray-400 ">
               {currSymbol ? currSymbol : ``} {mainAmt ? mainAmt : ""}
             </h3>
           </article>
@@ -84,7 +86,7 @@ const StatCard = ({
               <div className="inline-flex flex-row font-sans items-center space-x-2 ">
                 <p className="inline-flex items-center text-gray-500 space-x-1">
                   <span>
-                    <FaArrowRight className="-rotate-45 text-xs text-green-600 " />
+                    <FaArrowRight className="-rotate-45 text-xs text-red-800 " />
                   </span>
                   <span className="font-medium">
                     {" "}
@@ -94,7 +96,7 @@ const StatCard = ({
 
                 <p className="text-[15px]  inline-flex items-center text-xs text-gray-600 font-medium space-x-1">
                   <span>
-                    <FaArrowUp className="text-xs text-green-600 " />
+                    <FaArrowUp className="text-xs text-green-700 " />
                   </span>
                   <span>
                     {currSymbol ? currSymbol : ""}{" "}

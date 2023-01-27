@@ -1,59 +1,65 @@
-import {navlinks } from '../constants/Navbar'
-import styles , {layout} from '../styles/style'
-import {NavLink, Outlet,Link, useNavigate, useLocation} from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAutomobile, faBars, faBed, faGear, faPlane, faPlaneCircleCheck, faTaxi,  faUserCircle  } from '@fortawesome/free-solid-svg-icons'
-import { format,addDays  } from 'date-fns';
-import { useState } from 'react'
-import BookingOccupantModal from '../features/modal/BookingOccupantModal';
+import { navlinks } from "../constants/Navbar";
+import styles, { layout } from "../styles/style";
+import {
+  NavLink,
+  Outlet,
+  Link,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAutomobile,
+  faBars,
+  faBed,
+  faGear,
+  faPlane,
+  faPlaneCircleCheck,
+  faTaxi,
+  faUserCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { format, addDays } from "date-fns";
+import { useState } from "react";
+import BookingOccupantModal from "../features/modal/BookingOccupantModal";
 
- 
-const Navbar = ( {type} ) => { 
+const Navbar = ({ type }) => {
+  const navigate = useNavigate();
 
-  const navigate  =  useNavigate()
-
-  const [displayDateRange,setDisplayDateRange]  =  useState(false)
+  const [displayDateRange, setDisplayDateRange] = useState(false);
 
   const [date, setDate] = useState([
-      {
-        startDate: new Date(),
-        endDate: addDays(new Date(), 7),
-        key: 'selection'
-      }
-    ]);
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+    },
+  ]);
 
-   const handleSearch =  () => {
-        return (
-          navigate('/searchresults' , { date, occupants, destination } ) 
-        ) 
-     
-    }
+  const handleSearch = () => {
+    return navigate("/searchresults", { date, occupants, destination });
+  };
 
-  const [showOccupantModal, setShowOccupantModal] = useState(false)
-  const [destination, setDestination] = useState()
-  const [occupants, setOccupants] =  useState({
-
-      adults : 1,
-      children : 0,
-      rooms : 1 
-  })
+  const [showOccupantModal, setShowOccupantModal] = useState(false);
+  const [destination, setDestination] = useState();
+  const [occupants, setOccupants] = useState({
+    adults: 1,
+    children: 0,
+    rooms: 1,
+  });
 
   const handleOccupants = (name, operation) => {
-     setOccupants(prev => {
-      return{
-          ...prev,
-          [name] : operation ==='increase' ? occupants[name] + 1
-           :
-           occupants[name] - 1
-      }
-     })
+    setOccupants((prev) => {
+      return {
+        ...prev,
+        [name]:
+          operation === "increase" ? occupants[name] + 1 : occupants[name] - 1,
+      };
+    });
+  };
 
-  }
- 
   return (
     <>
-
-    <section className='min-w-full '>
+      {/* <section className='min-w-full '>
     <header className={`${layout.section} ${styles.flexBetween} items-center w-full pt-0 py-2 h-16 bg-[#003580] lg:px-48   `}>
         <Link to =  '/' className="logo font-medium text-white text-[22px]">
             Booking.com
@@ -89,7 +95,7 @@ const Navbar = ( {type} ) => {
         
     </header>
 
-    {/* Experiences flex display */}
+   
     <section className='flex flex-row items-center bg-[#003580] text-white  pb-3 px-4 lg:px-48 
     whitespace-nowrap'>
     <div className='w-[600px] overflow-scroll scrollbar-hide space-x-5'>
@@ -120,13 +126,12 @@ const Navbar = ( {type} ) => {
    </section>
 
 
-    </section> 
+    </section>  */}
+      <section className="w-[80%] mx-auto overflow-hidden">
+        <Outlet />
+      </section>
+    </>
+  );
+};
 
- <Outlet />
-
-
-  </>
-  )
-}
-
-export default Navbar
+export default Navbar;

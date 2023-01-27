@@ -7,6 +7,8 @@ const RequireAuth = ({ allowedRoles }) => {
 
   const content = roles.some((role) => allowedRoles.includes(role)) ? (
     <Outlet />
+  ) : roles.length > 0 ? (
+    <Navigate to="/admin-dashboard" state={{ from: location }} replace />
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./components/Navbar";
 import Index from "./Pages/Index";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Router } from "react-router-dom";
 import Login from "./features/auth/pages/Login";
 import RequireAuth from "./features/auth/pages/RequireAuth";
 import Signup from "./features/auth/pages/Signup";
@@ -43,6 +43,18 @@ import Error from "./utils/Error";
 import { Toaster } from "react-hot-toast";
 import ForgotPassword from "./features/auth/pages/ForgotPassword";
 import PasswordReset from "./features/auth/pages/PasswordReset";
+import UserSidebar from "./Pages/dashboard/User/UserSidebar";
+import UserAnalytics from "./Pages/dashboard/User/UserAnalytics";
+import Verify from "./Pages/dashboard/User/Verify";
+import Create from "./Pages/dashboard/User/Create";
+import PostTask from "./components/PostTask";
+import PostMail from "./components/PostMail";
+import FindItems from "./components/FindItems";
+import CreateService from "./components/CreateService";
+import BrowseTasks from "./components/BrowseTasks";
+import Nav from "./components/Nav";
+import HomePage from "./components/HomePage";
+import ModalProvider from "./features/modal/ModalProvide";
 // const LazySignup =  React.lazy(() => import('./Pages/dashboard/dashboard'))
 
 function App() {
@@ -59,91 +71,95 @@ function App() {
 
   const [theme, setTheme] = useState(localStorage.theme);
 
-  // const colorTheme = theme === "dark" ? "light" : "dark";
-
-  // return [colorTheme, setTheme]
-
   return (
-    <div className="bg-gray-100 dark:bg-gray-400 dark:transform:transition-all dark:duration-700 dark:ease-in dark:delay-300">
+    <div className="bg-slate-100 h-screen dark:bg-gray-700 dark:transform:transition-all dark:duration-700 dark:ease-in dark:delay-300">
+      <ModalProvider />
+      <Toaster />
       <Routes>
         {/* Links visible to unauthenticated Users */}
         <Route path="/" element={<Navbar />}>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="searchresults" element={<SearchResults />} />
+          <Route path="browse" element={<BrowseTasks />} />
+
           <Route path="single-property" element={<SingleProperty />} />
+          <Route path="create/post-a-task" element={<PostTask />} />
+          <Route path="create/post-a-mail" element={<PostMail />} />
+          <Route path="create/find-item" element={<FindItems />} />
+          <Route path="create/create-service" element={<CreateService />} />
+
           <Route path="login" element={<Login />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="password-reset" element={<PasswordReset />} />
           <Route path="signup" element={<Signup />} />
-
-          {/* <Route path = 'book' element =  { <AddPostForm />} /> */}
         </Route>
 
         {/* Routes to admin dashboard are protected by the RequireAuth Component */}
 
-        <Route element={<PersistLogin />}>
-          <Route element={<RequireAuth allowedRoles={["Employee", "Admin"]} />}>
-            <Route element={<Prefetch />}>
-              <Route path="dashboard" element={<Sidebar />}>
-                <Route index element={<Analytics />} />
-                <Route path="users" element={<Users />} />
-                <Route path="agents" element={<Agents />} />
-                <Route path="guests" element={<Guests />} />
+        <Route element={<RequireAuth allowedRoles={["Tasker", "Customer"]} />}>
+          <Route element={<PersistLogin />}>
+            <Route path="dashboard" element={<UserSidebar />}>
+              <Route index element={<UserAnalytics />} />
+              <Route path="verify" element={<Verify />} />
+              <Route path="create" element={<Create />} />
+              <Route path="verify" element={<Verify />} />
+              <Route path="verify" element={<Verify />} />
+              <Route path="verify" element={<Verify />} />
+            </Route>
+          </Route>
+        </Route>
 
-                <Route path="notes">
-                  <Route index element={<Notes />} />
-                  <Route path=":id" element={<EditNotes />} />
-                </Route>
+        <Route element={<RequireAuth allowedRoles={["Manager", "Admin"]} />}>
+          <Route element={<Prefetch />}>
+            <Route path="admin-dashboard" element={<Sidebar />}>
+              <Route index element={<Analytics />} />
+              {/* <Route path="overview" element={<Analytics />} /> */}
+              <Route path="users" element={<Users />} />
+              {/* <Route path="users" element={<Users />} /> */}
+              <Route path="agents" element={<Agents />} />
+              <Route path="guests" element={<Guests />} />
 
-                <Route path="bookings">
-                  <Route index element={<Booking />} />
-                  <Route path="create" element={<AddNewBooking />} />
-                  <Route path="single-booking/:id" element={<Booking />} />
-                  <Route path="edit/:id" element={<ModifyBooking />} />
-                </Route>
+              <Route path="notes">
+                <Route index element={<Notes />} />
+                <Route path=":id" element={<EditNotes />} />
+              </Route>
 
-                <Route path="tasks">
-                  <Route index element={<Tasks />} />
-                  <Route path="create" element={<CreateTask />} />
-                  <Route path="single-task/:id" element={<SingleTask />} />
-                  <Route path="edit/:id" element={<EditTask />} />
-                </Route>
+              <Route path="bookings">
+                <Route index element={<Booking />} />
+                <Route path="create" element={<AddNewBooking />} />
+                <Route path="single-booking/:id" element={<Booking />} />
+                <Route path="edit/:id" element={<ModifyBooking />} />
+              </Route>
 
-                <Route path="properties">
-                  <Route index element={<Properties />} />
-                  <Route path="create" element={<AddNewProperty />} />
-                  <Route path="single-property/:id" element={<Property />} />
-                  <Route path="edit/:id" element={<ModifyProperty />} />
-                </Route>
+              <Route path="tasks">
+                <Route index element={<Tasks />} />
+                <Route path="create" element={<CreateTask />} />
+                <Route path="single-task/:id" element={<SingleTask />} />
+                <Route path="edit/:id" element={<EditTask />} />
+              </Route>
 
-                <Route path="settings" element={<SideTab />}>
-                  <Route index element={<Profile />} />
-                  <Route path="theme" element={<Theme />} />
-                  <Route path="categories" element={<Categories />} />
-                  <Route path="users" element={<UserSettings />} />
-                  <Route path="bookings" element={<Bookings />} />
-                  <Route path="payments" element={<Payments />} />
-                  <Route path="cities" element={<Cities />} />
-                </Route>
+              <Route path="properties">
+                <Route index element={<Properties />} />
+                <Route path="create" element={<AddNewProperty />} />
+                <Route path="single-property/:id" element={<Property />} />
+                <Route path="edit/:id" element={<ModifyProperty />} />
+              </Route>
+
+              <Route path="settings" element={<SideTab />}>
+                <Route index element={<Profile />} />
+                <Route path="theme" element={<Theme />} />
+                <Route path="categories" element={<Categories />} />
+                <Route path="users" element={<UserSettings />} />
+                <Route path="bookings" element={<Bookings />} />
+                <Route path="payments" element={<Payments />} />
+                <Route path="cities" element={<Cities />} />
               </Route>
             </Route>
           </Route>
         </Route>
-
-        <Route element={<RequireAuth allowedRoles={[ROLES.guest]} />}>
-          <Route element={<Prefetch />}>
-            <Route path="dashboard" element={<Sidebar />}>
-              <Route index element={<Analytics />} />
-              <Route path="users" element={<Bookings />} />
-              <Route path="agents" element={<Agents />} />
-              <Route path="guests" element={<Guests />} />
-            </Route>
-          </Route>
-        </Route>
+        {/* </Route> */}
         <Route path="*" element={<Error />} />
       </Routes>
-
-      {/* <Toaster /> */}
     </div>
   );
 }

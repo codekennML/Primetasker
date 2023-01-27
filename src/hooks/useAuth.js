@@ -7,9 +7,9 @@ const useAuth = () => {
   //const credentials =  useSelector(selectCurrentCredentials)
   let isAdmin = false;
   let isManager = false;
-  let isEmployee = false;
+  let isUser = false;
   let isAgent = false;
-  let status = "Guest";
+  let status = "";
 
   if (token) {
     const decoded = jwt_decode(token);
@@ -19,12 +19,12 @@ const useAuth = () => {
 
     // console.log(decoded.UserInfo)
 
+    isUser = roles.includes("Tasker") || roles.includes("Customer");
     isManager = roles.includes("Manager");
-    isEmployee = roles.includes("Employee");
     isAdmin = roles.includes("Admin");
-
-    if (isEmployee) status = "Employee";
-    if (isAdmin) status = "Admin";
+    if (isUser) status = "primeUser";
+    if (isManager) status = "primeManager";
+    if (isAdmin) status = "primeAdmin";
 
     return {
       username: username,
