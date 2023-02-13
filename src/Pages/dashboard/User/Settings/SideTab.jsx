@@ -53,11 +53,11 @@ const SideTab = () => {
   ];
 
   return (
-    <article className="flex flex-row ">
-      <div className="h-screen  pt-6 w-[250px] max-w-[300px] border-r sticky left-0 top-0">
-        <div className="flex flex-row space-x-1 items-center px-4">
-          {/* <p className="text-[20px]"><FaAirbnb /></p> */}
-          <h2 className=" text-gray-600 font-bold py-3">General Settings</h2>
+    <article class="flex flex-row ">
+      <div class="h-screen  pt-6 w-[250px] max-w-[300px] border-r sticky left-0 top-0">
+        <div class="flex flex-row space-x-1 items-center px-4">
+          {/* <p class="text-[20px]"><FaAirbnb /></p> */}
+          <h2 class=" text-gray-600 font-bold py-3">General Settings</h2>
         </div>
         <form action="sticky top-2 mb-4">
           {/* <div class="relative px-4 pt-1  ">
@@ -67,21 +67,21 @@ const SideTab = () => {
         <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-indigo-500 block w-full outline-none pl-10 p-1.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required />
     </div> */}
         </form>
-        <ul className="flex flex-col  space-y-1 text-gray-500 mt-3 ">
+        <ul class="flex flex-col  space-y-1 text-gray-500 mt-3 ">
           {setLinks.map((setLink) => {
             return (
               <li key={setLink.id}>
                 <Link
                   to={setLink.link}
-                  className="relative flex flex-row items-center  h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent  pr-6"
+                  class="relative flex flex-row items-center  h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent  pr-6"
                 >
-                  <span className="inline-flex justify-center items-center ml-4 text-gray-500">
+                  <span class="inline-flex justify-center items-center ml-4 text-gray-500">
                     {setLink.icon}
                   </span>
-                  <span className="ml-4 text-[13px] font-medium tracking-wide truncate">
+                  <span class="ml-4 text-[13px] font-medium tracking-wide truncate">
                     {setLink.text}
                   </span>
-                  {/* <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">15</span> */}
+                  {/* <span class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">15</span> */}
                 </Link>
               </li>
             );
@@ -89,7 +89,7 @@ const SideTab = () => {
         </ul>
       </div>
 
-      <div className="flex-1">
+      <div class="flex-1">
         <Outlet />
       </div>
     </article>

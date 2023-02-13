@@ -11,7 +11,7 @@ const CustomSelect = ({
   name,
   selectArray,
   onChange,
-  isFilter,
+
   imgBfr,
   imgAfter,
 }) => {
@@ -39,7 +39,6 @@ const CustomSelect = ({
       <Listbox
         name={name}
         onChange={onChange ? onChange : (selected) => setValue(selected)}
-        // value={field.value}
         onBlur={(e) => handleBlur(e)}
       >
         {({ open }) => (
@@ -47,7 +46,7 @@ const CustomSelect = ({
             <div
               className={`relative dark:bg-gray-700 border-gray-400 dark:border-gray-600  rounded-lg text-gray-500 ${selectstyle} `}
             >
-              <Listbox.Button className=" w-full flex space-x-1.5 h-full items-center py-2 px-6  justify-center cursor-pointer  text-xs font-medium text-center relative   focus:outline-none  sm:text-sm  dark:bg-gray-700 dark:text-gray-100">
+              <Listbox.Button className=" w-full flex space-x-1.5 h-full items-center py-2 px-6  justify-center cursor-pointer  text-xs font-medium text-center relative   focus:outline-none  sm:text-sm  dark:bg-gray-700 dark:text-gray-100 text-gray-600">
                 {imgBfr ? <span className="inline-block"> {imgBfr} </span> : ""}
 
                 <span className="text-[13px] w-full inline-block ">

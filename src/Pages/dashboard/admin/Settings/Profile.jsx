@@ -4,7 +4,7 @@ import CustomFileUpload from "../../../../utils/CustomFieldComp/CustomFileUpload
 import { loginSchema } from "../../../../features/auth/schemas/LoginFormSchema";
 import Verification from "./ProfileElements.jsx/Verification";
 import TaskInfo from "./ProfileElements.jsx/TaskInfo";
-import SvgComponent from "../../../../../public/svgs/ccMaster";
+import SvgComponent from "../../../../../assets/svgs/ccMaster";
 import CustomRadio from "../../../../utils/CustomFieldComp/CustomRadio";
 import PersonalInfo from "./ProfileElements.jsx/PersonalInfo";
 
@@ -19,7 +19,7 @@ const Profile = () => {
         <h2 className="text-xl font-medium text-gray-600 font-sans">
           User Information
         </h2>
-        {/* <p className='text-sm  text-gray-600 pt-3 pb-2'>Here you can edit public information about yourself</p> */}
+        {/* <p className='text-sm  text-gray-600 pt-3 pb-2'>Here you can edit assets information about yourself</p> */}
       </article>
       <div className="px-7 ">
         <PersonalInfo />

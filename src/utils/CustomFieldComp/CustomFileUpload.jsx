@@ -122,11 +122,7 @@ const FileUpload = ({ label, float, name, ...props }) => {
       <label htmlFor={props.name} className="">
         {label}
       </label>
-      {/* <input
-        {...field}
-        {...props}
-        className={`absolute -top-[1000px] py-2 rounded-lg `}
-      /> */}
+
 
       {invalid && <div className="text-red-600"> {meta.error}</div>}
     </div>

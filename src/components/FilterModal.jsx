@@ -34,7 +34,7 @@ const allCategories = [
   "Marketing and Advertising",
   "Non-Profit Organizations",
   "Project Management",
-  "Public Relations",
+  "assets Relations",
   "Small Business",
   "Social Media",
   "Venture Capital",

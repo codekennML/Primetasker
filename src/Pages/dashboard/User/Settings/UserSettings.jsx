@@ -3,44 +3,44 @@ import Toggle from "../../../../utils/Toggle";
 
 const Users = () => {
   return (
-    <section className="px-7 max-w-screen-lg">
-      <article className="border-b py-3 sticky top-0 z-10 bg-white ">
-        <h2 className="text-xl font-medium text-gray-600 font-sans">
+    <section class="px-7 max-w-screen-lg">
+      <article class="border-b py-3 sticky top-0 z-10 bg-white ">
+        <h2 class="text-xl font-medium text-gray-600 font-sans">
           Users Management
         </h2>
-        {/* <p className='text-sm  text-gray-600 pt-3 pb-2'>Here you can edit public  about yourself</p> */}
+        {/* <p class='text-sm  text-gray-600 pt-3 pb-2'>Here you can edit assets  about yourself</p> */}
       </article>
-      <article className="py-5 space-y-2">
-        <h2 className="text-sm font-medium">Permissions & Roles</h2>
-        <span className="text-[11px]">
+      <article class="py-5 space-y-2">
+        <h2 class="text-sm font-medium">Permissions & Roles</h2>
+        <span class="text-[11px]">
           Owners have view and edit access to user management by default which
           cannot be changed
         </span>
-        <p className="text-xs pr-24 max-w-screen-sm">
+        <p class="text-xs pr-24 max-w-screen-sm">
           Every member gets basic permissions and functionality by default. You
           can customize settings for all members or make local adjustments for
           individual role types
         </p>
       </article>
-      <article className="flex justify-between items-center my-2">
-        <div className="text-sm font-medium">
+      <article class="flex justify-between items-center my-2">
+        <div class="text-sm font-medium">
           <h3>Roles</h3>
         </div>
-        <div className="text-sm font-medium">
+        <div class="text-sm font-medium">
           <h3>Permission</h3>
         </div>
         <div>
-          <button className="border py-2 px-5  rounded-lg text-sm  bg-purple-700 text-white font-medium">
+          <button class="border py-2 px-5  rounded-lg text-sm  bg-purple-700 text-white font-medium">
             Add role
           </button>
         </div>
       </article>
-      <article className="flex flex-row justify-between py-8 gap-x-3 border-y border-gray-100">
-        <div className="items-start text-sm font-medium text-gray-600">
+      <article class="flex flex-row justify-between py-8 gap-x-3 border-y border-gray-100">
+        <div class="items-start text-sm font-medium text-gray-600">
           <h2>Administrator</h2>
         </div>
-        <div className="self-center flex-1 flex-wrap px-20">
-          <ul className="flex flex-wrap gap-x-6 ">
+        <div class="self-center flex-1 flex-wrap px-20">
+          <ul class="flex flex-wrap gap-x-6 ">
             <Toggle toggleDesc={`Add view edit and delete users`} />
 
             <Toggle
@@ -67,12 +67,12 @@ const Users = () => {
           </ul>
         </div>
       </article>
-      <article className="flex flex-row justify-between py-8 gap-x-3 border-y border-gray-100">
-        <div className="items-start text-sm font-medium text-gray-600">
+      <article class="flex flex-row justify-between py-8 gap-x-3 border-y border-gray-100">
+        <div class="items-start text-sm font-medium text-gray-600">
           <h2>Manager</h2>
         </div>
-        <div className="self-center flex-1 flex-wrap px-20">
-          <ul className="flex flex-wrap gap-x-6 ">
+        <div class="self-center flex-1 flex-wrap px-20">
+          <ul class="flex flex-wrap gap-x-6 ">
             <Toggle toggleDesc={`Add view edit and delete users`} />
 
             <Toggle
@@ -99,12 +99,12 @@ const Users = () => {
           </ul>
         </div>
       </article>
-      <article className="flex flex-row justify-between py-8 gap-x-3 border-y border-gray-100">
-        <div className="items-start text-sm font-medium text-gray-600">
+      <article class="flex flex-row justify-between py-8 gap-x-3 border-y border-gray-100">
+        <div class="items-start text-sm font-medium text-gray-600">
           <h2>Editor</h2>
         </div>
-        <div className="self-center flex-1 flex-wrap px-20">
-          <ul className="flex flex-wrap gap-x-6 ">
+        <div class="self-center flex-1 flex-wrap px-20">
+          <ul class="flex flex-wrap gap-x-6 ">
             <Toggle toggleDesc={`Add view edit and delete users`} />
 
             <Toggle
@@ -131,12 +131,12 @@ const Users = () => {
           </ul>
         </div>
       </article>
-      <article className="flex flex-row justify-between py-8 gap-x-3 border-y border-gray-100">
-        <div className="items-start text-sm font-medium text-gray-600">
+      <article class="flex flex-row justify-between py-8 gap-x-3 border-y border-gray-100">
+        <div class="items-start text-sm font-medium text-gray-600">
           <h2>Tasker</h2>
         </div>
-        <div className="self-center flex-1 flex-wrap px-20">
-          <ul className="flex flex-wrap gap-x-6 ">
+        <div class="self-center flex-1 flex-wrap px-20">
+          <ul class="flex flex-wrap gap-x-6 ">
             <Toggle toggleDesc={`Add view edit and delete users`} />
 
             <Toggle
@@ -163,12 +163,12 @@ const Users = () => {
           </ul>
         </div>
       </article>
-      <article className="flex flex-row justify-between py-8 gap-x-3 border-y border-gray-100">
-        <div className="items-start text-sm font-medium text-gray-600">
+      <article class="flex flex-row justify-between py-8 gap-x-3 border-y border-gray-100">
+        <div class="items-start text-sm font-medium text-gray-600">
           <h2>Customer</h2>
         </div>
-        <div className="self-center flex-1 flex-wrap px-20">
-          <ul className="flex flex-wrap gap-x-6 ">
+        <div class="self-center flex-1 flex-wrap px-20">
+          <ul class="flex flex-wrap gap-x-6 ">
             <Toggle toggleDesc={`Add view edit and delete users`} />
 
             <Toggle

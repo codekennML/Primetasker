@@ -11,8 +11,6 @@ import Search from "./Search";
 const Home = () => {
   return (
     <section className="">
-      {/* <Search /> */}
-      {/* {content} */}
       <div className="">
         <HomePage />
       </div>

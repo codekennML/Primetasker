@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import CustomCheckbox from "../utils/CustomFieldComp/CustomCheckbox";
 import { Formik, Form, FieldArray } from "formik";
 import CustomText from "../utils/CustomFieldComp/CustomText";
 import { FaFilter, FaSearch, FaTimes } from "react-icons/fa";
 import { showModal } from "../features/modal/modalSlice";
 import { useDispatch } from "react-redux";
-import { MdFilterList } from "react-icons/md";
-import CustomRange from "../utils/CustomFieldComp/CustomRange";
 import CustomSelect from "../utils/CustomFieldComp/CustomSelect";
-import HeadlessRadio from "../utils/CustomFieldComp/HeadlessRadio";
+import CustomRadio from "../utils/CustomFieldComp/CustomRadioCheck";
+import MultiRangeSlider from "multi-range-slider-react";
+import "./range.css";
 
 const allCategories = [
   "Arts and Entertainment",
@@ -40,7 +40,7 @@ const allCategories = [
   "Marketing and Advertising",
   "Non-Profit Organizations",
   "Project Management",
-  "Public Relations",
+  "assets Relations",
   "Small Business",
   "Social Media",
   "Venture Capital",
@@ -66,6 +66,8 @@ const items = [
 ];
 
 const TaskFilters = () => {
+  const minPriceRef = useRef(null);
+  const maxPriceRef = useRef(null);
   const [isFilterActive, setIsFilterActive] = useState(false);
 
   const handleFilterDisplay = () => {
@@ -73,28 +75,32 @@ const TaskFilters = () => {
   };
 
   return (
-    <section className="  sticky top-0 border-gray-500 bg-white flex items-center space-x-4 ">
+    <section className=" sticky top-0 z-30 border-gray-500 bg-white flex items-center space-x-4 ">
       <Formik
         initialValues={{
           search: "",
           categories: [],
-          distance: "10",
-          price: "10,000",
+          taskType: "",
+          minPrice: "5000",
+          maxPrice: "500000",
           sort: "",
         }}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
       >
-        {(values) => {
+        {({ setFieldValue, values }) => {
           return (
-            <Form className="flex flex-row items-center justify-end w-full">
+            <Form className="flex flex-row items-center justify-center w-full">
               <div className="relative ">
                 <CustomText
                   name="search"
                   labelstyle={`hidden`}
                   imgBfr={<FaSearch />}
                   wrapperclass={`relative `}
-                  inputstyle={`w-52  outline-none text-[13px] py-2 rounded-full caret-indigo-400 dark:caret-gray-300 bg-gray-200/50 dark:bg-gray-700  outline-none  border-purple-100 dark:border-gray-600  dark:text-gray-400  placeholder:text-purple-800 py-1.5 focus:bg-transparent  w-full text-xs font-medium text-gray-600 border  `}
-                  placeholder="Search for tasks and services"
-                  svgclass={`text-[12px] text-gray-400 font-thin dark:text-gray-400 absolute top-[32%] left-[4%]  z-10 `}
+                  inputstyle={`w-64  outline-none text-[13px] py-2.5 rounded-full caret-indigo-400 dark:caret-gray-300 bg-gray-100 dark:bg-gray-700  outline-none  border-purple-100 dark:border-gray-600  dark:text-gray-400 placeholder:text-[14px] placeholder:text-gray-500  focus:bg-transparent  w-full text-xs font-medium text-gray-400 border  `}
+                  placeholder="Search for tasks"
+                  svgclassName={`text-[12px] text-gray-400 font-thin dark:text-gray-400 absolute top-[34%] left-[4%]  z-10 `}
                 />
               </div>
 
@@ -104,16 +110,18 @@ const TaskFilters = () => {
                     <button
                       onClick={() => handleFilterDisplay()}
                       type="button"
-                      className="hover:opacity-90  px-3 py-1.5 cursor-pointer rounded-full text-[13px] bg-gray-200/50  font-medium flex items-center space-x-2  "
+                      className="hover:opacity-90   py-1.5 cursor-pointer rounded-full text-[14px]  font-medium flex items-center space-x-2  "
                       aria-haspopup="true"
                     >
-                      <span className="  text-purple-800 ">
-                        <MdFilterList className="text-[16px] h-4" />
+                      <span className=" text-blue-300 ">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 20"
+                          className="text-green-600 w-6 h-6"
+                        >
+                          <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"></path>
+                        </svg>
                       </span>
-                      <span className="text-[12px] text-purple-800">
-                        Filters
-                      </span>
-                      {/* <span className="arrow down items-start"></span> */}
                     </button>
 
                     {isFilterActive ? (
@@ -123,7 +131,7 @@ const TaskFilters = () => {
                       >
                         <div
                           onClick={(e) => e.stopPropagation()}
-                          className=" top-[20%] left-[25%] pl-12 px-6 py-2 pb-12 bg-white w-[768px] z-50 rounded-xl shadow-xl "
+                          className=" top-[20%] left-[25%] pl-12 px-6 py-2 pb-6 bg-white w-[768px] z-50 rounded-xl shadow-xl "
                         >
                           <div className="flex justify-between border-b">
                             <h1 className="font-semibold text-[16px] text-purple-800 my-2  pb-1">
@@ -132,53 +140,105 @@ const TaskFilters = () => {
                             <button
                               onClick={() => handleFilterDisplay()}
                               type="button"
-                              className="text-red-500   hover:bg-gray-100 rounded-lg text-sm px-2 py-1 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                              className="text-purple-500    rounded-lg text-sm px-2 py-1 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                             >
                               <FaTimes />
                             </button>
                           </div>
-                          <div className=" border-b ">
+                          <div className="  ">
                             <section className="flex flex-row justify-between my-2 border-b pb-4 mt-3">
-                              <div className=" w-1/2 px-3">
+                              <div className=" w-1/3 px-3">
                                 <h3 className="text-purple-800 font-semibold text-sm">
                                   Sort by
                                 </h3>
-
-                                <HeadlessRadio plans={items} />
+                                <div className="border rounded-md mt-3">
+                                  <CustomRadio
+                                    name="sort"
+                                    options={items}
+                                    style={`flex flex-col  items-center w-full   `}
+                                    renderItem={(name, idx) => (
+                                      <li key={idx} className="py-1">
+                                        <div className="py-1 text-[14px] font-medium">
+                                          {name}
+                                        </div>
+                                      </li>
+                                    )}
+                                  />
+                                </div>
                               </div>
-                              <div className=" w-1/2 flex-1 px-3">
+                              <div className=" w-2/3 flex-1 px-3">
                                 <h3 className="text-sm text-purple-800 font-semibold mb-3">
                                   To be done
                                 </h3>
-                                <div className="border rounded pb-4 py-2 px-2 ">
-                                  <ul className="font-medium text-gray-500 text-[13px] flex my-2 space-x-2">
-                                    <li className="bg-gray-50 p-2 px-4 rounded-lg text-purple-900">
-                                      Remote
-                                    </li>
-                                    <li className="bg-gray-50 p-2 px-4 rounded-lg text-purple-900">
-                                      In-Person
-                                    </li>
-                                    <li className="bg-gray-50 p-2 px-4 rounded-lg text-purple-900 ">
-                                      Both
-                                    </li>
-                                  </ul>
-                                  <div>
-                                    <h3 className="text-sm text-purple-800 font-semibold my-2 mt-4">
+                                <div className="border rounded-md pb-4 py-2 px-4 ">
+                                  <CustomRadio
+                                    name="taskType"
+                                    options={[
+                                      { name: "Any", value: "all" },
+                                      { name: "Remote", value: "remote" },
+                                      { name: "In-Person", value: "physical" },
+                                    ]}
+                                    style={`flex flex-row mt-2 items-center w-full  px-2 `}
+                                    // buttonstyle={`bg-gray-100 `}
+                                    renderItem={(name, idx) => (
+                                      <li key={idx} className="py-1">
+                                        {name}
+                                      </li>
+                                    )}
+                                  />
+
+                                  <div className="">
+                                    <h3 className="text-sm text-purple-800 font-semibold  mt-4">
                                       Task price
                                     </h3>
 
-                                    <div>
-                                      <CustomRange
-                                        name="price"
-                                        type="range"
-                                        max="20"
-                                        min="0"
-                                        value={values.distance}
-                                        className="w-2/3 h-2 bg-gray-200 mt-4 rounded-lg accent-purple-500 appearance-none cursor-pointer border  dark:bg-gray-700"
+                                    <div className="mt-2">
+                                      <MultiRangeSlider
+                                        name="range"
+                                        label="false"
+                                        min={5000}
+                                        max={100000}
+                                        minCaption="none"
+                                        ruler="false"
+                                        thumbLeftColor="#9333ea"
+                                        thumbRightColor="#9333ea"
+                                        style={{
+                                          border: "none",
+                                          boxShadow: "none",
+                                          padding: "15px 10px",
+                                        }}
+                                        minValue={5000}
+                                        maxValue={500000}
+                                        onChange={(e) => {
+                                          if (
+                                            minPriceRef.current !== e.minValue
+                                          ) {
+                                            setFieldValue(
+                                              "minPrice",
+                                              e.minValue
+                                            );
+                                            minPriceRef.current = e.minValue;
+                                          }
+
+                                          if (
+                                            maxPriceRef.current !== e.maxValue
+                                          ) {
+                                            setFieldValue(
+                                              "maxPrice",
+                                              e.maxValue
+                                            );
+                                            maxPriceRef.current = e.maxValue;
+                                          }
+                                        }}
                                       />
-                                      <p className="text-gray-600">
-                                        {values.values.price}
-                                      </p>
+                                    </div>
+
+                                    <div className="w-full border py-2 flex flex-row justify-center items-center  font-semibold text-purple-800 text-[13px] mt-1">
+                                      <div>{values.minPrice}</div>
+                                      <div className="px-2  flex items-center justify-center ">
+                                        <p className="font-medium">-</p>
+                                      </div>
+                                      <div>{values.maxPrice}</div>
                                     </div>
                                   </div>
                                 </div>
@@ -206,7 +266,7 @@ const TaskFilters = () => {
                                           labelstyle={`text-[13px] font-medium text-gray-500`}
                                           label={category}
                                           value={category}
-                                          checked={values.values.categories.includes(
+                                          checked={values.categories.includes(
                                             category
                                           )}
                                           onChange={(e) => {
@@ -214,7 +274,7 @@ const TaskFilters = () => {
                                               arrayHelpers.push(category);
                                             } else {
                                               const idx =
-                                                values.values.categories.indexOf(
+                                                values.categories.indexOf(
                                                   category
                                                 );
                                               arrayHelpers.remove(idx);
@@ -227,124 +287,21 @@ const TaskFilters = () => {
                                 </FieldArray>
                               </ul>
 
-                              {/* <div className="flex justify-between mt-3 ">
-                              <button className="py-2 px-16 bg-red-500 rounded-full text-white">
-                                Cancel
-                              </button>
-                              <button
-                                onClick={() => hideModal()}
-                                type="submit"
-                                className="py-2 px-16 bg-purple-600 rounded-full text-white"
-                              >
-                                Apply
-                              </button>
-                            </div> */}
+                              <div className="flex justify-end mt-3 ">
+                                <button
+                                  onClick={() => hideModal()}
+                                  type="submit"
+                                  className="py-2 px-12 mt-4 text-[15px] bg-purple-800 rounded-full text-white font-medium"
+                                >
+                                  Apply Changes
+                                </button>
+                              </div>
                             </section>
                           </div>
                         </div>
                       </section>
                     ) : null}
                   </li>
-
-                  {/* 
-                  <li className="relative group px-3 py-2">
-                    <button
-                      className="hover:opacity-50 cursor-default px-5 py-1 rounded-full text-[13px] font-medium flex items-center space-x-2  "
-                      aria-haspopup="true"
-                    >
-                      <span> More Filters</span>
-                      <span className="arrow down items-start"></span>
-                    </button>
-                    <div className="absolute lg:-left-48 top-3 transition group-hover:translate-y-5 translate-y-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-500 ease-in-out group-hover:transform z-50 min-w-[560px] transform">
-                      <div className="relative top-6 p-6 bg-white rounded-xl shadow-xl w-full">
-                        <div className="w-10 h-10 bg-white transform rotate-45 absolute top-0 z-0 translate-x-0 transition-transform group-hover:translate-x-[12rem] duration-500 ease-in-out rounded-sm"></div>
-                        <div className="relative z-10">
-                          <div className="grid grid-cols-2 gap-6">
-                            <div>
-                              <p className="uppercase tracking-wider text-gray-500 font-medium text-[13px]">
-                                The Suite
-                              </p>
-                              <ul className="mt-3 text-[15px]">
-                                <li>
-                                  <a
-                                    href="#"
-                                    className="block p-2 -mx-2 rounded-lg hover:bg-gradient-to-br hover:from-indigo-50 hover:to-pink-50 hover:via-blue-50 transition ease-in-out duration-300 text-gray-800 font-semibold hover:text-indigo-600"
-                                  >
-                                    Course Editor
-                                    <p className="text-gray-500 font-normal">
-                                      All in one editor
-                                    </p>
-                                  </a>
-                                </li>
-                                <li>
-                                  <a
-                                    href="#"
-                                    className="block p-2 -mx-2 rounded-lg hover:bg-gradient-to-br hover:from-indigo-50 hover:to-pink-50 hover:via-blue-50 transition ease-in-out duration-300 text-gray-800 font-semibold hover:text-indigo-600"
-                                  >
-                                    Accept payments
-                                    <p className="text-gray-500 font-normal">
-                                      Pre-build payments page
-                                    </p>
-                                  </a>
-                                </li>
-                                <li>
-                                  <a
-                                    href="#"
-                                    className="block p-2 -mx-2 rounded-lg hover:bg-gradient-to-br hover:from-indigo-50 hover:to-pink-50 hover:via-blue-50 transition ease-in-out duration-300 text-gray-800 font-semibold hover:text-indigo-600"
-                                  >
-                                    Close captioning
-                                    <p className="text-gray-500 font-normal">
-                                      Use AI to generate captions
-                                    </p>
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                            <div>
-                              <p className="uppercase tracking-wider text-gray-500 font-medium text-[13px]">
-                                Extensions
-                              </p>
-                              <ul className="mt-4 text-[15px]">
-                                <li>
-                                  <a
-                                    href="#"
-                                    className="block p-2 -mx-2 rounded-lg hover:bg-gradient-to-br hover:from-indigo-50 hover:to-pink-50 hover:via-blue-50 transition ease-in-out duration-300 text-gray-800 font-semibold hover:text-indigo-600"
-                                  >
-                                    Plugins
-                                    <p className="text-gray-500 font-normal">
-                                      Tweak existing functionality
-                                    </p>
-                                  </a>
-                                </li>
-                                <li>
-                                  <a
-                                    href="#"
-                                    className="block p-2 -mx-2 rounded-lg hover:bg-gradient-to-br hover:from-indigo-50 hover:to-pink-50 hover:via-blue-50 transition ease-in-out duration-300 text-gray-800 font-semibold hover:text-indigo-600"
-                                  >
-                                    Batch uploads
-                                    <p className="text-gray-500 font-normal">
-                                      Get your time back
-                                    </p>
-                                  </a>
-                                </li>
-                                <li>
-                                  <a
-                                    href="#"
-                                    className="block p-2 -mx-2 rounded-lg hover:bg-gradient-to-br hover:from-indigo-50 hover:to-pink-50 hover:via-blue-50 transition ease-in-out duration-300 text-gray-800 font-semibold hover:text-indigo-600"
-                                  >
-                                    Social sharing
-                                    <p className="text-gray-500 font-normal">
-                                      Generate content for socials
-                                    </p>
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li> */}
                 </ul>
               </div>
             </Form>
@@ -356,3 +313,11 @@ const TaskFilters = () => {
 };
 
 export default TaskFilters;
+
+const RadioDesign = ({ name, idx }) => {
+  return (
+    <div className="py-2">
+      <p>{name}</p>
+    </div>
+  );
+};

@@ -8,20 +8,20 @@ import ChatUser from "./Messages/ChatUser";
 
 const Notes = () => {
   return (
-    <section className=" bg-[#f5f7fb] h-screen flex justify-center items-center">
-      {/* <div className='h-20 bg-[#f5f7fb] '>
-      <div className='flex flex-row space-x-1 items-center py-4 px-4'>
-          <p className="text-2xl bg-indigo-800 text-white p-1.5 rounded">
+    <section class=" bg-[#f5f7fb] h-screen flex justify-center items-center">
+      {/* <div class='h-20 bg-[#f5f7fb] '>
+      <div class='flex flex-row space-x-1 items-center py-4 px-4'>
+          <p class="text-2xl bg-indigo-800 text-white p-1.5 rounded">
           <FaComment />
             </p>  
-            <h2 className='text-2xl text-indigo-800 font-bold pl-3'>  Inbox</h2>
+            <h2 class='text-2xl text-indigo-800 font-bold pl-3'>  Inbox</h2>
         </div>
 
       </div> */}
 
-      <section className="flex flex-row max-w-screen-xl mx-auto max-h-[650px] pb-12 ">
-        <article className=" shadow  py-3 text-center bg-white space-y-4 min-w-[320px]  overflow-hidden  overflow-y-scroll scrollbar-hide relative pb-16  ">
-          <div className="relative">
+      <section class="flex flex-row max-w-screen-xl mx-auto max-h-[650px] pb-12 ">
+        <article class=" shadow  py-3 text-center bg-white space-y-4 min-w-[320px]  overflow-hidden  overflow-y-scroll scrollbar-hide relative pb-16  ">
+          <div class="relative">
             <form action="sticky top-2 ">
               <div class="relative px-4 pt-1  ">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-8 pt-1 pointer-events-none">
@@ -49,7 +49,7 @@ const Notes = () => {
               </div>
             </form>
           </div>
-          <ul className="space-y-3  ">
+          <ul class="space-y-3  ">
             <ChatUser
               name={`Amelia Nelson`}
               img={`https://images.pexels.com/photos/1170261/pexels-photo-1170261.jpeg?auto=compress&cs=tinysrgb&w=600`}
@@ -88,7 +88,7 @@ const Notes = () => {
        <ChatUser name = {`Jessie Rhodes`} img = {`https://images.pexels.com/photos/3786525/pexels-photo-3786525.jpeg?auto=compress&cs=tinysrgb&w=600`}/> */}
         </article>
 
-        <article className="shadow bg-gray-50 border-l my-0  relative overflow-hidden  overflow-y-scroll scrollbar-hide">
+        <article class="shadow bg-gray-50 border-l my-0  relative overflow-hidden  overflow-y-scroll scrollbar-hide">
           <ChatHeader />
           <ChatSender />
           <ChatReceiver />

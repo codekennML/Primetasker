@@ -70,7 +70,7 @@ const HomePage = () => {
                     Grow fast, do more , spend less !
                   </p>
                   {/* bg-gradient-to-r from-purple-500  to-pink-600 */}
-                  <h1 className="mb-4 font-heading text-7xl md:text-5xl xl:text-11xl text-purple-900 font-bold  max-w-[600px] tracking-wide">
+                  <h1 className="mb-4 font-heading text-7xl md:text-5xl xl:text-11xl text-gray-800 font-bold  max-w-[600px] tracking-wide">
                     Achieve more with ease
                   </h1>
                   <ul className="marker:text-gray-400 mb-8 font-medium flex items-center space-x-4  text-sm text-gray-900 text-center ">
@@ -87,7 +87,7 @@ const HomePage = () => {
                     <div className="w-full lg:w-auto py-7 p-3">
                       <Link
                         to="/create/post-a-task"
-                        className="font-heading w-full px-6 py-3.5 text-base text-gray-100 font-medium bg-purple-900 border border-gray-500 hover:bg-gray-800 rounded-full"
+                        className="font-heading w-full px-8 py-3.5 text-base text-gray-100 font-medium bg-gray-800 border border-gray-500 hover:bg-gray-800 rounded-full"
                       >
                         Post a task for free
                       </Link>
@@ -168,7 +168,6 @@ const HomePage = () => {
                           duration: 0.8,
                           delay: 5,
                         },
-                        // transitionEnd: { display: "none" },
                       }}
                       className=" absolute z-50 top-32 -left-4 rounded-bl-lg scale-75 animate-pulse"
                     >
@@ -199,21 +198,21 @@ const HomePage = () => {
                                       className="mr-1 "
                                       width="13"
                                       height="13"
-                                      viewbox="0 0 13 13"
+                                      viewBox="0 0 13 13"
                                       fill="none"
                                       xmlns="http://www.w3.org/2000/svg"
                                     >
                                       <path
                                         d="M9.56413 9.02246C9.19416 9.39243 8.5298 10.0568 7.91404 10.6726C7.13299 11.4536 5.867 11.4536 5.08595 10.6725C4.4823 10.0689 3.82786 9.41446 3.43587 9.02246C1.7436 7.33019 1.7436 4.58648 3.43587 2.8942C5.12814 1.20193 7.87185 1.20193 9.56413 2.8942C11.2564 4.58648 11.2564 7.33019 9.56413 9.02246Z"
                                         stroke="#71717A"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       ></path>
                                       <path
                                         d="M8.125 5.95833C8.125 6.8558 7.39746 7.58333 6.5 7.58333C5.60253 7.58333 4.875 6.8558 4.875 5.95833C4.875 5.06087 5.60253 4.33333 6.5 4.33333C7.39746 4.33333 8.125 5.06087 8.125 5.95833Z"
                                         stroke="#71717A"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       ></path>
                                     </svg>
                                   </p>
@@ -229,24 +228,6 @@ const HomePage = () => {
                       </div>
                     </motion.article>
 
-                    {/* <motion.img
-                      initial={{ x: -200, opacity: 0, scale: 0.7 }}
-                      animate={{
-                        x: 0,
-                        opacity: 1,
-                        scale: 1,
-                        transition: {
-                          ease: "easeIn",
-                          duration: 0.7,
-                          delay: 0.5,
-                        },
-                    
-                      }}
-                      src="../banner.png"
-                      className="h-[650px] w-[550px]  -mt-8 absolute left-0 "
-                    /> */}
-
-                    {/* <article className="bg-purple-200 w-[200px] h-[200px] rounded-lg absolute -top-10 -z-10 -right-10"></article> */}
                     <motion.article
                       initial={{ y: 100, opacity: 0, scale: 0.3 }}
                       animate={{
@@ -290,21 +271,21 @@ const HomePage = () => {
                                       className="mr-1 "
                                       width="13"
                                       height="13"
-                                      viewbox="0 0 13 13"
+                                      viewBox="0 0 13 13"
                                       fill="none"
                                       xmlns="http://www.w3.org/2000/svg"
                                     >
                                       <path
                                         d="M9.56413 9.02246C9.19416 9.39243 8.5298 10.0568 7.91404 10.6726C7.13299 11.4536 5.867 11.4536 5.08595 10.6725C4.4823 10.0689 3.82786 9.41446 3.43587 9.02246C1.7436 7.33019 1.7436 4.58648 3.43587 2.8942C5.12814 1.20193 7.87185 1.20193 9.56413 2.8942C11.2564 4.58648 11.2564 7.33019 9.56413 9.02246Z"
                                         stroke="#71717A"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       ></path>
                                       <path
                                         d="M8.125 5.95833C8.125 6.8558 7.39746 7.58333 6.5 7.58333C5.60253 7.58333 4.875 6.8558 4.875 5.95833C4.875 5.06087 5.60253 4.33333 6.5 4.33333C7.39746 4.33333 8.125 5.06087 8.125 5.95833Z"
                                         stroke="#71717A"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       ></path>
                                     </svg>
                                   </p>
@@ -364,21 +345,21 @@ const HomePage = () => {
                                       className="mr-1 "
                                       width="13"
                                       height="13"
-                                      viewbox="0 0 13 13"
+                                      viewBox="0 0 13 13"
                                       fill="none"
                                       xmlns="http://www.w3.org/2000/svg"
                                     >
                                       <path
                                         d="M9.56413 9.02246C9.19416 9.39243 8.5298 10.0568 7.91404 10.6726C7.13299 11.4536 5.867 11.4536 5.08595 10.6725C4.4823 10.0689 3.82786 9.41446 3.43587 9.02246C1.7436 7.33019 1.7436 4.58648 3.43587 2.8942C5.12814 1.20193 7.87185 1.20193 9.56413 2.8942C11.2564 4.58648 11.2564 7.33019 9.56413 9.02246Z"
                                         stroke="#71717A"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       ></path>
                                       <path
                                         d="M8.125 5.95833C8.125 6.8558 7.39746 7.58333 6.5 7.58333C5.60253 7.58333 4.875 6.8558 4.875 5.95833C4.875 5.06087 5.60253 4.33333 6.5 4.33333C7.39746 4.33333 8.125 5.06087 8.125 5.95833Z"
                                         stroke="#71717A"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       ></path>
                                     </svg>
                                   </p>
@@ -440,21 +421,21 @@ const HomePage = () => {
                                       className="mr-1 "
                                       width="13"
                                       height="13"
-                                      viewbox="0 0 13 13"
+                                      viewBox="0 0 13 13"
                                       fill="none"
                                       xmlns="http://www.w3.org/2000/svg"
                                     >
                                       <path
                                         d="M9.56413 9.02246C9.19416 9.39243 8.5298 10.0568 7.91404 10.6726C7.13299 11.4536 5.867 11.4536 5.08595 10.6725C4.4823 10.0689 3.82786 9.41446 3.43587 9.02246C1.7436 7.33019 1.7436 4.58648 3.43587 2.8942C5.12814 1.20193 7.87185 1.20193 9.56413 2.8942C11.2564 4.58648 11.2564 7.33019 9.56413 9.02246Z"
                                         stroke="#71717A"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       ></path>
                                       <path
                                         d="M8.125 5.95833C8.125 6.8558 7.39746 7.58333 6.5 7.58333C5.60253 7.58333 4.875 6.8558 4.875 5.95833C4.875 5.06087 5.60253 4.33333 6.5 4.33333C7.39746 4.33333 8.125 5.06087 8.125 5.95833Z"
                                         stroke="#71717A"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       ></path>
                                     </svg>
                                   </p>
@@ -509,21 +490,21 @@ const HomePage = () => {
                                       className="mr-1"
                                       width="13"
                                       height="13"
-                                      viewbox="0 0 13 13"
+                                      viewBox="0 0 13 13"
                                       fill="none"
                                       xmlns="http://www.w3.org/2000/svg"
                                     >
                                       <path
                                         d="M9.56413 9.02246C9.19416 9.39243 8.5298 10.0568 7.91404 10.6726C7.13299 11.4536 5.867 11.4536 5.08595 10.6725C4.4823 10.0689 3.82786 9.41446 3.43587 9.02246C1.7436 7.33019 1.7436 4.58648 3.43587 2.8942C5.12814 1.20193 7.87185 1.20193 9.56413 2.8942C11.2564 4.58648 11.2564 7.33019 9.56413 9.02246Z"
                                         stroke="#71717A"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       ></path>
                                       <path
                                         d="M8.125 5.95833C8.125 6.8558 7.39746 7.58333 6.5 7.58333C5.60253 7.58333 4.875 6.8558 4.875 5.95833C4.875 5.06087 5.60253 4.33333 6.5 4.33333C7.39746 4.33333 8.125 5.06087 8.125 5.95833Z"
                                         stroke="#71717A"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       ></path>
                                     </svg>
                                     <p className="text-[11px] text-gray-700 font-medium">
@@ -644,21 +625,21 @@ const HomePage = () => {
                                   className="mr-1"
                                   width="13"
                                   height="13"
-                                  viewbox="0 0 13 13"
+                                  viewBox="0 0 13 13"
                                   fill="none"
                                   xmlns="http://www.w3.org/2000/svg"
                                 >
                                   <path
                                     d="M9.56413 9.02246C9.19416 9.39243 8.5298 10.0568 7.91404 10.6726C7.13299 11.4536 5.867 11.4536 5.08595 10.6725C4.4823 10.0689 3.82786 9.41446 3.43587 9.02246C1.7436 7.33019 1.7436 4.58648 3.43587 2.8942C5.12814 1.20193 7.87185 1.20193 9.56413 2.8942C11.2564 4.58648 11.2564 7.33019 9.56413 9.02246Z"
                                     stroke="#71717A"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                   ></path>
                                   <path
                                     d="M8.125 5.95833C8.125 6.8558 7.39746 7.58333 6.5 7.58333C5.60253 7.58333 4.875 6.8558 4.875 5.95833C4.875 5.06087 5.60253 4.33333 6.5 4.33333C7.39746 4.33333 8.125 5.06087 8.125 5.95833Z"
                                     stroke="#71717A"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                   ></path>
                                 </svg>
                                 <p className="text-xs text-gray-700 font-medium">
@@ -690,21 +671,21 @@ const HomePage = () => {
                                   className="mr-1"
                                   width="13"
                                   height="13"
-                                  viewbox="0 0 13 13"
+                                  viewBox="0 0 13 13"
                                   fill="none"
                                   xmlns="http://www.w3.org/2000/svg"
                                 >
                                   <path
                                     d="M9.56413 9.02246C9.19416 9.39243 8.5298 10.0568 7.91404 10.6726C7.13299 11.4536 5.867 11.4536 5.08595 10.6725C4.4823 10.0689 3.82786 9.41446 3.43587 9.02246C1.7436 7.33019 1.7436 4.58648 3.43587 2.8942C5.12814 1.20193 7.87185 1.20193 9.56413 2.8942C11.2564 4.58648 11.2564 7.33019 9.56413 9.02246Z"
                                     stroke="#71717A"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                   ></path>
                                   <path
                                     d="M8.125 5.95833C8.125 6.8558 7.39746 7.58333 6.5 7.58333C5.60253 7.58333 4.875 6.8558 4.875 5.95833C4.875 5.06087 5.60253 4.33333 6.5 4.33333C7.39746 4.33333 8.125 5.06087 8.125 5.95833Z"
                                     stroke="#71717A"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                   ></path>
                                 </svg>
                                 <p className="text-xs text-gray-700 font-medium">

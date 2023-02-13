@@ -78,14 +78,14 @@ const Login = () => {
 
   return (
     <section>
-      <div className="bg-gray-700">
+      {/* <div className="bg-gray-700">
         <Nav />
-      </div>
+      </div> */}
       <section className="flex h-screen justify-center items-center relative">
-        <div className=" max-w-lg w-full px-12 pt-4 pb-2 rounded-lg ">
+        <div className="max-w-lg lg:max-w-lg w-full   lg:px-12 pt-4 pb-2 rounded-lg ">
           <div>
-            <div class="flex flex-wrap items-center justify-center mb-6">
-              <div class="w-auto ">
+            <div className="flex flex-wrap items-center justify-center mb-6">
+              <div className="w-auto ">
                 <a
                   href="#"
                   className="text-gray-100 text-[35px] font-bold flex items-center space-x-2 text-center"
@@ -113,26 +113,26 @@ const Login = () => {
                 <Form>
                   <CustomText
                     label="E-mail Address"
-                    labelstyle={`text-[15px]  text-gray-600 py-3 `}
+                    labelstyle={`font-bold lg:font-normal lg:text-[15px]  text-gray-600 py-3 `}
                     name="email"
                     type="text"
                     placeholder="Enter your email address"
-                    inputstyle="py-3 my-2.5  border-2 border-violet-200/90 placeholder:text-[15px] placeholder:text-gray-500 focus:outline-violet-500 text-base text-gray-400 bg-white indent-2 w-full rounded"
+                    inputstyle="text-[14px] py-3.5  my-2.5  border-2 border-violet-200/90 placeholder:text-[12px] lg:placeholder:text-[15px] placeholder:text-gray-600 focus:outline-violet-500 lg:text-base text-gray-600 bg-white indent-2 w-full rounded"
                   />
 
                   <CustomText
                     label="Password"
-                    labelstyle={`text-[15px]  text-gray-600 py-2 `}
+                    labelstyle={`font-bold lg:font-normal  lg:text-[15px] lg:text-base  text-gray-600 py-3 `}
                     name="password"
                     type="password"
                     placeholder="Password (8+ characters)"
-                    inputstyle="py-3 my-2.5 indent-2 placeholder:text-gray-500  border-2 border-violet-200/90 placeholder:text-[15px] focus:outline-violet-500 text-base w-full rounded"
+                    inputstyle="text-[14px] py-3 my-2.5 indent-2 placeholder:text-gray-500  border-2 border-violet-200/90 placeholder:text-[12px] lg:placeholder:text-[15px] focus:outline-violet-500 lg:text-base w-full rounded"
                     imgAfter={<AiOutlineEye />}
                   />
 
-                  <div className="flex flex-row  items-center mt-3 w-full">
+                  <div className="flex flex-col lg:flex-row items-start lg:items-center mt-1 lg:mt-3 w-full">
                     <CustomCheckbox
-                      labelstyle={`text-[13px] text-gray-600 `}
+                      labelstyle={`text-[12px] lg:text-[13px] text-gray-600 `}
                       type="checkbox"
                       checked={persist}
                       onChange={(e) => {
@@ -140,12 +140,12 @@ const Login = () => {
                       }}
                       name="rememberUser"
                       label={`Remember Me`}
-                      className=" mt-0 accent-violet-700 w-4 h-4"
+                      className=" mt-0 accent-violet-700 w-3 h-3 lg:w-4 lg:h-4 "
                     />
 
                     <div className="flex-1 ">
                       <Link
-                        className="text-violet-800 text-[14px] font-medium cursor-pointer float-right"
+                        className="hidden lg:block text-violet-800 text-[12px] lg:text-[14px] font-medium cursor-pointer float-right "
                         to="/forgot-password"
                       >
                         Forgot Password?
@@ -156,7 +156,7 @@ const Login = () => {
                   {/* <br /> */}
 
                   <button
-                    className="bg-purple-800 hover:bg-purple-900 mt-6 rounded  text-white text-sm text-[18px] mb-4 px-8 py-4 w-full  font-medium"
+                    className="bg-purple-800 hover:bg-purple-900 mt-6 rounded  text-white text-sm text-[17px] lg:text-[18px] mb-4 px-8 py-3 lg:py-4 w-full  font-semibold"
                     type="submit"
                   >
                     Login
@@ -166,7 +166,7 @@ const Login = () => {
             </Formik>
           </div>
 
-          <div className="text-gray-500 text-[13px] font-medium text-center ">
+          <div className="text-gray-500 text-[12px] lg:text-[13px] font-medium text-center mt-3 ">
             <Link to="/signup">
               Don't have an account?{" "}
               <span className="text-purple-500"> Sign up </span>
@@ -175,20 +175,20 @@ const Login = () => {
 
           <div className="my-2 text-center">
             <div className="flex items-center my-1 before:flex-1 before:border-t-2 before:border-gray-200 before:mt-0.5 after:flex-1 after:border-t-2 after:border-gray-200 after:mt-0.5">
-              <p className="text-center font-semibold text-gray-300 mx-4 mb-0">
+              <p className="text-center font-semibold text-gray-300 mx-4 mb-0 text-[14px] lg:text-base">
                 or
               </p>
             </div>
             <div>
               <a
                 href="http://localhost:3500/auth/google"
-                className="bg-white px-12 mt-5 inline-block border-2 w-full text-lg  border-gray-300/90 text-gray-500 font-medium  py-3 rounded "
+                className="bg-white px-6 lg:px-12 mt-4 lg:mt-5 inline-block border-2 w-full text-[12px] lg:text-lg  border-gray-300/90 text-gray-500 font-medium  py-3 rounded "
               >
-                <p className="flex -items-center">
+                <p className="flex items-center">
                   <span className="text-red-500 self-start text-lg ">
-                    <FcGoogle className="w-6 h-6" />
+                    <FcGoogle className="w-4 h-4  lg:w-6 lg:h-6" />
                   </span>
-                  <span className="flex-1 justify-center text-base">
+                  <span className="flex-1 justify-center text-[12px] lg:text-base">
                     Continue with Google
                   </span>
                 </p>

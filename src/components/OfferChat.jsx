@@ -1,12 +1,20 @@
-import React from "react";
+import { Form, Formik } from "formik";
+import React, { useRef, useEffect, forwardRef } from "react";
 import { AiFillStar } from "react-icons/ai";
-import { FaImage } from "react-icons/fa";
+import { FaImage, FaTimes } from "react-icons/fa";
+import CustomText from "../utils/CustomFieldComp/CustomText";
 import CustomTextarea from "../utils/CustomFieldComp/CustomTextarea";
 
 const OfferChat = () => {
+  const fileUploadRef = useRef();
+
+  const displayFileUpload = (e) => {
+    fileUploadRef.current.click();
+  };
+
   return (
     <div className="bg-white w-[550px] pt-2 pb-4  relative rounded-lg">
-      <section className=" overflow-y-scroll h-[450px] px-6 space-y-4">
+      <section className=" overflow-y-scroll h-[450px] px-6 space-y-4 mb-6">
         <article>
           <div className="   rounded-l-lg flex flex-row space-x-2 ">
             <div>
@@ -55,7 +63,7 @@ const OfferChat = () => {
             perferendis, natus velit incidunt, quis earum doloremque modi
           </p>
         </article>
-        <article className="border-b">
+        <article className="border-b py-3">
           <div className="   rounded-l-lg flex flex-row items-center space-x-2 ">
             <div>
               <img
@@ -75,7 +83,7 @@ const OfferChat = () => {
             perferendis, natus velit incidunt, quis earum doloremque modi
           </p>
         </article>
-        <article className="border-b">
+        <article className=" py-3">
           <div className="   rounded-l-lg flex flex-row items-center space-x-2 ">
             <div>
               <img
@@ -96,25 +104,80 @@ const OfferChat = () => {
           </p>
         </article>
       </section>
+      <Formik
+        initialValues={{ comment: "", file: "" }}
+        onSubmit={(values, actions) => {
+          console.log(values);
+          actions.resetForm();
+        }}
+      >
+        {({ values, setFieldValue }) => {
+          return (
+            <Form className="bg-gray-50 mx-6 rounded-lg pb-3 focus-within:border-violet-400 border-2">
+              <div className="px-3 ">
+                <div className="relative ">
+                  <CustomTextarea
+                    autoFocus
+                    disabled={values.comment && values.comment.length >= 1400}
+                    maxlength="1400"
+                    placeholder={`Reply to Kamsi Jaja`}
+                    name="comment"
+                    inputStyle="h-16 oveflow-y-scroll py-5 bg-gray-100 outline-0 border-0 text-gray-500 resize-none font-semibold"
+                  />
+                  <p className="absolute -bottom-6 right-2 text-[12px] fomt-semibold text-gray-600">
+                    {`${values.comment.length}  of 1400`}
+                  </p>
+                </div>
 
-      <div className="px-6 pt-2.5">
-        {/* <div>
-          <p>Lol</p>
-        </div> */}
-        <CustomTextarea placeholder={`Reply to Kamsi Jaja`} name="replytext" />
-        <div className="flex items-center justify-between py-1 mt-2">
-          <button
-            type="file"
-            className=" rounded-full border border-purple-800 p-1"
-          >
-            {" "}
-            <FaImage className="text-purple-600" />{" "}
-          </button>
-          <button className="px-12 py-2 text-purple-700 border border-violet-500 hover:bg-purple-800 hover:text-white rounded-lg font-semibold ">
-            Send
-          </button>
-        </div>
-      </div>
+                <div className="flex items-center justify-between py-1 mt-6">
+                  <div className="flex-1">
+                    {values.file ? (
+                      <div className="flex items-center space-x-2 bg-gray-50 rounded">
+                        <span>
+                          <FaImage className="text-purple-600" />
+                        </span>
+                        <p className="max-w-52 truncate text-[13px] ">
+                          {values.file.name}
+                        </p>
+                        <button onClick={() => setFieldValue("file", "")}>
+                          <FaTimes className="text-gray-700 text-[13px]" />
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => displayFileUpload()}
+                        className=" rounded-full  border-purple-800 p-1 px-2 flex items-center space-x-2"
+                      >
+                        <span>
+                          <FaImage className="text-purple-600" />
+                        </span>
+                        {/* <span className="text-[11px]">Add Image</span> */}
+                        <input
+                          type="file"
+                          ref={fileUploadRef}
+                          className="hidden"
+                          name="file"
+                          onChange={(e) =>
+                            setFieldValue("file", e.currentTarget.files[0])
+                          }
+                        />
+                      </button>
+                    )}
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="px-3 py-1 mt-1 text-purple-700 text-[13px]  bg-purple-200 rounded-full hover:text-gray-600 font-medium "
+                  >
+                    Send Reply
+                  </button>
+                </div>
+              </div>
+            </Form>
+          );
+        }}
+      </Formik>
     </div>
   );
 };

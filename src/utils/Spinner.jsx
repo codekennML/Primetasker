@@ -1,18 +1,24 @@
 import { Oval } from "react-loader-spinner";
 
-const Spinner = ({ position }) => {
+const Spinner = ({
+  color = "purple",
+  visible = false,
+  position,
+  height = 50,
+  width = 50,
+}) => {
   return (
     <Oval
-      height={50}
-      width={50}
-      color="lightgray"
+      strokeWidth={30}
+      strokeWidthSecondary={100}
+      color={color}
+      secondaryColor="white"
+      height={height}
+      width={width}
       wrapperStyle={{}}
-      wrapperClass=""
-      visible={true}
+      wrapperclassName=""
+      visible={visible}
       ariaLabel="oval-loading"
-      secondaryColor="purple"
-      strokeWidth={2}
-      strokeWidthSecondary={2}
     />
     // </div>
   );

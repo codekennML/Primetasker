@@ -42,20 +42,22 @@ const ModalProvider = ({ children }) => {
       } fixed z-50  w-full h-screen bg-gray-900/40 flex justify-center items-center transform:transition-transform duration-1000 ease-in delay-700`}
     >
       <div onClick={(e) => e.stopPropagation()}>
-        {/* {children} */}
-        <div
-          //   initial={{ y: -100, opacity: 0, scale: 0.3 }}
-          //   animate={{
-          //     opacity: 1,
-          //     y: 0,
-          //     scale: 1,
-          //     transition: {
-          //       delay: -6,
-          //       ease: "easeIn",
-          //       duration: 3,
-          //       //   delay: 2,
-          //     },
-          //   }}
+        <motion.div
+          initial="initial"
+          animate="animate"
+          variants={{
+            initial: {
+              y: -100,
+              opacity: 0,
+            },
+            animate: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 1,
+              },
+            },
+          }}
           className="bg-white rounded-lg  "
         >
           <div className="flex justify-between items-center  pt-3   rounded-t  pb-1 px-6  dark:border-gray-600">
@@ -73,7 +75,7 @@ const ModalProvider = ({ children }) => {
             </button>
           </div>
           {content}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

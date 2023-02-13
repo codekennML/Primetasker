@@ -2,8 +2,10 @@ import React from "react";
 import { FaSun } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setDarkMode } from "../../../features/theme/themeSlice";
+import useAuth from "../../../hooks/useAuth";
 
 const TopBar = ({ headerText }) => {
+  const { avatar } = useAuth();
   const dispatch = useDispatch();
 
   const handleMode = () => {
@@ -24,11 +26,7 @@ const TopBar = ({ headerText }) => {
           </button>
         </div>
         <div className="bg-gradient-to-tr from-pink-300 via-green-300 to-orange-300 p-1 rounded-full  ">
-          <img
-            src="https://images.pexels.com/photos/4355346/pexels-photo-4355346.jpeg?auto=compress&cs=tinysrgb&w=600"
-            alt=""
-            className="w-[40px] h-[40px] rounded-full"
-          />
+          <img src={avatar} alt="" className="w-[40px] h-[40px] rounded-full" />
         </div>
       </div>
     </article>

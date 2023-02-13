@@ -58,15 +58,15 @@ const Transactions = () => {
           </h2>
           <article className="w-full flex items-center space-x-4 justify-between  ">
             <div className=" flex flex-row items-center  flex-1 space-x-8 ">
-              <form class="flex items-center flex-1  ">
-                <label for="simple-search" class="sr-only">
+              <form className="flex items-center flex-1  ">
+                <label for="simple-search" className="sr-only">
                   Search
                 </label>
-                <div class="relative w-full">
-                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <div className="relative w-full">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <svg
                       aria-hidden="true"
-                      class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                      className="w-5 h-5 text-gray-500 dark:text-gray-400"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +81,7 @@ const Transactions = () => {
                   <input
                     type="text"
                     id="simple-search"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full pl-10 p-1.5  "
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full pl-10 p-1.5  "
                     placeholder="Search all transactions"
                     required
                   />
@@ -121,7 +121,7 @@ const Transactions = () => {
                 type="submit"
                 className=" mr-4 flex items-center p-2 px-3 ml-2 text-sm font-medium text-gray-700 border border-gray-400 rounded-lg  hover:bg-gray-200  focus:outline-none  "
               >
-                <span class="">New Payment</span>
+                <span className="">New Payment</span>
               </button>
               <button
                 type="submit"
@@ -130,7 +130,7 @@ const Transactions = () => {
                 <span className="pr-2 text-[10px] text-gray-500">
                   <FaDownload />
                 </span>
-                <span class="">Export</span>
+                <span className="">Export</span>
               </button>
             </div>
           </article>

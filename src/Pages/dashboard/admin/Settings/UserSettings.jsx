@@ -8,7 +8,7 @@ const Users = () => {
         <h2 className="text-xl font-medium text-gray-600 font-sans">
           Users Management
         </h2>
-        {/* <p className='text-sm  text-gray-600 pt-3 pb-2'>Here you can edit public  about yourself</p> */}
+        {/* <p className='text-sm  text-gray-600 pt-3 pb-2'>Here you can edit assets  about yourself</p> */}
       </article>
       <article className="py-5 space-y-2">
         <h2 className="text-sm font-medium">Permissions & Roles</h2>

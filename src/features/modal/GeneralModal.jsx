@@ -4,7 +4,7 @@ import { closeAnyModal } from "./modalSlice";
 
 const GeneralModal = ({ children }) => {
   const dispatch = useDispatch();
-  // const modalStatus =  useSelector((state) => state.modal.status)
+
 
   return (
     <section

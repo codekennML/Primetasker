@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 const Logo = () => {
   return (
-    <div class="flex flex-wrap items-center">
-      <div class="w-auto mr-14">
+    <div className="flex flex-wrap items-center">
+      <div className="w-auto mr-14">
         <Link
           to="/"
           className="text-gray-800 text-[30px] font-bold flex items-center space-x-1"
@@ -15,7 +15,7 @@ const Logo = () => {
             </div>
           </div>
 
-          <p className="text-purple-900 text-[28px] ">Primetasker</p>
+          <p className="text-gray-900 text-[28px] ">Primetasker</p>
         </Link>
       </div>
     </div>

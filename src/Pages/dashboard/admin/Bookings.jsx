@@ -4,7 +4,7 @@ import DescCards from "../../../utils/DescCards";
 
 const Bookings = () => {
   return (
-    <div className="w-full max-w-screen-full  mx-auto px-6 ">
+    <div className="w-full max-w-screen-full mx-auto px-6 ">
       <section className=" h-16 ">
         <div className="flex flex-row space-x-1 items-center py-4 px-4">
           <p className="text-2xl bg-indigo-800 text-white p-1.5 rounded">

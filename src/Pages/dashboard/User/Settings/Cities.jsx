@@ -1,22 +1,22 @@
 const Cities = () => {
   return (
-    <section className="px-7 max-w-screen-lg">
-      <article className="border-b py-3 sticky top-0 z-10 bg-white ">
-        <h2 className="text-xl font-medium text-gray-600 font-sans">
+    <section class="px-7 max-w-screen-lg">
+      <article class="border-b py-3 sticky top-0 z-10 bg-white ">
+        <h2 class="text-xl font-medium text-gray-600 font-sans">
           Cities Management
         </h2>
-        {/* <p className='text-sm  text-gray-600 pt-3 pb-2'>Here you can edit public information about yourself</p> */}
+        {/* <p class='text-sm  text-gray-600 pt-3 pb-2'>Here you can edit assets information about yourself</p> */}
       </article>
-      <article className="mt-4 max-w-screen-md space-y-3 text-xs">
-        <h3 className="text-sm font-medium text-gray-600">
+      <article class="mt-4 max-w-screen-md space-y-3 text-xs">
+        <h3 class="text-sm font-medium text-gray-600">
           Create and Manage all Cities
         </h3>
-        <p className="text-xs">
+        <p class="text-xs">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas,
           architecto quis veniam velit{" "}
         </p>
       </article>
-      <article className="mt-4">{/* <DataTable pagination={10} /> */}</article>
+      <article class="mt-4">{/* <DataTable pagination={10} /> */}</article>
     </section>
   );
 };

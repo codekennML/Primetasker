@@ -6,8 +6,8 @@ const TabComponent = ({ TabList }) => {
     <Tabs
       activeTab="1"
       className=""
-      ulClassName="bg-gradient-to-tr from-pink-100/60 to-blue-100/60  font-medium text-gray-800 font-sans"
-      activityClassName="bg-indigo-300 py-[1.5px] rounded-full"
+      ulclassName="bg-gradient-to-tr from-pink-100/60 to-blue-100/60  font-medium text-gray-800 font-sans"
+      activityclassName="bg-indigo-300 py-[1.5px] rounded-full"
       onClick={(event, tab) => console.log(event, tab)}
     >
       {TabList.map((tab) => (

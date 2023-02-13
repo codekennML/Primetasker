@@ -127,7 +127,7 @@ const Navbar = ({ type }) => {
 
 
     </section>  */}
-      <section className="w-[80%] mx-auto overflow-hidden">
+      <section className="w-full px-4 lg:px-0  lg:w-[80%] mx-auto overflow-hidden">
         <Outlet />
       </section>
     </>

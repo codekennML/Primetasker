@@ -47,7 +47,7 @@ import UserSidebar from "./Pages/dashboard/User/UserSidebar";
 import UserAnalytics from "./Pages/dashboard/User/UserAnalytics";
 import Verify from "./Pages/dashboard/User/Verify";
 import Create from "./Pages/dashboard/User/Create";
-import PostTask from "./components/PostTask";
+import PostTask from "./features/tasks/pages/PostTask/PostTaskForm";
 import PostMail from "./components/PostMail";
 import FindItems from "./components/FindItems";
 import CreateService from "./components/CreateService";
@@ -72,7 +72,7 @@ function App() {
   const [theme, setTheme] = useState(localStorage.theme);
 
   return (
-    <div className="bg-slate-100 h-screen dark:bg-gray-700 dark:transform:transition-all dark:duration-700 dark:ease-in dark:delay-300">
+    <div class="bg-[#f3f5f7] h-screen dark:bg-gray-700 dark:transform:transition-all dark:duration-700 dark:ease-in dark:delay-300">
       <ModalProvider />
       <Toaster />
       <Routes>
@@ -96,8 +96,10 @@ function App() {
 
         {/* Routes to admin dashboard are protected by the RequireAuth Component */}
 
-        <Route element={<RequireAuth allowedRoles={["Tasker", "Customer"]} />}>
-          <Route element={<PersistLogin />}>
+        <Route element={<PersistLogin />}>
+          <Route
+            element={<RequireAuth allowedRoles={["Tasker", "Customer"]} />}
+          >
             <Route path="dashboard" element={<UserSidebar />}>
               <Route index element={<UserAnalytics />} />
               <Route path="verify" element={<Verify />} />
@@ -107,52 +109,52 @@ function App() {
               <Route path="verify" element={<Verify />} />
             </Route>
           </Route>
-        </Route>
 
-        <Route element={<RequireAuth allowedRoles={["Manager", "Admin"]} />}>
-          <Route element={<Prefetch />}>
-            <Route path="admin-dashboard" element={<Sidebar />}>
-              <Route index element={<Analytics />} />
-              {/* <Route path="overview" element={<Analytics />} /> */}
-              <Route path="users" element={<Users />} />
-              {/* <Route path="users" element={<Users />} /> */}
-              <Route path="agents" element={<Agents />} />
-              <Route path="guests" element={<Guests />} />
+          <Route element={<RequireAuth allowedRoles={["Manager", "Admin"]} />}>
+            <Route element={<Prefetch />}>
+              <Route path="admin-dashboard" element={<Sidebar />}>
+                <Route index element={<Analytics />} />
+                {/* <Route path="overview" element={<Analytics />} /> */}
+                <Route path="users" element={<Users />} />
+                {/* <Route path="users" element={<Users />} /> */}
+                <Route path="agents" element={<Agents />} />
+                <Route path="guests" element={<Guests />} />
 
-              <Route path="notes">
-                <Route index element={<Notes />} />
-                <Route path=":id" element={<EditNotes />} />
-              </Route>
+                <Route path="notes">
+                  <Route index element={<Notes />} />
+                  <Route path=":id" element={<EditNotes />} />
+                </Route>
 
-              <Route path="bookings">
-                <Route index element={<Booking />} />
-                <Route path="create" element={<AddNewBooking />} />
-                <Route path="single-booking/:id" element={<Booking />} />
-                <Route path="edit/:id" element={<ModifyBooking />} />
-              </Route>
+                <Route path="bookings">
+                  <Route index element={<Booking />} />
+                  <Route path="create" element={<AddNewBooking />} />
+                  <Route path="single-booking/:id" element={<Booking />} />
+                  <Route path="edit/:id" element={<ModifyBooking />} />
+                </Route>
 
-              <Route path="tasks">
-                <Route index element={<Tasks />} />
-                <Route path="create" element={<CreateTask />} />
-                <Route path="single-task/:id" element={<SingleTask />} />
-                <Route path="edit/:id" element={<EditTask />} />
-              </Route>
+                <Route path="tasks">
+                  <Route index element={<Tasks />} />
+                  <Route path="create" element={<CreateTask />} />
+                  <Route path="single-task/:id" element={<SingleTask />} />
+                  <Route path="edit/:id" element={<EditTask />} />
+                </Route>
 
-              <Route path="properties">
-                <Route index element={<Properties />} />
-                <Route path="create" element={<AddNewProperty />} />
-                <Route path="single-property/:id" element={<Property />} />
-                <Route path="edit/:id" element={<ModifyProperty />} />
-              </Route>
+                <Route path="properties">
+                  <Route index element={<Properties />} />
+                  <Route path="create" element={<AddNewProperty />} />
+                  <Route path="single-property/:id" element={<Property />} />
+                  <Route path="edit/:id" element={<ModifyProperty />} />
+                </Route>
 
-              <Route path="settings" element={<SideTab />}>
-                <Route index element={<Profile />} />
-                <Route path="theme" element={<Theme />} />
-                <Route path="categories" element={<Categories />} />
-                <Route path="users" element={<UserSettings />} />
-                <Route path="bookings" element={<Bookings />} />
-                <Route path="payments" element={<Payments />} />
-                <Route path="cities" element={<Cities />} />
+                <Route path="settings" element={<SideTab />}>
+                  <Route index element={<Profile />} />
+                  <Route path="theme" element={<Theme />} />
+                  <Route path="categories" element={<Categories />} />
+                  <Route path="users" element={<UserSettings />} />
+                  <Route path="bookings" element={<Bookings />} />
+                  <Route path="payments" element={<Payments />} />
+                  <Route path="cities" element={<Cities />} />
+                </Route>
               </Route>
             </Route>
           </Route>

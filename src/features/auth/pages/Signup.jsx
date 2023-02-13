@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatchSignupMutation } from "../slices/authApiSlice";
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineEye } from "react-icons/ai";
-import HeadlessRadio from "../../../utils/CustomFieldComp/HeadlessRadio";
+import HeadlessRadio from "../../../utils/CustomFieldComp/CustomRadioCheck";
 // import { notify, notifyLoad, notifyErr } from "../../hooks/NotifyToast";
 
 const Signup = () => {
@@ -169,8 +169,8 @@ const Signup = () => {
         </div>
 
         <div className=" text-center px-4 ">
-          <div class="flex items-center my-1 before:flex-1 before:border-t-2 before:border-gray-200 before:mt-0.5 after:flex-1 after:border-t-2 after:border-gray-200 after:mt-0.5">
-            <p class="text-center font-semibold text-gray-400 mx-4 mb-0">or</p>
+          <div className="flex items-center my-1 before:flex-1 before:border-t-2 before:border-gray-200 before:mt-0.5 after:flex-1 after:border-t-2 after:border-gray-200 after:mt-0.5">
+            <p className="text-center font-semibold text-gray-400 mx-4 mb-0">or</p>
           </div>
           <div>
             <a

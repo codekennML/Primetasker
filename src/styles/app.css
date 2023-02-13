@@ -44,7 +44,13 @@ body,html {
     scrollbar-width: none;  /* Firefox */
 }
 
-
+.rdrDayDisabled,.rdrDayDisabled .rdrInRange,.rdrDayDisabled .rdrStartEdge {
+  filter: none;
+  color:blue
+}
+.rdrDayDisabled .rdrInRange{
+  color:yellow
+}
         .rdrDefinedRangesWrapper{
             display: none;
         }
@@ -53,14 +59,14 @@ body,html {
          }
          .rdrPprevButton i {
             border-width: 8px 11px 7px 0px;
-            border-color: transparent rgb(166 79 180) transparent transparent;
+            border-color: transparent rgb(131, 14, 199) transparent transparent;
             transform: translate(-3px, 0px);
           }
           
           .rdrNextButton i {
             margin: 0 0 0 7px;
             border-width: 8px 11px 7px 10px;
-            border-color: transparent transparent transparent rgb(166 79 180);
+            border-color: transparent transparent transparent rgb(131, 14, 199);
             transform: translate(3px, 0px);
           }
           

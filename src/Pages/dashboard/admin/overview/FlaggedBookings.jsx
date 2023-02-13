@@ -2,7 +2,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import Select from "../../../../utils/CustomSelect";
 import { FaExclamationCircle } from "react-icons/fa";
 import { useState } from "react";
-
+import { Formik, Form } from "formik";
 const options = [
   "Today",
   "Last Week",
@@ -23,13 +23,24 @@ const FlaggedBookings = () => {
             <h2 className=" pt-4  font-semibold dark:text-gray-100 text-gray-700 dark:text-purple-600 text-[15px]">
               Flagged Bookings
             </h2>
-            <div className="relative pt-3 flex items-center justify-between">
-              <Select
-                items={options}
-                selected={selected}
-                setSelected={setSelected}
-              />
-            </div>
+            <Formik initialValues={{ flagBook: selected }}>
+              {() => {
+                return (
+                  <Form>
+                    <div className="relative ">
+                      <Select
+                        name="flagBook"
+                        selected={selected}
+                        setSelected={setSelected}
+                        items={options}
+                        width={`w-full`}
+                        style={`py-2 text-[16px] bg-gray-50`}
+                      />
+                    </div>
+                  </Form>
+                );
+              }}
+            </Formik>
           </article>
           <article className="text-[13px] font-medium  ">
             <ul className=" pt-3 pb-1 last:border-b-none">

@@ -245,7 +245,7 @@ const Table = ({
     tableContent = (
       <tr className="absolute left-2/4 space-y-4 mt-32">
         <td>
-          <Spinner />
+          <Spinner height={60} width={60} visible={true} color="#b09cd7" />
         </td>
       </tr>
     );
@@ -290,7 +290,7 @@ const Table = ({
       <section className=" antialiased  text-gray-600   ">
         <div className="h-full ">
           <div className="w-full  mx-auto bg-white dark:bg-gray-800 border border-t-0 border-gray-100  max-w-full  dark:border-none">
-            <div className="p-3 dark:bg-gray-800">
+            <div className="p-3 pt-0 dark:bg-gray-800">
               <div className="overflow-x-auto  lg:max-w-screen-lg xl:max-w-[calc(80vw)] xl:w-full  min-h-[500px] scrollbar-hide ">
                 <table
                   {...getTableProps()}

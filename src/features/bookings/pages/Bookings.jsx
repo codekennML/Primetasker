@@ -19,6 +19,7 @@ const Booking = () => {
           filterList={filterList}
           sortList={sortList}
           tableTitle={`All Bookings`}
+          searchTitle={`Search all bookings`}
           // pageData={pageData}
         />
       </section>

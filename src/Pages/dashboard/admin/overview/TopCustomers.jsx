@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useGetTopCustomersQuery } from "../../../../features/stats/customerStats";
 import millify from "millify";
 import Spinner from "../../../../utils/Spinner";
-
+import { Formik, Form } from "formik";
 const options = [
   "Today",
   "Last Week",
@@ -91,13 +91,24 @@ const TopCustomers = () => {
             <h2 className="  font-semibold dark:text-purple-400 text-purple-700 text-[15px]">
               Top customers
             </h2>
-            <div className="relative ">
-              <Select
-                selected={selected}
-                setSelected={setSelected}
-                items={options}
-              />
-            </div>
+            <Formik initialValues={{ topCust: selected }}>
+              {() => {
+                return (
+                  <Form>
+                    <div className="relative ">
+                      <Select
+                        name="topCust"
+                        selected={selected}
+                        setSelected={setSelected}
+                        items={options}
+                        width={`w-full`}
+                        style={`py-2 text-[16px] bg-gray-50`}
+                      />
+                    </div>
+                  </Form>
+                );
+              }}
+            </Formik>
           </article>
 
           <article className=" text-[13px] font-medium   ">

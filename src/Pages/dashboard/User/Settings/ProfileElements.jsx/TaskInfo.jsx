@@ -3,7 +3,7 @@ import CustomSelect from "../../../../../utils/CustomFieldComp/CustomSelect";
 import CustomText from "../../../../../utils/CustomFieldComp/CustomText";
 import { Form, Formik } from "formik";
 import CustomRadio from "../../../../../utils/CustomFieldComp/CustomRadio";
-import HeadlessRadio from "../../../../../utils/CustomFieldComp/HeadlessRadio";
+import HeadlessRadio from "../../../../../utils/CustomFieldComp/CustomRadioCheck";
 
 const TaskInfo = () => {
   const onSubmit = async (values, actions) => {

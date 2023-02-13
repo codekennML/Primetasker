@@ -58,6 +58,7 @@ import RecentWithdrawals from "./overview/RecentWithdrawals";
 import FlaggedBookings from "./overview/FlaggedBookings";
 import FlaggedCustomers from "./overview/FlaggedCustomers";
 import FlaggedTaskers from "./overview/FlaggedTaskers";
+import TopBar from "./TopBar";
 
 const Analytics = () => {
   const dispatch = useDispatch();
@@ -69,66 +70,71 @@ const Analytics = () => {
   let content;
 
   return (
-    <div className="w-full   mx-auto bg-slate-100 dark:bg-gray-700">
-      <section className="">
-        <section className="mt-8 ">
-          <article className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-4 lg:grid-rows-1 gap-x-4 gap-y-4 mt-3  rounded-lg">
-            <StatCard
-              Svg={
-                <FaChartBar className="font-medium w-16 h-12  text-purple-700 " />
-              }
-              currSymbol={`₦`}
-              title="Commissions"
-              mainAmt={`2,500,000`}
-              changePercent={`16`}
-              changeAmount={`89k`}
-              timeframe={`today`}
-            />
-            <StatCard
-              Svg={
-                <AiOutlineShoppingCart className="font-medium w-16 h-12  text-purple-700 " />
-              }
-              title="Bookings"
-              mainAmt={`2,500,000`}
-              changePercent={`16`}
-              changeAmount={`89k`}
-              timeframe={`today`}
-            />
-            <StatCard
-              Svg={
-                <AiOutlineReconciliation className="font-medium w-16 h-12  text-purple-700 " />
-              }
-              title="Transactions"
-              mainAmt={`2,500`}
-              changePercent={`16`}
-              changeAmount={`89k`}
-              timeframe={`today`}
-            />
-            <StatCard
-              Svg={
-                <AiOutlineUser className="font-medium w-16 h-12  text-purple-700 " />
-              }
-              title="Users"
-              mainAmt={`25,000`}
-              changePercent={`16`}
-              changeAmount={`89k`}
-              timeframe={`today`}
-            />
-          </article>
-        </section>
+    <div className="w-full mx-auto bg-slate-100 dark:bg-gray-700 ">
+      <section className="h-20  ">
+        <div className="sticky top-0">
+          <TopBar headerText={"Dashboard"} />
+        </div>
 
-        <section className="mt-6 flex gap-x-8  w-full  ">
-          <div className="w-2/3">
-            <Performance />
-          </div>
-          <div className="w-1/3">
-            <TopCategories />
-          </div>
-        </section>
+        <section className="h-screen pb-16 max-h-[calc(100vh_-_75px)] pl-4 overflow-scroll scrollbar-hide">
+          <section className="mt-8 ">
+            <article className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-4 lg:grid-rows-1 gap-x-4 gap-y-4 mt-3  rounded-lg">
+              <StatCard
+                Svg={
+                  <FaChartBar className="font-medium w-16 h-12  text-purple-700 " />
+                }
+                currSymbol={`₦`}
+                title="Commissions"
+                mainAmt={`2,500,000`}
+                changePercent={`16`}
+                changeAmount={`89k`}
+                timeframe={`today`}
+              />
+              <StatCard
+                Svg={
+                  <AiOutlineShoppingCart className="font-medium w-16 h-12  text-purple-700 " />
+                }
+                title="Bookings"
+                mainAmt={`2,500,000`}
+                changePercent={`16`}
+                changeAmount={`89k`}
+                timeframe={`today`}
+              />
+              <StatCard
+                Svg={
+                  <AiOutlineReconciliation className="font-medium w-16 h-12  text-purple-700 " />
+                }
+                title="Transactions"
+                mainAmt={`2,500`}
+                changePercent={`16`}
+                changeAmount={`89k`}
+                timeframe={`today`}
+              />
+              <StatCard
+                Svg={
+                  <AiOutlineUser className="font-medium w-16 h-12  text-purple-700 " />
+                }
+                title="Users"
+                mainAmt={`25,000`}
+                changePercent={`16`}
+                changeAmount={`89k`}
+                timeframe={`today`}
+              />
+            </article>
+          </section>
 
-        {/* Tasker, Customer and Categories Stats */}
-        <section className="flex flex-row justify-between my-8 gap-x-4">
-          {/* <article className="bg-white dark:bg-gray-800 w-1/3 rounded-lg shadow-md">
+          <section className="mt-6 flex gap-x-8  w-full  ">
+            <div className="w-2/3">
+              <Performance />
+            </div>
+            <div className="w-1/3">
+              <TopCategories />
+            </div>
+          </section>
+
+          {/* Tasker, Customer and Categories Stats */}
+          <section className="flex flex-row justify-between my-8 gap-x-4">
+            {/* <article className="bg-white dark:bg-gray-800 w-1/3 rounded-lg shadow-md">
             <div className=" rounded-lg  px-4  border dark:border-gray-600 shadow-md bg-white dark:bg-gray-800 h-full ">
               <article className="flex justify-between items-center mb-8 mt-2">
                 <h2 className="  font-semibold dark:text-purple-400 text-purple-700 text-[15px]">
@@ -172,24 +178,24 @@ const Analytics = () => {
               </div>
             </div>
           </article> */}
-          <TopTaskers />
-          <TopCustomers />
-        </section>
+            <TopTaskers />
+            <TopCustomers />
+          </section>
 
-        <section class="antialiased  text-gray-600  flex flex-col lg:flex-row gap-x-2 rounded-lg ">
-          <RecentDeposits />
+          <section className="antialiased  text-gray-600  flex flex-col lg:flex-row gap-x-2 rounded-lg ">
+            {/* <RecentDeposits />
 
-          <RecentWithdrawals />
-        </section>
+          <RecentWithdrawals /> */}
+          </section>
 
-        <section className="flex flex-row justify-between my-8 gap-x-4 ">
-          <FlaggedBookings />
-          <FlaggedCustomers />
-          <FlaggedTaskers />
+          <section className="flex flex-row justify-between  gap-x-4 ">
+            <FlaggedBookings />
+            <FlaggedCustomers />
+            <FlaggedTaskers />
+          </section>
         </section>
       </section>
-
-      <footer className="bg-white dark:bg-gray-800 py-3 text-center">
+      {/* <footer className="bg-white dark:bg-gray-800 py-3 text-center">
         <div className="flex flex-row items-center justify-between py-1.5 px-12">
           <nav>
             <ul className="flex space-x-3 text-purple-800 font-medium">
@@ -211,7 +217,7 @@ const Analytics = () => {
             Copyright &copy; 2022. Primetasker Inc.{" "}
           </p>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 };

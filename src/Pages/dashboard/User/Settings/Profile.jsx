@@ -4,7 +4,7 @@ import CustomFileUpload from "../../../../utils/CustomFieldComp/CustomFileUpload
 import { loginSchema } from "../../../../features/auth/schemas/LoginFormSchema";
 import Verification from "./ProfileElements.jsx/Verification";
 import TaskInfo from "./ProfileElements.jsx/TaskInfo";
-import SvgComponent from "../../../../../public/svgs/ccMaster";
+import SvgComponent from "../../../../../assets/svgs/ccMaster";
 import CustomRadio from "../../../../utils/CustomFieldComp/CustomRadio";
 import PersonalInfo from "./ProfileElements.jsx/PersonalInfo";
 

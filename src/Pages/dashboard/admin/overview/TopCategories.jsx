@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useGetTopCategoriesQuery } from "../../../../features/categories/slices/categorySlice";
 import millify from "millify";
 import Spinner from "../../../../utils/Spinner";
+import { Formik, Form } from "formik";
 
 const options = [
   "Today",
@@ -73,14 +74,24 @@ const TopCategories = () => {
         <h2 className="   font-semibold dark:text-purple-600 text-purple-800 text-[14px]  tracking-wide">
           Top Categories
         </h2>
-
-        <div className="relative  ">
-          <Select
-            selected={selected}
-            setSelected={setSelected}
-            items={options}
-          />
-        </div>
+        <Formik initialValues={{ categories: selected }}>
+          {() => {
+            return (
+              <Form>
+                <div className="relative ">
+                  <Select
+                    name="tasker"
+                    selected={selected}
+                    setSelected={setSelected}
+                    items={options}
+                    width={`w-full`}
+                    style={`py-2 text-[16px] bg-gray-50`}
+                  />
+                </div>
+              </Form>
+            );
+          }}
+        </Formik>
       </article>
 
       <article className="">

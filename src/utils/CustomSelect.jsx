@@ -1,21 +1,21 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { HiCheckBadge, HiChevronUpDown } from "react-icons/hi2";
+import { useField } from "formik";
 
-// const items = [
-//   { name: "This week" },
-//   { name: "Last Week" },
-//   { name: "Last Month" },
-//   { name: "Last Year" },
-// ];
+export default function Select({ items, name, width, style }) {
+  const [field, meta, helpers] = useField(name);
+  const [selected, setSelected] = useState(field.value || items[0]);
 
-export default function Select({ items, selected, setSelected, width, style }) {
-  // const [selected, setSelected] = useState(items[0]);
-  // console.log(items);
+  const { setValue } = helpers;
+
+  useEffect(() => {
+    setValue(selected);
+  }, [selected]);
 
   return (
     <div className={`${width ? width : "w-40"} top-16 `}>
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox value={selected} onChange={(value) => setSelected(value)}>
         <div className="relative ">
           <Listbox.Button
             className={`${

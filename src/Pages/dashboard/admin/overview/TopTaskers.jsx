@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useGetTopTaskersQuery } from "../../../../features/stats/taskerStats";
 import millify from "millify";
 import Spinner from "../../../../utils/Spinner";
+import { Formik, Form } from "formik";
 
 const options = [
   "Today",
@@ -91,13 +92,24 @@ const TopTaskers = () => {
             <h2 className="  font-semibold dark:text-purple-400 text-purple-700 text-[15px]">
               Top taskers
             </h2>
-            <div className="relative ">
-              <Select
-                selected={selected}
-                setSelected={setSelected}
-                items={options}
-              />
-            </div>
+            <Formik initialValues={{ tasker: selected }}>
+              {() => {
+                return (
+                  <Form>
+                    <div className="relative ">
+                      <Select
+                        name="tasker"
+                        selected={selected}
+                        setSelected={setSelected}
+                        items={options}
+                        width={`w-full`}
+                        style={`py-2 text-[16px] bg-gray-50`}
+                      />
+                    </div>
+                  </Form>
+                );
+              }}
+            </Formik>
           </article>
 
           <article className=" text-[13px] font-medium   ">
