@@ -5,29 +5,28 @@ import { useGetTasksQuery } from "../slices/taskApiSlice";
 import { useSelector } from "react-redux";
 
 import { pageInfo } from "../../pagination/paginate";
-import BasicTable from "../../tables/BasicTable";
+import TableUtilities from "../../tables/TableUtilities";
 import { filterList, sortList } from "../utils/taskTableFilterSort";
+import { FaRegCalendarAlt } from "react-icons/fa";
 
 const usersList = () => {
   const pageData = useSelector(pageInfo);
 
-  const { data } = useGetTasksQuery();
-  console.log(data);
+  // const { data } = useGetTasksQuery();
+  // console.log(data);
 
   return (
-    <div className="">
-      <div className="mb-6">
-        <h2 className=""> All Tasks</h2>
-      </div>
-      <div>
-        <BasicTable
-          fetchTableData={useGetTasksQuery}
+    <div className="dark:bg-gray-700">
+      <section className="">
+        <TableUtilities
+          fetchData={useGetTasksQuery}
           headers={taskTableHeaders}
           filterList={filterList}
           sortList={sortList}
-          pageData={pageData}
+          tableTitle={`All tasks`}
+          searchTitle={`Search all tasks`}
         />
-      </div>
+      </section>
     </div>
   );
 };

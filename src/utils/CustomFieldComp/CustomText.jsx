@@ -25,7 +25,7 @@ const CustomText = ({
   return (
     <div
       className={
-        props.wrapperclass ? props.wrapperclass : `w-full my-1.5 relative`
+        props.wrapperclassName ? props.wrapperclassName : `w-full my-1.5 relative`
       }
     >
       <label
@@ -40,8 +40,8 @@ const CustomText = ({
       {imgBfr ? (
         <div
           className={
-            props.svgclass
-              ? props.svgclass
+            props.svgclassName
+              ? props.svgclassName
               : `text-[18px] text-red-400  absolute top-[45%] left-[1%]`
           }
         >
@@ -53,17 +53,18 @@ const CustomText = ({
           type={passwordVisible ? "text" : type}
           {...field}
           {...props}
+        
           className={`${invalid ? errorStyle : validStyle} ${
-            imgBfr ? "pl-9" : "pl-2"
-          } ${props.inputstyle} py-2 rounded-lg pr-3  w-full text-xs`}
+            imgBfr ? "pl-7" : "pl-2"
+          } ${props.inputstyle} `}
         />
         {imgAfter ? (
           <button
             type="button"
             onClick={() => toggleVisibility()}
             className={
-              props.svgclass
-                ? props.svgclass
+              props.svgclassName
+                ? props.svgclassName
                 : `text-[18px] text-violet-600  absolute top-[40%] right-[5%] `
             }
           >

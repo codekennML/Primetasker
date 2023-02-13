@@ -104,7 +104,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
           //TODO only await queryfulfilled no destructuring
           const { data } = await queryFulfilled;
           const { token } = data;
-          dispatch(setCredentials({ token })); //trigger the imported logout reducer action
+          dispatch(setCredentials({ token }));
         } catch (err) {
           console.log(err);
         }

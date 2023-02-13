@@ -51,7 +51,7 @@ const SingleProperty = () => {
   const [sliderOpen, setSliderOpen] = useState(false);
   return (
     <div>
-      <section className="max-w-screen-lg mx-auto ">
+      <section class="max-w-screen-lg mx-auto ">
         {/* <div>
                                     <button onClick = {() => setModalOpen(!modalOpen)}>Open Modal</button>
                                    {modalOpen && <GeneralModal modalOpen={modalOpen} setModalOpen= {setModalOpen} content = {<ModalContent />} />}
@@ -59,24 +59,24 @@ const SingleProperty = () => {
                                 </div> */}
         {/* {modalOpen && <ImageSlider modalOpen={modalOpen} setModalOpen= {setModalOpen} />} */}
 
-        <article className="bg-[#fff0e0] ">
+        <article class="bg-[#fff0e0] ">
           <div
-            className="px-6 py-3 cursor-pointer w-full "
+            class="px-6 py-3 cursor-pointer w-full "
             onClick={() => setOpen(!open)}
           >
-            <div className="space-x-6 w-full flex flex-row ">
+            <div class="space-x-6 w-full flex flex-row ">
               <FontAwesomeIcon
                 icon={faCircleInfo}
-                className="w-6 h-6 text-red-500"
+                class="w-6 h-6 text-red-500"
               />
-              <p className="font-bold "> Coronavirus (COVID-19) Support </p>
-              <p className="justify-end">
-                <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
+              <p class="font-bold "> Coronavirus (COVID-19) Support </p>
+              <p class="justify-end">
+                <FontAwesomeIcon icon={faChevronDown} class="text-xs" />
               </p>
             </div>
           </div>
           <div
-            className={`${
+            class={`${
               open ? "visible" : "hidden "
             }mt-3 text-xs space-y-4 pl-[75px]`}
           >
@@ -84,151 +84,149 @@ const SingleProperty = () => {
               Get the travel advice you need. Read more about possible travel
               restrictions before you go.
             </p>
-            <p className="text-blue-600 hover:underline pb-4">Read More</p>
+            <p class="text-blue-600 hover:underline pb-4">Read More</p>
           </div>
         </article>
 
-        <section className="flex flex-row gap-4">
-          <article className="w-1/4">
-            <p className="px-3 py-2 text-sm font-medium text-center bg-blue-100 my-3">
+        <section class="flex flex-row gap-4">
+          <article class="w-1/4">
+            <p class="px-3 py-2 text-sm font-medium text-center bg-blue-100 my-3">
               {" "}
               We Price Match{" "}
             </p>
             <SideSearchBar />
             <p
-              className="mt-3 w-full h-[150px] 
+              class="mt-3 w-full h-[150px] 
              bg-[url('https://t-cf.bstatic.com/psb/capla/static/media/map-entry-point.6b01012a.png')] 
                 rounded  mb-4 flex justify-center items-center "
             >
-              <button className="px-4 py-2 bg-blue-600 rounded text-[12px] font-bold text-white ">
+              <button class="px-4 py-2 bg-blue-600 rounded text-[12px] font-bold text-white ">
                 Show on Map
               </button>
             </p>
           </article>
 
-          <article className="w-3/4 ">
-            <div className="flex flex-row justify-between w-full text-[#0071c2] gap-x-0.5">
-              <button className="w-full py-2 text-sm font-medium text-center bg-blue-100 my-3">
+          <article class="w-3/4 ">
+            <div class="flex flex-row justify-between w-full text-[#0071c2] gap-x-0.5">
+              <button class="w-full py-2 text-sm font-medium text-center bg-blue-100 my-3">
                 {" "}
                 Info &amp; prices{" "}
               </button>
-              <button className="w-full py-2 text-sm font-medium text-center bg-blue-100 my-3">
+              <button class="w-full py-2 text-sm font-medium text-center bg-blue-100 my-3">
                 {" "}
                 Facilities{" "}
               </button>
-              <button className="w-full py-2 text-sm font-medium text-center bg-blue-100 my-3">
+              <button class="w-full py-2 text-sm font-medium text-center bg-blue-100 my-3">
                 House Rules{" "}
               </button>
-              <button className="w-full py-2 text-sm font-medium text-center bg-blue-100 my-3">
+              <button class="w-full py-2 text-sm font-medium text-center bg-blue-100 my-3">
                 {" "}
                 The Fine Print
               </button>
-              <button className="w-full py-2 text-sm font-medium text-center bg-blue-100 my-3">
+              <button class="w-full py-2 text-sm font-medium text-center bg-blue-100 my-3">
                 Guest Reviews (701)
               </button>
             </div>
 
-            <div className="flex flex-row justify-between items-start ">
-              <div className="space-y-1">
-                <p className="space-x-3">
-                  <span className="bg-gray-600/60 px-2 py-1 text-white text-xs">
+            <div class="flex flex-row justify-between items-start ">
+              <div class="space-y-1">
+                <p class="space-x-3">
+                  <span class="bg-gray-600/60 px-2 py-1 text-white text-xs">
                     Hotel
                   </span>
                   <span>*****%</span>
-                  <span className="text-xs">Airport Shuttle</span>
-                  <span className="text-xs">Travel Sustainable Property</span>
+                  <span class="text-xs">Airport Shuttle</span>
+                  <span class="text-xs">Travel Sustainable Property</span>
                 </p>
 
-                <p className="text-gray-800 font-bold text-xl">
+                <p class="text-gray-800 font-bold text-xl">
                   Lagos Continental Hotel
                 </p>
-                <p className="text-[13.5px]">
+                <p class="text-[13.5px]">
                   Plot 52A Kofo Abayomi Street, Victoria Island, Victoria
                   Island, 23401 Lagos, Nigeria –
                 </p>
-                <p className="text-xs font-bold text-blue-500 pb-2">
+                <p class="text-xs font-bold text-blue-500 pb-2">
                   Great location - show map
                 </p>
               </div>
 
-              <div className="text-right flex flex-col items-end">
-                <p className="space-x-3">
+              <div class="text-right flex flex-col items-end">
+                <p class="space-x-3">
                   <span>
                     <FontAwesomeIcon
                       icon={faHeart}
-                      className="text-red-600 w-5 h-5"
+                      class="text-red-600 w-5 h-5"
                     />
                   </span>
                   <span>
                     <FontAwesomeIcon
                       icon={faShareAlt}
-                      className="w-5 h-5 text-blue-400"
+                      class="w-5 h-5 text-blue-400"
                     />
                   </span>
 
-                  <button className="bg-blue-600 px-2 text-sm py-2 text-white font-medium ">
+                  <button class="bg-blue-600 px-2 text-sm py-2 text-white font-medium ">
                     Reserve
                   </button>
                 </p>
-                <p className="text-sm">We Price Match</p>
+                <p class="text-sm">We Price Match</p>
               </div>
 
               <div></div>
             </div>
 
-            <article className="">
-              <div className="grid grid-cols-5 grid-rows-4 gap-2">
-                <div className="row-span-2 col-span-2">
+            <article class="">
+              <div class="grid grid-cols-5 grid-rows-4 gap-2">
+                <div class="row-span-2 col-span-2">
                   <img
                     src="https://t-cf.bstatic.com/xdata/images/hotel/max1024x768/337263673.jpg?k=9be8b42f2c97087cd78119b069e597a1afa34319a23b2a517146e6b39b645007&o=&hp=1"
                     alt=""
-            
-                    className=" rounded h-[175px] w-full "
+                    class=" rounded h-[175px] w-full "
                   />
                 </div>
-                <div className="row-span-4 col-span-3">
+                <div class="row-span-4 col-span-3">
                   <img
                     src="https://t-cf.bstatic.com/xdata/images/hotel/max1024x768/333543119.jpg?k=d9cfb214b69834669b434862db16a5a155fdb90b78dd34a2b7904b58fb12c5e6&o=&hp=1"
                     alt=""
-                    className=" w-full rounded h-[355px]"
+                    class=" w-full rounded h-[355px]"
                   />
                 </div>
 
-                <div className="row-span-2 col-span-2">
+                <div class="row-span-2 col-span-2">
                   <img
                     src="https://t-cf.bstatic.com/xdata/images/hotel/max1024x768/333550390.jpg?k=cb361d9f65ea9ef8b39167a3637a9b6bec50a25d314ca59d366426bf51147e0a&o=&hp=1"
                     alt=""
-                    
-                    className=" rounded  h-[175px] w-full"
+                    class=" rounded  h-[175px] w-full"
                   />
                 </div>
-             
-                <div className="col-span-1">
+
+                <div class="col-span-1">
                   <img
                     src="https://t-cf.bstatic.com/xdata/images/hotel/max1024x768/337263032.jpg?k=2f6e0ce9c65fc14547a6208c32b0aedc52eb2d89efe1df5429ecb5095830b693&o=&hp=1"
                     alt=""
-                    className="rounded w-full  h-[100px] "
+                    class="rounded w-full  h-[100px] "
                   />
                 </div>
-                <div className="col-span-2">
+                <div class="col-span-2">
                   <img
                     src="https://t-cf.bstatic.com/xdata/images/hotel/max1024x768/121403657.jpg?k=c2f4c86a713fb52b3d785f08a88353a3c99f3e667cde3e0b60ace1a6a50a337c&o=&hp=1"
                     alt=""
-                    className="rounded h-[100px] w-full max-w-full"
+                    class="rounded h-[100px] w-full max-w-full"
                   />
                 </div>
-                <div className="col-span-1">
+                <div class="col-span-1">
                   <img
                     src="https://t-cf.bstatic.com/xdata/images/hotel/max1024x768/80927411.jpg?k=d4068ee6e83c4339aef783ab611fcd697d574797c7994c0ec450d02b30fd4c83&o=&hp=1"
                     alt=""
-                    className=" rounded h-[100px] w-full"
+                    class=" rounded h-[100px] w-full"
                   />
                 </div>
-                <div className="col-span-1">
+                <div class="col-span-1">
                   <img
                     src="https://t-cf.bstatic.com/xdata/images/hotel/max1024x768/337275167.jpg?k=f12b67e93faa125e7573aeb0ea80c0107157bcd19aa8fc0e106d9cd28c34c649&o=&hp=1"
                     alt=""
-                    className="rounded h-[100px] w-full"
+                    class="rounded h-[100px] w-full"
                   />
                 </div>
               </div>
@@ -236,17 +234,17 @@ const SingleProperty = () => {
           </article>
         </section>
 
-        <section className="flex flex-row pb-12 mt-4 border-b border-gray-300">
-          <article className="flex-1 w-2/3 pr-6 ">
-            <h2 className="text-xl font-bold">
+        <section class="flex flex-row pb-12 mt-4 border-b border-gray-300">
+          <article class="flex-1 w-2/3 pr-6 ">
+            <h2 class="text-xl font-bold">
               Stay in the heart of Lagos –{" "}
-              <span className="text-blue-500 text-xs">
+              <span class="text-blue-500 text-xs">
                 {" "}
                 Great location - show map{" "}
               </span>{" "}
             </h2>
-            <ul className="list-none space-y-3 text-xs  text-justify">
-              <li className="mt-4">
+            <ul class="list-none space-y-3 text-xs  text-justify">
+              <li class="mt-4">
                 {" "}
                 Lagos Continental Hotel in Lagos features a fitness centre and a
                 terrace. Featuring a 24-hour front desk, this property also
@@ -279,76 +277,67 @@ const SingleProperty = () => {
               </li>
             </ul>
             <div>
-              <h3 className="font-medium my-3">Most Popular Facilities</h3>
-              <div className="text-xs flex flex-wrap items-center gap-y-3 ">
-                <p className="inline-flex items-center pr-3">
+              <h3 class="font-medium my-3">Most Popular Facilities</h3>
+              <div class="text-xs flex flex-wrap items-center gap-y-3 ">
+                <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faSwimmer}
-                    className={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-green-600 pr-1 w-5 h-5`}
                   />{" "}
                   1 Swimming Pool
                 </p>
-                <p className="inline-flex items-center pr-3">
+                <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faShuttleVan}
-                    className={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-green-600 pr-1 w-5 h-5`}
                   />{" "}
                   Airport shuttle
                 </p>
-                <p className="inline-flex items-center pr-3">
+                <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faDumbbell}
-                    className={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-green-600 pr-1 w-5 h-5`}
                   />{" "}
                   very good fitness
                 </p>
-                <p className="inline-flex items-center pr-3">
+                <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faSmokingBan}
-                    className={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-green-600 pr-1 w-5 h-5`}
                   />{" "}
                   Non-smoking rooms
                 </p>
-                <p className="inline-flex items-center pr-3">
-                  <Icon
-                    icon={faWifi}
-                    className={`text-green-600 pr-1 w-5 h-5`}
-                  />{" "}
+                <p class="inline-flex items-center pr-3">
+                  <Icon icon={faWifi} class={`text-green-600 pr-1 w-5 h-5`} />{" "}
                   Free WiFi
                 </p>
-                <p className="inline-flex items-center pr-3">
-                  <Icon
-                    icon={faSpa}
-                    className={`text-green-600 pr-1 w-5 h-5`}
-                  />{" "}
+                <p class="inline-flex items-center pr-3">
+                  <Icon icon={faSpa} class={`text-green-600 pr-1 w-5 h-5`} />{" "}
                   Spa and wellness centre
                 </p>
-                <p className="inline-flex items-center pr-3">
+                <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faUtensils}
-                    className={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-green-600 pr-1 w-5 h-5`}
                   />{" "}
                   Restaurant{" "}
                 </p>
-                <p className="inline-flex items-center pr-3">
+                <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faChampagneGlasses}
-                    className={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-green-600 pr-1 w-5 h-5`}
                   />{" "}
                   Bar
                 </p>
-                <p className="inline-flex items-center pr-3">
-                  <Icon
-                    icon={faMugHot}
-                    className="text-green-600 pr-1 w-5 h-5"
-                  />{" "}
+                <p class="inline-flex items-center pr-3">
+                  <Icon icon={faMugHot} class="text-green-600 pr-1 w-5 h-5" />{" "}
                   Breakfast
                 </p>
               </div>
             </div>
-            <div className="mt-6 mb-3">
-              <p className="text-xs">
-                <span className="font-medium text-sm">
+            <div class="mt-6 mb-3">
+              <p class="text-xs">
+                <span class="font-medium text-sm">
                   ATM and Currency Exchange:
                 </span>
                 Need cash? There's an ATM machine and a currency exchange
@@ -357,22 +346,22 @@ const SingleProperty = () => {
             </div>
           </article>
 
-          <article className="w-1/3 ml-2 pl-8">
-            <section className="bg-blue-50 text-xs p-3 space-y-4 text-gray-600">
-              <h2 className="text-base font-bold">Property highlights</h2>
-              <div className="space-y-1">
-                <h3 className="font-bold  text-sm mb-2">
+          <article class="w-1/3 ml-2 pl-8">
+            <section class="bg-blue-50 text-xs p-3 space-y-4 text-gray-600">
+              <h2 class="text-base font-bold">Property highlights</h2>
+              <div class="space-y-1">
+                <h3 class="font-bold  text-sm mb-2">
                   Perfect for a 4-night Stay
                 </h3>
 
-                <p className="inline-flex flex-row items-center">
-                  <span className="my-2 pr-3">
+                <p class="inline-flex flex-row items-center">
+                  <span class="my-2 pr-3">
                     <FontAwesomeIcon icon={faMapPin} />
                   </span>
                   <span>Top location: Highly rated by recent guests (8.7)</span>
                 </p>
-                <p className="inline-flex flex-row items-center">
-                  <span className="my-2 pr-3">
+                <p class="inline-flex flex-row items-center">
+                  <span class="my-2 pr-3">
                     <FontAwesomeIcon icon={faBed} />
                   </span>
                   <span>
@@ -383,7 +372,7 @@ const SingleProperty = () => {
               </div>
 
               <div>
-                <h3 className="font-bold text-sm mb-2"> Breakfast info</h3>
+                <h3 class="font-bold text-sm mb-2"> Breakfast info</h3>
                 <p>
                   Continental, Full English/Irish, Vegetarian, Asian, American,
                   Buffet, Breakfast to go
@@ -391,52 +380,52 @@ const SingleProperty = () => {
               </div>
 
               <div>
-                <h3 className="font-bold text-sm mb-2">Rooms with:</h3>
-                <ul className="space-y-2">
+                <h3 class="font-bold text-sm mb-2">Rooms with:</h3>
+                <ul class="space-y-2">
                   <li>
                     {" "}
                     <span>
-                      <FontAwesomeIcon icon={faHouse} className="pr-1" />
+                      <FontAwesomeIcon icon={faHouse} class="pr-1" />
                     </span>{" "}
                     City view
                   </li>
                   <li>
                     {" "}
                     <span>
-                      <FontAwesomeIcon icon={faWater} className="pr-1" />
+                      <FontAwesomeIcon icon={faWater} class="pr-1" />
                     </span>{" "}
                     Sea view
                   </li>
                   <li>
                     {" "}
                     <span>
-                      <FontAwesomeIcon icon={faSwimmer} className="pr-1" />
+                      <FontAwesomeIcon icon={faSwimmer} class="pr-1" />
                     </span>{" "}
                     Pool with a view
                   </li>
                   <li>
                     {" "}
                     <span>
-                      <FontAwesomeIcon icon={faParking} className="pr-1" />
+                      <FontAwesomeIcon icon={faParking} class="pr-1" />
                     </span>{" "}
                     Free private parking available at the hotel
                   </li>
                 </ul>
               </div>
 
-              <div className="">
-                <h3 className="font-bold  text-sm mb-2"> Loyal Customers</h3>
+              <div class="">
+                <h3 class="font-bold  text-sm mb-2"> Loyal Customers</h3>
                 <p>
                   {" "}
                   <span>
                     {" "}
-                    <FontAwesomeIcon icon={faCheck} className=" pr-2" />
+                    <FontAwesomeIcon icon={faCheck} class=" pr-2" />
                   </span>
                   There are more repeat guests here than most other properties.
                 </p>
               </div>
-              <div className="my-4">
-                <button className="bg-blue-600 py-2 w-full rounded-sm text-white font-medium text-sm ">
+              <div class="my-4">
+                <button class="bg-blue-600 py-2 w-full rounded-sm text-white font-medium text-sm ">
                   Reserve
                 </button>
               </div>
@@ -444,52 +433,50 @@ const SingleProperty = () => {
           </article>
         </section>
 
-        <section className="pb-40">
-          <div className="flex justify-between py-3">
-            <h2 className="text-[23px] text-gray-800 font-bold">
-              Availability
-            </h2>
-            <p className="text-xs ">
+        <section class="pb-40">
+          <div class="flex justify-between py-3">
+            <h2 class="text-[23px] text-gray-800 font-bold">Availability</h2>
+            <p class="text-xs ">
               <span>
-                <Icon icon={faClipboardCheck} className={`w-4 h-4 pr-2 `} />
+                <Icon icon={faClipboardCheck} class={`w-4 h-4 pr-2 `} />
               </span>
               We Price Match
             </p>
           </div>
           <div>
-            <p className="font-bold text-sm text-gray-600">Filter By : </p>
-            <p className="space-x-2 mt-3 mb-2">
-              <input type="checkbox" name="" id="" className="py-3 " />
+            <p class="font-bold text-sm text-gray-600">Filter By : </p>
+            <p class="space-x-2 mt-3 mb-2">
+              <input type="checkbox" name="" id="" class="py-3 " />
               <span>Rooms</span>
               <input type="checkbox" name="" id="" />
               <span>Suites</span>
             </p>
           </div>
-          <div className="flex flex-row">
-            <table className="w-full text-xs ">
-              <thead className=" bg-[#4c76b2] text-white font-medium sticky top-0">
-                <tr className="py-20">
-                  <td className="py-3 px-3">Room Type</td>
-                  <td className="border border-cyan-500 px-1">Sleeps</td>
-                  <td className="border border-gray-500 bg-blue-800 px-2">
+          <div class="flex flex-row">
+            <table class="w-full text-xs ">
+              <thead class=" bg-[#4c76b2] text-white font-medium sticky top-0">
+                <tr class="py-20">
+                  <td class="py-3 px-3">Room Type</td>
+                  <td class="border border-cyan-500 px-1">Sleeps</td>
+                  <td class="border border-gray-500 bg-blue-800 px-2">
                     Price for 4 Night
                   </td>
-                  <td className="border border-gray-500 px-1">Your Choices</td>
-                  <td className="border border-gray-500  px-1 w-[15px]">
+                  <td class="border border-gray-500 px-1">Your Choices</td>
+                  <td class="border border-gray-500  px-1 w-[15px]">
                     Select rooms
                   </td>
-                  {/* <td className='border border-gray-500  px-1 w-[15px]'></td>      */}
+                  {/* <td class='border border-gray-500  px-1 w-[15px]'></td>      */}
                 </tr>
               </thead>
               <TableBody />
             </table>
-            <div className="sticky top-2">
-              <p className="py-[21px] bg-[#4c76b2]"></p>
-              <button className="bg-blue-900 text-white font-medium mx-3 pl-6  pr-5 py-1 my-3 rounded ">
+            <div class="sticky top-2">
+              <p class="py-[21px] bg-[#4c76b2]"></p>
+              <button class="bg-blue-900 text-white font-medium mx-3 pl-6  pr-5 py-1 my-3 rounded ">
                 {" "}
                 I'll reserve
               </button>
-              <ul className="pl-3 text-[12px] no-wrap">
+              <ul class="pl-3 text-[12px] no-wrap">
                 <li>Confirmation is immediate</li>
                 <li>No booking or credit card fees</li>
               </ul>
@@ -497,27 +484,27 @@ const SingleProperty = () => {
           </div>
 
           {/* DEALS SECTION  -  UNDERNEATH BOOKINGS TABLE  */}
-          <div className="my-12 space-y-5">
-            <p className="bg-red-100 border border-red-400 py-2 text-xs flex items-center">
+          <div class="my-12 space-y-5">
+            <p class="bg-red-100 border border-red-400 py-2 text-xs flex items-center">
               <FontAwesomeIcon
                 icon={faClock}
-                className="w-4 h-4 text-red-500 px-3"
+                class="w-4 h-4 text-red-500 px-3"
               />
-              <span className="font-medium">
+              <span class="font-medium">
                 Limited supply in Lagos for your dates:
               </span>
               1 five-star hotel like this is already unavailable on our site
             </p>
 
-            <div className="flex flex-row  text-xs space-x-2 border border-gray-300 py-3 px-3 items-center ">
+            <div class="flex flex-row  text-xs space-x-2 border border-gray-300 py-3 px-3 items-center ">
               <p>
                 <FontAwesomeIcon
                   icon={faBriefcase}
-                  className="w-7 h-7 text-green-800"
+                  class="w-7 h-7 text-green-800"
                 />
               </p>
               <p>
-                <h5 className="font-bold text-[13px]">
+                <h5 class="font-bold text-[13px]">
                   Travel Sustainable Property
                 </h5>
                 <span>
@@ -525,55 +512,55 @@ const SingleProperty = () => {
                   which means it’s taken significant steps to make your stay
                   more sustainable.
                 </span>
-                <a className="mr-auto">Read More </a>
+                <a class="mr-auto">Read More </a>
               </p>
             </div>
 
-            <div className="flex flex-row  text-xs space-x-2 border bg-green-100 border-green-300 py-4 px-3 ">
-              <p className="items-start">
+            <div class="flex flex-row  text-xs space-x-2 border bg-green-100 border-green-300 py-4 px-3 ">
+              <p class="items-start">
                 <FontAwesomeIcon
                   icon={faCheck}
-                  className="w-7 h-7 text-green-800"
+                  class="w-7 h-7 text-green-800"
                 />
               </p>
               <p>
-                <h5 className="font-bold text-[13px]">Tip: Stay flexible</h5>
+                <h5 class="font-bold text-[13px]">Tip: Stay flexible</h5>
                 <span>
                   Since your dates are a while away, choose free cancellation to
                   stay flexible. A change of plans is no problem when you have
                   free cancellation!
                 </span>
-                <a className="mr-auto">Read More </a>
+                <a class="mr-auto">Read More </a>
               </p>
-              <p className="self-end justify-self-end rounded-full bg-red-50">
+              <p class="self-end justify-self-end rounded-full bg-red-50">
                 <FontAwesomeIcon icon={faTimes} />
               </p>
             </div>
           </div>
 
           {/* CLOSEST MONUMENT OR LANDMARK SECTION */}
-          <div className="w-[400px]">
-            <h2 className="font-bold text-xl mb-4">Closest Beach</h2>
+          <div class="w-[400px]">
+            <h2 class="font-bold text-xl mb-4">Closest Beach</h2>
 
-            <article className="border border-gray-200 rounded py-2 px-3 flex flex-row  space-x-3 items-center ">
-              <div className="w-16 h-16 bg-gray-300 inline-flex justify-center items-center ">
-                <FontAwesomeIcon icon={faSwimmer} className="w-8 h-8 p-2 " />
+            <article class="border border-gray-200 rounded py-2 px-3 flex flex-row  space-x-3 items-center ">
+              <div class="w-16 h-16 bg-gray-300 inline-flex justify-center items-center ">
+                <FontAwesomeIcon icon={faSwimmer} class="w-8 h-8 p-2 " />
               </div>
               <div>
-                <h3 className="font-bold">Landmark Beach</h3>
-                <p className=" text-[12px]">8.6 Fabulous Beach</p>
-                <p className="text-[11px]">2.5km from property </p>
+                <h3 class="font-bold">Landmark Beach</h3>
+                <p class=" text-[12px]">8.6 Fabulous Beach</p>
+                <p class="text-[11px]">2.5km from property </p>
               </div>
             </article>
           </div>
           {/* GUEST REVIEWS */}
 
           <article>
-            <div className="my-3">
-              <h2 className="font-bold text-xl mb-4 mt-6">Guest Reviews</h2>
-              <p className="space-x-3">
+            <div class="my-3">
+              <h2 class="font-bold text-xl mb-4 mt-6">Guest Reviews</h2>
+              <p class="space-x-3">
                 <span
-                  className="bg-blue-700
+                  class="bg-blue-700
                                  text-lg font-medium "
                 >
                   {" "}
@@ -586,71 +573,71 @@ const SingleProperty = () => {
               </p>
             </div>
 
-            <section className="w-full">
-              <h4 className="mb-2 font-medium text-[15px]">Categories:</h4>
-              <div className="flex flex-row flex-wrap gap-y-4 gap-x-3 text-[13px] w-full">
-                <article className="w-[32%] flex flex-col  rounded border-blue-800">
-                  <div className="flex justify-between">
-                    <p className="font-medium">Staff</p>
-                    <p className="font-medium">8.2</p>
+            <section class="w-full">
+              <h4 class="mb-2 font-medium text-[15px]">Categories:</h4>
+              <div class="flex flex-row flex-wrap gap-y-4 gap-x-3 text-[13px] w-full">
+                <article class="w-[32%] flex flex-col  rounded border-blue-800">
+                  <div class="flex justify-between">
+                    <p class="font-medium">Staff</p>
+                    <p class="font-medium">8.2</p>
                   </div>
-                  <div className="w-full h-2 bg-gray-200  rounded-full ">
-                    <p className="w-[82%] h-full bg-blue-800 rounded-full "></p>
-                  </div>
-                </article>
-                <article className="w-[32%] flex flex-col   rounded border-blue-800">
-                  <div className="flex justify-between">
-                    <p className="font-medium">Staff</p>
-                    <p className="font-medium">8.2</p>
-                  </div>
-                  <div className="w-full h-2 bg-gray-200  rounded-full">
-                    <p className="w-[82%] h-full bg-blue-800 rounded-full "></p>
+                  <div class="w-full h-2 bg-gray-200  rounded-full ">
+                    <p class="w-[82%] h-full bg-blue-800 rounded-full "></p>
                   </div>
                 </article>
-                <article className="w-[32%] flex flex-col   rounded border-blue-800">
-                  <div className="flex justify-between">
-                    <p className="font-medium">Staff</p>
-                    <p className="font-medium">8.2</p>
+                <article class="w-[32%] flex flex-col   rounded border-blue-800">
+                  <div class="flex justify-between">
+                    <p class="font-medium">Staff</p>
+                    <p class="font-medium">8.2</p>
                   </div>
-                  <div className="w-full h-2 bg-gray-200  rounded-full">
-                    <p className="w-[82%] h-full bg-blue-800 rounded-full "></p>
-                  </div>
-                </article>
-                <article className="w-[32%] flex flex-col   rounded border-blue-800">
-                  <div className="flex justify-between">
-                    <p className="font-medium">Staff</p>
-                    <p className="font-medium">8.2</p>
-                  </div>
-                  <div className="w-full h-2 bg-gray-200  rounded-full">
-                    <p className="w-[82%] h-full bg-blue-800 rounded-full "></p>
+                  <div class="w-full h-2 bg-gray-200  rounded-full">
+                    <p class="w-[82%] h-full bg-blue-800 rounded-full "></p>
                   </div>
                 </article>
-                <article className="w-[32%] flex flex-col   rounded border-blue-800">
-                  <div className="flex justify-between">
-                    <p className="font-medium">Staff</p>
-                    <p className="font-medium">8.2</p>
+                <article class="w-[32%] flex flex-col   rounded border-blue-800">
+                  <div class="flex justify-between">
+                    <p class="font-medium">Staff</p>
+                    <p class="font-medium">8.2</p>
                   </div>
-                  <div className="w-full h-2 bg-gray-200  rounded-full">
-                    <p className="w-[82%] h-full bg-blue-800 rounded-full "></p>
+                  <div class="w-full h-2 bg-gray-200  rounded-full">
+                    <p class="w-[82%] h-full bg-blue-800 rounded-full "></p>
                   </div>
                 </article>
-                <article className="w-[32%] flex flex-col   rounded border-blue-800">
-                  <div className="flex justify-between">
-                    <p className="font-medium">Staff</p>
-                    <p className="font-medium">8.2</p>
+                <article class="w-[32%] flex flex-col   rounded border-blue-800">
+                  <div class="flex justify-between">
+                    <p class="font-medium">Staff</p>
+                    <p class="font-medium">8.2</p>
                   </div>
-                  <div className="w-full h-2 bg-gray-200  rounded-full">
-                    <p className="w-[82%] h-full bg-blue-800 rounded-full "></p>
+                  <div class="w-full h-2 bg-gray-200  rounded-full">
+                    <p class="w-[82%] h-full bg-blue-800 rounded-full "></p>
+                  </div>
+                </article>
+                <article class="w-[32%] flex flex-col   rounded border-blue-800">
+                  <div class="flex justify-between">
+                    <p class="font-medium">Staff</p>
+                    <p class="font-medium">8.2</p>
+                  </div>
+                  <div class="w-full h-2 bg-gray-200  rounded-full">
+                    <p class="w-[82%] h-full bg-blue-800 rounded-full "></p>
+                  </div>
+                </article>
+                <article class="w-[32%] flex flex-col   rounded border-blue-800">
+                  <div class="flex justify-between">
+                    <p class="font-medium">Staff</p>
+                    <p class="font-medium">8.2</p>
+                  </div>
+                  <div class="w-full h-2 bg-gray-200  rounded-full">
+                    <p class="w-[82%] h-full bg-blue-800 rounded-full "></p>
                   </div>
                 </article>
 
-                <article className="w-[32%] flex flex-col justify-between  rounded border-blue-800">
-                  <div className="flex justify-between">
-                    <p className="font-medium">Staff</p>
-                    <p className="font-medium">8.2</p>
+                <article class="w-[32%] flex flex-col justify-between  rounded border-blue-800">
+                  <div class="flex justify-between">
+                    <p class="font-medium">Staff</p>
+                    <p class="font-medium">8.2</p>
                   </div>
-                  <div className="w-full h-2 bg-gray-200  rounded-full">
-                    <p className="w-[82%] h-full bg-green-800 rounded-full "></p>
+                  <div class="w-full h-2 bg-gray-200  rounded-full">
+                    <p class="w-[82%] h-full bg-green-800 rounded-full "></p>
                   </div>
                 </article>
               </div>
@@ -658,10 +645,10 @@ const SingleProperty = () => {
 
             {/*Topics to read  */}
             <section>
-              <h3 className="font-bold text-base mb-4 mt-6">
+              <h3 class="font-bold text-base mb-4 mt-6">
                 Select topics to read reviews
               </h3>
-              <p className="flex flex-row space-x-3">
+              <p class="flex flex-row space-x-3">
                 <Tags icon={faChampagneGlasses} name={`Breakfast`} />
                 <Tags icon={faHouse} name={`Rooms`} />
                 <Tags icon={faUtensils} name={`Dinner`} />
@@ -672,10 +659,10 @@ const SingleProperty = () => {
 
             {/* Review Cards */}
             <section>
-              <h3 className="font-bold text-base mb-4 mt-6">
+              <h3 class="font-bold text-base mb-4 mt-6">
                 See what guests loved the most
               </h3>
-              <article className="relative">
+              <article class="relative">
                 {/* <SwiperScroll content =  {<ReviewCards name = {`Victor`} country = {`Poland`}/>} /> */}
 
                 {/* <ReviewCards name = {`Piotr`}  country = {`Azerbaijan`}/> 
@@ -685,43 +672,40 @@ const SingleProperty = () => {
                 />
               </article>
 
-              <button className="mt-6 text-blue-700 px-1.5 py-1.5 text-[13px] font-medium   border  border-blue-700">
+              <button class="mt-6 text-blue-700 px-1.5 py-1.5 text-[13px] font-medium   border  border-blue-700">
                 Read all reviews
               </button>
             </section>
             {/* Property questions and answers */}
             <section>
-              <div className="flex flex-row justify-between">
-                <h2 className="font-bold text-xl mb-4 mt-6">
+              <div class="flex flex-row justify-between">
+                <h2 class="font-bold text-xl mb-4 mt-6">
                   Property Questions &amp; answers{" "}
                 </h2>
-                <button className="bg-[#0071c2] text-xs h-8  text-white font-medium px-2  ">
+                <button class="bg-[#0071c2] text-xs h-8  text-white font-medium px-2  ">
                   See availability{" "}
                   <span>
-                    <FontAwesomeIcon
-                      icon={faChevronRight}
-                      className="w-3 h-3"
-                    />
+                    <FontAwesomeIcon icon={faChevronRight} class="w-3 h-3" />
                   </span>
                 </button>
               </div>
-              <p className="text-[13px]">
+              <p class="text-[13px]">
                 Browse questions from guests for anything extra you want to know
                 about the property
               </p>
-              <p className="text-xs text-green-700">
+              <p class="text-xs text-green-700">
                 The property usually replies within a few days
               </p>
 
-              <article className="mt-6  relative">
+              <article class="mt-6  relative">
                 <SwiperScroll content={<QuestionCard />} />
               </article>
 
-              <div className=" flex flex-row space-x-2 mb-6">
-                <button className="mt-6 text-blue-700 px-8 py-1.5 text-[13px] font-medium   border  border-blue-700">
+              <div class=" flex flex-row space-x-2 mb-6">
+                <button class="mt-6 text-blue-700 px-8 py-1.5 text-[13px] font-medium   border  border-blue-700">
                   Ask a Question
                 </button>
-                <button className="mt-6 text-blue-700 px-5 py-1.5 text-[13px] font-medium   border  border-blue-700">
+                <button class="mt-6 text-blue-700 px-5 py-1.5 text-[13px] font-medium   border  border-blue-700">
                   See More Questions(15)
                 </button>
               </div>

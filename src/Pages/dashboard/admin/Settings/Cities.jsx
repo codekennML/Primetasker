@@ -5,7 +5,7 @@ const Cities = () => {
         <h2 className="text-xl font-medium text-gray-600 font-sans">
           Cities Management
         </h2>
-        {/* <p className='text-sm  text-gray-600 pt-3 pb-2'>Here you can edit public information about yourself</p> */}
+        {/* <p className='text-sm  text-gray-600 pt-3 pb-2'>Here you can edit assets information about yourself</p> */}
       </article>
       <article className="mt-4 max-w-screen-md space-y-3 text-xs">
         <h3 className="text-sm font-medium text-gray-600">

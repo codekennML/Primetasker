@@ -1,64 +1,51 @@
+import { useField } from "formik";
+import { DateRangePicker } from "react-date-range";
+import "react-date-range/dist/styles.css"; // main css file
+import "react-date-range/dist/theme/default.css"; // theme css file
 
-import 'react-day-picker/dist/style.css';
-import  { useEffect, useState } from 'react';
-import { subDays, addDays, format, isValid } from 'date-fns';
-import { DayPicker } from 'react-day-picker';
+const DatePicker = ({
+  dateActive,
+  numofMonths = 1,
+  date,
+  setDate,
+  show = false,
+  position,
+  name,
+}) => {
+  const [field, meta, helpers] = useField(name);
+  const { setValue } = helpers;
 
-const DatePicker = ({getDateRange,isFilterActive}) => {
-  // const dateRange{
-  //   from: pastMonth,
-  //   to: addDays(pastMonth, 4),
-  // }
-  // const dateRange = useState({
-  //   from : null,
-  //   to : null
-  const today = new Date();
-  // })
-  const defaultSelected =  {
-    from: today,
-    to: addDays(today, 7)
+  const handleDate = (dateArray) => {
+    setDate(dateArray);
+    setValue(dateArray);
   };
 
-  // const today =  new Date()
-  // const weekRange = subDays(today , 7)
-
-  const [range, setRange] = useState(defaultSelected)
-  if(!isValid(range?.from))
-  {
-    setRange( prev => ({
-      ...prev,
-      from : defaultSelected?.from  
-
-    }))}
-    else if (!isValid(range?.to)) {
-      setRange( prev => ({
-        ...prev,
-        to: defaultSelected?.to 
-  
-      }))}
-    
-  useEffect(() => {
-    
-    getDateRange(range)
-  },[range])
- 
-
- 
-
-
   return (
-    <div className={`${isFilterActive ? 'opacity-100 ease-in ' : 'opacity-0 invisible ease-out ' } transition-opacity duration-300  bg-gray-50 text-gray-600 font-sans font-medium text-sm py-2 w-[620px] max- h-[330px] absolute z-50 right-0 top-11 `} >
-          <DayPicker 
-          selected={range}
-          required
-            mode="range"
-            onSelect={setRange}
-          numberOfMonths={2} pagedNavigation   className='w-full' 
-          // footer = {footer} 
-          />
-    </div>
+    <>
+      <div
+        className={`${
+          dateActive ? "opacity-100 ease-in " : "opacity-0 invisible ease-out "
+        } ${
+          numofMonths === 1 ? "" : "w-[620px]"
+        } mt-2 transition-opacity duration-300 z-50  shadow-md  dark:bg-gray-300 pb-6  font-sans font-medium text-sm py-2
+     rounded-lg max-h-[340px] ${position ? position : ""}  `}
+      >
+        <DateRangePicker
+          onChange={(item) => handleDate([item.selection])}
+          name={name}
+          showSelectionPreview={true}
+          moveRangeOnFirstSelection={false}
+          months={1}
+          minDate={new Date()}
+          range
+          ranges={date}
+          direction="horizontal"
+          rangeColors={["#7e22ce"]}
+          showMonthAndYearPickers={show}
+        />
+      </div>
+    </>
+  );
+};
 
-  )
-}
-
-export default DatePicker
+export default DatePicker;

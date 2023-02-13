@@ -13,11 +13,7 @@ const FileUploadProgress = ({
   function bytesToMegabytes(bytes, roundTo) {
     if (bytes < 1024) {
       return (bytes / 1024).toFixed(roundTo) + "kb";
-    }
-    // } else if (bytes < 1024 * 1024) {
-    //   return bytes + "KB"
-    // }
-    else {
+    } else {
       var converted = bytes / (1024 * 1024);
       return roundTo ? converted.toFixed(roundTo) + " MB" : converted + " MB";
     }
@@ -65,23 +61,22 @@ const FileUploadProgress = ({
           </p>
         </div>
 
-        <p>{convertedFileSize}</p>
+        {/* <p>{convertedFileSize}</p> */}
         <div>
-          {hasError ? (
-            errors.map((error, idx) => (
-              <li key={idx}>{`${
-                error.code === "file-too-large"
-                  ? "File exceeds maximum uploadable size of 5MB"
-                  : `${
-                      error.code === "file-invalid-type"
-                        ? "File must be a pdf or an image"
-                        : `${error.message}`
-                    }`
-              }`}</li>
-            ))
-          ) : (
-            <ProgressComp progress={progress} hasError={hasError} />
-          )}
+          {hasError
+            ? errors.map((error, idx) => (
+                <li key={idx}>{`${
+                  error.code === "file-too-large"
+                    ? "File exceeds maximum uploadable size of 5MB"
+                    : `${
+                        error.code === "file-invalid-type"
+                          ? "File must be a pdf or an image"
+                          : `${error.message}`
+                      }`
+                }`}</li>
+              ))
+            : // <ProgressComp progress={progress} hasError={hasError} />
+              null}
         </div>
       </article>
     </div>

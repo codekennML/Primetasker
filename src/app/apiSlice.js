@@ -1,8 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { useDispatch } from "react-redux";
-// import { logout } from '../../../../backend/controllers/authController'
 import { setCredentials, logOut } from "../features/auth/slices/authSlice";
-// import {dispatchL}
 
 // Send headers along with our requests
 const baseQuery = fetchBaseQuery({
@@ -44,16 +41,15 @@ const baseQuerywithRefreshToken = async (args, api, extraOptions) => {
     }
     // Retry the failed request (response) again with new accessToken
     else {
-      // console.log(refreshTokenRequest)
       if (refreshTokenRequest?.error?.status === 403) {
         refreshTokenRequest.error.data.message =
-          "Login Expired . Please Login again";
+          "Your login session has expired . Please Login again";
 
         setTimeout(() => {
           api.dispatch(logOut());
 
           api.dispatch(apiSlice.util.resetApiState());
-        }, 3000);
+        }, 1000);
       }
       return refreshTokenRequest;
     }
@@ -68,7 +64,7 @@ export const apiSlice = createApi({
   //  Request details
   baseQuery: baseQuerywithRefreshToken,
   // Caching & invalidation types
-  tagTypes: ["Posts, Properties, Users, Bookings", "Files"],
+  tagTypes: ["Post", "Task", "Booking", "Category", "User"],
 
   // EndPoint Injections go in here
   endpoints: () => ({}),

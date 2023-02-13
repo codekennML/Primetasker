@@ -1,7 +1,8 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&display=swap');
- */
- @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&display=swap');
+ 
+ /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap'); */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,12 +10,33 @@
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 html{
-    /* font-family: 'Inter', sans-serif; */
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+}
+body,html {
+  margin: 0;
+  padding: 0;
 }
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
+ .scrollbar-reduce::-webkit-scrollbar-button, .scrollbar-reduce::-moz-scrollbar {
+    width: 15px;
+    height: 15px;
+} */
+ .scrollbar-reduce {
+    width: 15px;
+    height: 15px;
+}
+
+.arrow {
+  border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 4px solid #333;
+}
+
+
+
 
 /* For IE, Edge and Firefox */
 .scrollbar-hide {
@@ -22,37 +44,49 @@ html{
     scrollbar-width: none;  /* Firefox */
 }
 
-    /* DayPicker */
-    .rdp-caption_label {
-        font-size: 15px;}
-    .rdp-nav_icon{
-            width: 25px;
-            padding: 2px;
+.rdrDayDisabled,.rdrDayDisabled .rdrInRange,.rdrDayDisabled .rdrStartEdge {
+  filter: none;
+  color:blue
+}
+.rdrDayDisabled .rdrInRange{
+  color:yellow
+}
+        .rdrDefinedRangesWrapper{
+            display: none;
         }
-        .rdp-day{
-            border-radius: 0;
-        }
-        .rdp-day_today:not(.rdp-day_outside) {
-            color: rgb(91, 195, 230);
-            /* background-color: #4f46e5; */
-            font-weight : 800;
-        }
-        .rdp-row:hover{
-            background-color:transparent;
-        }
-        .rdp-day_selected, .rdp-day_selected:focus-visible, .rdp-day_selected:hover {
-            color: #131212;
-            opacity: 1;
-            background-color: #f4f4f4;
-            /* border: 1px solid rgba(104, 17, 121, 0.692); */
-            
-        }
-        .rdp-day_range_start, .rdp-day_range_end{
-            border-radius: 0 !important; 
-            background-color: #4f46e5;
-            color: #f5f5f5;
-         
-        }
+        .rdrDateDisplayWrapper {
+            display: none;
+         }
+         .rdrPprevButton i {
+            border-width: 8px 11px 7px 0px;
+            border-color: transparent rgb(131, 14, 199) transparent transparent;
+            transform: translate(-3px, 0px);
+          }
+          
+          .rdrNextButton i {
+            margin: 0 0 0 7px;
+            border-width: 8px 11px 7px 10px;
+            border-color: transparent transparent transparent rgb(131, 14, 199);
+            transform: translate(3px, 0px);
+          }
+          
+          .rdrPprevButton,.rdrNextPrevButton {
+          background: transparent;
+          }
+          
+          .rdrDayNumber {
+            font-weight: 600;
+          }
+          .rdrWeekDay {
+            font-weight: 600;
+            line-height: 2.667em;
+            color: rgb(17 19 19);
+          }
+          .rdrMonthAndYearPickers select {
+            font-weight: 600;
+          }
+          
+
 
 /* table, th, td {
         padding: 12px 6px;
@@ -67,28 +101,24 @@ tr:hover{
 
 /* END TABLE THEME */
 
-table {
-    /* font-family: Arial, Helvetica, sans-serif; */
-    border-collapse: collapse;
-    /* width: 100%; */
-  }
   
   table td, table th {
-    border-bottom: 1px solid #ddd;
-    padding: 12px 8px;
+    border-bottom: 0.5px solid rgba(223, 222, 223, 0.601);
+    padding: 6px 8px;
     word-wrap: break-word;
   }
   
-  table tr:nth-child(even){background-color: #f8fcfead;}
+  /* table tr:nth-child(even){background-color: #f8fcfead;} */
   
-  table tr:hover {background-color: rgb(251, 249, 249);}
+  /* table tr:hover {background-color: rgb(87, 86, 86)} */
   
   table th {
     padding-top: 8px;
     padding-bottom: 8px;
     text-align: center;
-    background-color: #f8fcfead;
-    color: rgb(56, 71, 151);
+    font-size: 13.5px;
+    /* background-color: #f8fcfead; */
+    /* color: rgb(56, 71, 151); */
   }
 
   /* Tanstack ends here */

@@ -5,7 +5,7 @@ const CustomCheckbox = ({ label, labelstyle, ...props }) => {
   const errorStyle = " ";
   const validStyle = "text-red-400 ";
   const invalid = meta.touched && meta.error;
-  // console.log(field, meta);
+
   return (
     <article>
       <div className=" flex ">

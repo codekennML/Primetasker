@@ -1,17 +1,24 @@
-import { ThreeCircles } from "react-loader-spinner";
+import { Oval } from "react-loader-spinner";
 
-const Spinner = ({ position }) => {
+const Spinner = ({
+  color = "purple",
+  visible = false,
+  position,
+  height = 50,
+  width = 50,
+}) => {
   return (
-    // <div className="inline-flex justify-center items-center">
-    <ThreeCircles
-      height="60"
-      width="60"
-      color="#5521B5"
-      visible={true}
-      ariaLabel="three-circles-rotating"
-      outerCircleColor="#5521B5"
-      innerCircleColor="#5521B5"
-      middleCircleColor="#5521B5"
+    <Oval
+      strokeWidth={30}
+      strokeWidthSecondary={100}
+      color={color}
+      secondaryColor="white"
+      height={height}
+      width={width}
+      wrapperStyle={{}}
+      wrapperclassName=""
+      visible={visible}
+      ariaLabel="oval-loading"
     />
     // </div>
   );

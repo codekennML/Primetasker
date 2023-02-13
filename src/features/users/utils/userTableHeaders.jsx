@@ -16,13 +16,13 @@ export const userTableHeaders = [
   },
 
   {
-    Header: "First Name",
-    accessor: "firstname",
+    Header: "Name",
+    accessor: (user) => `${user.firstname} ${user.lastname}`,
   },
-  {
-    Header: "Last Name",
-    accessor: "lastname",
-  },
+  // {
+  //   Header: "Last Name",
+  //   accessor: "lastname",
+  // },
   {
     Header: "Gender",
     accessor: `gender`,
@@ -61,11 +61,11 @@ export const userTableHeaders = [
     accessor: "active",
     Cell: ({ row }) => {
       return row.values.active ? (
-        <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs ">
+        <span className="bg-green-100 text-green-600 px-3 py-1 rounded text-xs ">
           Active
         </span>
       ) : (
-        <span className="bg-red-200 text-red-700 px-3 py-1 rounded-full text-xs">
+        <span className="bg-red-50 text-red-700 px-3 py-1 rounded text-xs">
           Inactive
         </span>
       );
@@ -76,11 +76,11 @@ export const userTableHeaders = [
     accessor: "verified",
     Cell: ({ row }) => {
       return row.values.verified ? (
-        <span className="bg-green-50 text-green-500 px-3 py-1 rounded-full text-xs ">
+        <span className="bg-green-50 text-green-500 px-3 py-1 rounded text-xs ">
           Verified
         </span>
       ) : (
-        <span className="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full text-xs">
+        <span className="bg-indigo-50 text-indigo-600 px-3 py-1 rounded text-xs">
           Unverified
         </span>
       );
