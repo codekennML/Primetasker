@@ -3,16 +3,19 @@ import useAuth from "../../../hooks/useAuth";
 
 const RequireAuth = ({ allowedRoles }) => {
   const location = useLocation();
-  const { roles } = useAuth();
+  const redirectUri = location?.pathname;
+  const redirectData = location?.state?.data;
 
-  console.log(roles);
+  const { roles } = useAuth();
 
   const content = roles.some((role) => allowedRoles.includes(role)) ? (
     <Outlet />
-  ) : roles.length > 0 ? (
-    <Navigate to="/admin-dashboard" state={{ from: location }} replace />
   ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
+    <Navigate
+      to="/login"
+      state={{ from: location, data: redirectData, redirectUri: redirectUri }}
+      replace
+    />
   );
 
   return content;

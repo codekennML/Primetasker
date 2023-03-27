@@ -38,11 +38,7 @@ const SwiperScroll = ({ content, slide, gap }) => {
       //    onSwiper={(swiper) => console.log(swiper)}
     >
       <SwiperSlide>{content}</SwiperSlide>
-      <SwiperSlide>{content}</SwiperSlide>
-      <SwiperSlide>{content}</SwiperSlide>
-      <SwiperSlide>{content}</SwiperSlide>
-      <SwiperSlide>{content}</SwiperSlide>
-      <SwiperSlide>{content}</SwiperSlide>
+   
     </Swiper>
   );
 };

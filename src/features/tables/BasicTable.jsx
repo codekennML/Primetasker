@@ -69,6 +69,7 @@ const TableData = ({ fetchData, headers, params }) => {
     page: page,
     ...params,
   });
+  console.log(params);
   let tableContent = [];
   useEffect(() => {
     if (isSuccess) {
@@ -317,12 +318,12 @@ const Table = ({
                   isLoading || isError
                     ? "hidden opacity-0"
                     : "visible opacity-100"
-                } pagination bar flex justify-between values-center pt-2`}
+                } pagination bar flex justify-between values-center `}
               >
                 <button
                   onClick={() => previousPage()}
                   disabled={!canPreviousPage}
-                  className=" inline-flex items-center space-x-1 values-center disabled:bg-indigo-50 disabled:cursor-not-allowed bg-purple-700  text-white hover:bg-purple-700 px-3 py-1.5 font-medium rounded-lg"
+                  className=" inline-flex items-center space-x-1 values-center disabled:bg-indigo-50 disabled:cursor-not-allowed bg-purple-700  text-white hover:bg-purple-700 px-3 py-1.5 disabled:text-gray-400 text-[13px] font-medium rounded-lg"
                 >
                   <span>
                     <HiArrowNarrowLeft />
@@ -331,7 +332,7 @@ const Table = ({
                 </button>
 
                 <div>
-                  <p className="text-gray-600">{`Showing Page ${
+                  <p className="text-gray-600 text-[13px]">{`Showing Page ${
                     pageIndex + 1
                   } of ${pageCount} ~  ${pageData.totalDocs} entries`}</p>
                   <p></p>
@@ -340,7 +341,7 @@ const Table = ({
                 <button
                   onClick={() => nextPage()}
                   disabled={!canNextPage}
-                  className=" items-center  inline-flex space-x-1 values-center disabled:cursor-not-allowed disabled:bg-indigo-50    hover:bg-indigo-900 px-5 bg-purple-700 text-white py-1.5 font-medium rounded-lg"
+                  className=" items-center  inline-flex space-x-1 values-center disabled:cursor-not-allowed disabled:bg-indigo-50 disabled:text-gray-400 hover:bg-indigo-900 px-5 bg-purple-700 text-white py-1.5 font-medium rounded-lg text-[13px] "
                 >
                   <span>Next</span>
                   <span>

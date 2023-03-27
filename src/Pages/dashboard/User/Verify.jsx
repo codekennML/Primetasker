@@ -6,6 +6,7 @@ const Verify = () => {
   return (
     <div>
       <TopBar headerText={`Account Verification`} />
+
       <Profile />
     </div>
   );

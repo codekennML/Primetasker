@@ -1,17 +1,17 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { apiSlice } from "../../../app/apiSlice";
 import { io } from "socket.io-client";
-import { ErrorResponse } from "@remix-run/router";
 
 const chatAdapter = createEntityAdapter({
   selectId: (chat) => chat._id,
 });
 
 const chatEvent = {
-  SendMessage: "send_message",
+  joinChat: "join chat",
+  SendMessage: "new_message",
   RequestAllMessages: "request_all_messages",
   SendAllMessages: "send_all_messages",
-  receive: "receive_message",
+  receive: "message_received",
 };
 
 const initialState = chatAdapter.getInitialState();
@@ -19,7 +19,12 @@ const initialState = chatAdapter.getInitialState();
 let socket;
 function getSocket() {
   if (!socket) {
-    socket = io("http://localhost:3500");
+    try {
+      socket = io("http://localhost:3500");
+      console.log("Socket Connected");
+    } catch (err) {
+      console.log("Socket Disconnected");
+    }
   }
   return socket;
 }
@@ -30,56 +35,67 @@ const chatApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response) => {
         return chatAdapter.setAll(initialState, response);
       },
+      providesTags: (_) => {
+        return ["Chat"];
+      },
     }),
-
     getMessages: builder.query({
-      query: () => "/chats/getMessages",
+      query: (arg) => `/messages/getMessages/${arg}`,
 
-      transformResponse(response) {
+      transformResponse: (response) => {
         return chatAdapter.addMany(initialState, response);
       },
-      // async onCacheEntryAdded(
-      //   message,
-      //   { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
-      // ) {
-      //   const socket = getSocket();
-      //   try {
-      //     await cacheDataLoaded;
 
-      //     socket.on("connect", () => {
-      //       socket.emit(chatEvent.RequestAllMessages);
-      //     });
+      async onCacheEntryAdded(
+        arg,
+        { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
+      ) {
+        const socket = getSocket();
+        socket.emit(chatEvent.joinChat, arg);
 
-      //     socket.on(chatEvent.SendAllMessages, (messages) => {
-      //       updateCachedData((draft) => {
-      //         chatAdapter.upsertMany(draft, ...messages);
-      //       });
-      //     });
+        try {
+          await cacheDataLoaded;
 
-      //     socket.on(chatEvent.receive, (message) => {
-      //       updateCachedData((draft) => {
-      //         chatAdapter.upsertOne(draft, message);
-      //       });
-      //     });
-      //   } catch {
-      //     // Errors
-      //   }
+          socket.on("message_received", (message) => {
+            message?.chat._id === arg
+              ? updateCachedData((draft) => {
+                  chatAdapter.upsertOne(draft, message);
+                })
+              : null;
+          });
+        } catch {}
 
-      //   await cacheEntryRemoved;
-      //   socket.off("connect");
-      //   socket.off(chatEvent.SendAllMessages);
-      //   socket.off(chatEvent.ReceiveMessage);
-      // },
+        await cacheEntryRemoved;
+        socket.disconnect();
+      },
     }),
+
     sendMessage: builder.mutation({
-      query: (message) => {
-        console.log(message);
-        // const socket = getSocket();
-        // return new Promise((resolve) => {
-        //   socket.emit(chatEvent.SendMessage, message, (chat) => {
-        //     resolve({ data: chat });
-        //   });
-        // });
+      query: (message) => ({
+        url: "/messages",
+        method: "POST",
+        body: {
+          messageText: message.messageText,
+          files: message.files,
+          chatId: message.chatId,
+        },
+      }),
+      async onQueryStarted(args, { queryFulfilled, dispatch }) {
+        const { chatId } = args;
+        try {
+          const { data: latestMessage } = await queryFulfilled;
+          console.log("latest");
+          await dispatch(
+            apiSlice.util.updateQueryData("getMessages", chatId, (draft) => {
+              chatAdapter.upsertOne(draft, latestMessage);
+            })
+          );
+          const socket = getSocket();
+          socket.emit("new_message", latestMessage);
+        } catch {}
+      },
+      invalidatesTags: (_) => {
+        return ["Chat"];
       },
     }),
   }),

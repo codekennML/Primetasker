@@ -1,137 +1,216 @@
-import { navlinks } from "../constants/Navbar";
-import styles, { layout } from "../styles/style";
-import {
-  NavLink,
-  Outlet,
-  Link,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAutomobile,
-  faBars,
-  faBed,
-  faGear,
-  faPlane,
-  faPlaneCircleCheck,
-  faTaxi,
-  faUserCircle,
-} from "@fortawesome/free-solid-svg-icons";
-import { format, addDays } from "date-fns";
-import { useState } from "react";
-import BookingOccupantModal from "../features/modal/BookingOccupantModal";
+import { Link } from "react-router-dom";
+import Logo from "./Logo";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import useAuth from "../hooks/useAuth";
 
-const Navbar = ({ type }) => {
-  const navigate = useNavigate();
+const categories = [
+  {
+    id: 1,
+    name: "Home & Office",
+  },
+  {
+    id: 2,
+    name: "Data & Technology",
+  },
+  {
+    id: 3,
+    name: "Business",
+  },
+  {
+    id: 4,
+    name: "Relaxation & Entertainment",
+  },
+  {
+    id: 5,
+    name: "Events & Decoration",
+  },
+  {
+    id: 6,
+    name: "Design & Marketing",
+  },
+  {
+    id: 7,
+    name: "Errands & Deliveries",
+  },
+  {
+    id: 8,
+    name: "Religion  Education",
+  },
+];
 
-  const [displayDateRange, setDisplayDateRange] = useState(false);
+const Nav = () => {
+  const { avatar, userLoggedIn: isLoggedIn } = useAuth();
+  const [showNav, setShowNav] = useState(false);
+  const [isScroll, setIsScroll] = useState(false);
 
-  const [date, setDate] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: "selection",
-    },
-  ]);
+  const [isHome, setIsHome] = useState(false);
 
-  const handleSearch = () => {
-    return navigate("/searchresults", { date, occupants, destination });
-  };
+  const { pathname } = useLocation();
 
-  const [showOccupantModal, setShowOccupantModal] = useState(false);
-  const [destination, setDestination] = useState();
-  const [occupants, setOccupants] = useState({
-    adults: 1,
-    children: 0,
-    rooms: 1,
-  });
+  useEffect(() => {
+    pathname !== "/" ? setIsHome(false) : setIsHome(true);
+  }, [pathname]);
 
-  const handleOccupants = (name, operation) => {
-    setOccupants((prev) => {
-      return {
-        ...prev,
-        [name]:
-          operation === "increase" ? occupants[name] + 1 : occupants[name] - 1,
-      };
-    });
-  };
+  function scroll() {
+    window.scrollY > 0 ? setIsScroll(true) : setIsScroll(false);
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", scroll);
+
+    return () => {
+      window.removeEventListener("scroll", scroll);
+    };
+  }, []);
 
   return (
-    <>
-      {/* <section className='min-w-full '>
-    <header className={`${layout.section} ${styles.flexBetween} items-center w-full pt-0 py-2 h-16 bg-[#003580] lg:px-48   `}>
-        <Link to =  '/' className="logo font-medium text-white text-[22px]">
-            Booking.com
-      </Link>
- 
+    <section>
+      <header
+        className={`${
+          isHome && !isScroll
+            ? "bg-transparent text-white "
+            : "bg-white text-black"
+        } ${
+          pathname === "/create/post-a-task" ? "hidden" : "visible"
+        } transition-all ease duration-400 w-full   pt-2 fixed top-0 z-20`}
+      >
+        <div className="">
+          <div className="flex justify-between items-center lg:w-[80%] lg:mx-auto ">
+            <div className="">
+              <Link to="/" className="cursor-pointer ">
+                <Logo />
+              </Link>
+            </div>
 
-        <ul  className={`${layout.sectionImgReverse} hidden lg:flex space-x-4`}>
-            {  navlinks.map((link) => {
-                    return (
-
-                       <li key =  {link.id} >
-                            <NavLink to = { link.href }  className = 'text-white font-medium capitalize text-[14px]'> {link.text}</NavLink>
-                       </li> 
-                    )
-                   
-                })
-            }
-
+            {/* Nav links */}
+            <nav className="">
+              <ul
+                className={`hidden font-medium lg:flex text-[14px]   lg:flex-row lg:space-x-8  text-center space-y-4 lg:space-y-0 items-center lg:justify-between 
           
-        </ul>
-          
-        <ul className='lg:hidden flex flex-row space-x-8' >
-            <li>
-            <FontAwesomeIcon icon={faUserCircle} className = 'text-white text-[32px]'  />
-            </li>
-               
-            <li>
-            <FontAwesomeIcon icon={faBars} className = 'text-white text-[32px]' />
-              
-            </li>
+            
+            `}
+              >
+                <li className="cursor-pointer border border-gray-400  px-6 rounded-full py-1.5 hover:transition duration-200 hover:bg-purple-800 hover:border-purple-800 hover:text-white">
+                  <Link to="/create/post-a-task">Post a task</Link>
+                </li>
+                <li>
+                  <Link to="/tasks">Browse tasks</Link>
+                </li>
+                <li>
+                  <Link to="/explore">Explore </Link>
+                </li>
+                {isLoggedIn ? (
+                  <li>
+                    <Link to="/dashboard">
+                      <img
+                        src={avatar}
+                        height={40}
+                        width={40}
+                        className="rounded-full h-10 w-10 p-1 "
+                      />
+                    </Link>
+                  </li>
+                ) : (
+                  <>
+                    <li>
+                      <Link to="/signup">Become a tasker</Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/login"
+                        className="bg-purple-800 text-white px-5 py-2 rounded"
+                      >
+                        Login
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </ul>
 
-        </ul>
-        
-    </header>
+              <ul
+                className={`fixed pt-40  items-center justify-start space-y-12 flex flex-col text-white left-0 lg:relative  w-full h-screen lg:h-max  z-20 shadow-md py-[2em]  top-0 bottom-0 transition:opacity delay-600 opacity-100 duration-1000  bg-gray-900 lg:hidden ${
+                  showNav
+                    ? "left-[0%] opacity-100"
+                    : "opacity-0  left-[150%] lg:hidden"
+                } `}
+              >
+                <li className="">
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="details">Rooms</Link>
+                </li>
+                <li>
+                  <Link to="/details">Restaurant</Link>
+                </li>
+                <li>
+                  <Link to="/details">Event Space</Link>
+                </li>
+                <li>
+                  <Link to="/details">Facilities</Link>
+                </li>
 
-   
-    <section className='flex flex-row items-center bg-[#003580] text-white  pb-3 px-4 lg:px-48 
-    whitespace-nowrap'>
-    <div className='w-[600px] overflow-scroll scrollbar-hide space-x-5'>
-          
-          <a href="" className='inline-flex items-center border rounded-full px-3  py-2'>
-         <FontAwesomeIcon icon={faBed} className = 'pr-2 text-[12px]' />
-         <span className='font-medium text-[13px]'>Stay</span>
-         </a>
-         <a href="" className='inline-flex items-center   '>
-         <FontAwesomeIcon icon={faPlaneCircleCheck} className = 'pr-2 text-[12px]' />
-         <span className='font-medium text-[13px]'>Flights</span>
-         </a>
-         <a href="" className='inline-flex items-center   '>
-         <FontAwesomeIcon icon={faAutomobile} className = 'pr-2 text-[12px]' />
-         <span className='font-medium text-[13px] '>Car rentals</span>
-         </a>
-         <a href="" className='inline-flex items-center '>
-         <FontAwesomeIcon icon={faGear}  className = 'pr-2 text-[12px]'/>
-         <span className='font-medium text-[13px] '>Attractions</span>
-         </a>
-         <a href="" className='inline-flex items-center hover:  '>
-         <FontAwesomeIcon icon={faTaxi}  className = 'pr-2 text-[12px]'/>
-         <span className='font-medium text-[13px]'>Airport taxis</span>
-         </a>
-  
-     
+                <li className="bg-primary px-6 py-1 rounded w-[30%] text-center">
+                  <Link
+                    to="/login"
+                    className={`${isScroll ? "text-white" : ""}`}
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      setShowNav(false);
+                    }}
+                    className="absolute top-9  text-[2em] text-primary bg-white right-6 lg:hidden z-50"
+                  >
+                    <AiOutlineClose />
+                  </button>
+                </li>
+              </ul>
+            </nav>
+
+            {/* Nav toggle  */}
+            <div className="lg:hidden ">
+              <button
+                className=" text-white"
+                onClick={() => setShowNav((prev) => !prev)}
+              >
+                <AiOutlineMenu className="w-[30px] h-[40px] " />
+              </button>
+            </div>
           </div>
-   </section>
+          <div
+            className={`w-full border-t shadow bg-transparent  ${
+              isScroll ? "block" : "hidden"
+            }`}
+          >
+            <ul className="flex flex-row justify-between text-sm  font-medium   lg:w-[80%] lg:mx-auto">
+              {categories.map((category) => {
+                return (
+                  <li
+                    key={category.id}
+                    className="py-3 relative  after:absolute after:w-full after:h-[0px] hover:after:h-[3px] after:bottom-0 after:bg-purple-400 after:left-0  "
+                  >
+                    <button>{category.name}</button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      </header>
 
-
-    </section>  */}
-      <section className="w-full px-4 lg:px-0  lg:w-[80%] mx-auto overflow-hidden">
+      <main>
         <Outlet />
-      </section>
-    </>
+      </main>
+    </section>
   );
 };
 
-export default Navbar;
+// export default Navbar;
+
+export default Nav;

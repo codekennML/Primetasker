@@ -25,7 +25,7 @@ const CustomText = ({
   return (
     <div
       className={
-        props.wrapperclassName ? props.wrapperclassName : `w-full my-1.5 relative`
+        props.wrapperclassName ? props.wrapperclass : `w-full my-1.5 relative`
       }
     >
       <label
@@ -37,23 +37,23 @@ const CustomText = ({
         {label}
       </label>
 
-      {imgBfr ? (
-        <div
-          className={
-            props.svgclassName
-              ? props.svgclassName
-              : `text-[18px] text-red-400  absolute top-[45%] left-[1%]`
-          }
-        >
-          {imgBfr}
-        </div>
-      ) : null}
       <div className="relative">
+        {imgBfr ? (
+          <button
+            type="button"
+            onClick={() => toggleVisibility()}
+            className={`${
+              props.adornment ? props.adornment : null
+            }  text-[18px]   absolute  `}
+          >
+            {imgBfr}
+          </button>
+        ) : null}
+
         <input
           type={passwordVisible ? "text" : type}
           {...field}
           {...props}
-        
           className={`${invalid ? errorStyle : validStyle} ${
             imgBfr ? "pl-7" : "pl-2"
           } ${props.inputstyle} `}
@@ -63,8 +63,8 @@ const CustomText = ({
             type="button"
             onClick={() => toggleVisibility()}
             className={
-              props.svgclassName
-                ? props.svgclassName
+              props.adornment
+                ? props.adornment
                 : `text-[18px] text-violet-600  absolute top-[40%] right-[5%] `
             }
           >
@@ -74,7 +74,7 @@ const CustomText = ({
       </div>
 
       {invalid && (
-        <div className="text-red-600 text-xs mt-1 mb-2"> {meta.error}</div>
+        <div className="text-red-600 text-xs  py-2"> {meta.error}</div>
       )}
     </div>
   );

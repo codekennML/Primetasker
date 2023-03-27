@@ -5,7 +5,7 @@ import { usersApiCalls } from "../features/users/slices/UserApiSlice";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import DatePicker from "../utils/DatePicker";
+import DatePicker from "../../../../Heristays/Heristays/src/utils/DatePicker";
 
 const Search = () => {
   const navigate = useNavigate();

@@ -1,11 +1,48 @@
 import { Form, Formik } from "formik";
-import React, { useRef, useEffect, forwardRef } from "react";
+import React, { useRef, useEffect, forwardRef, useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { FaImage, FaTimes } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
 import CustomText from "../utils/CustomFieldComp/CustomText";
 import CustomTextarea from "../utils/CustomFieldComp/CustomTextarea";
+import MemoizedImageForm from "./ImageForm";
+import TextVisibility from "./TextVisibility";
+import {
+  useGetCommentsfortaskQuery,
+  useGetCommentsRepliesQuery,
+} from "../features/comments/slices/commentApiAlice";
+import Spinner from "../utils/Spinner";
 
-const OfferChat = () => {
+const OfferChat = ({ comment }) => {
+  console.log(comment);
+  // console.log(comment);
+
+  const { userLoggedIn: isLoggedIn } = useAuth();
+  const [resetForm, setResetForm] = useState(false);
+  const [pageData, setPageData] = useState({});
+  const [commentReplies, setCommentReplies] = useState([]);
+
+  const {
+    data: replies,
+    isLoading,
+    isSuccess,
+  } = useGetCommentsRepliesQuery(
+    {
+      page: 1,
+      commentId: comment?._id,
+    },
+    {
+      skip: !comment._id,
+    }
+  );
+  useEffect(() => {
+    if (isSuccess) {
+      const { ids, entities, pageData: pagination } = replies;
+      setPageData(pageData);
+      setCommentReplies((prev) => [...prev, ...ids.map((id) => entities[id])]);
+    }
+  }, [replies]);
+
   const fileUploadRef = useRef();
 
   const displayFileUpload = (e) => {
@@ -13,20 +50,22 @@ const OfferChat = () => {
   };
 
   return (
-    <div className="bg-white w-[550px] pt-2 pb-4  relative rounded-lg">
-      <section className=" overflow-y-scroll h-[450px] px-6 space-y-4 mb-6">
+    <div className="bg-white w-[550px] max-h-[calc(100vh_-_100px)] pt-2 pb-4  relative rounded-b-lg">
+      <section className=" overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400/30 scrollbar-track-gray-300 overflow-x-hidden scrollbar-thumb-rounded-full scrollbar-track-rounded-full  h-[350px] px-6 space-y-4 pb-6">
         <article>
           <div className="   rounded-l-lg flex flex-row space-x-2 ">
             <div>
               <img
-                src="https://images.unsplash.com/photo-1509839862600-309617c3201e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGFzc3BvcnQlMjBwaG90b3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+                src={comment.createdBy.Avatar}
                 alt=""
                 className="w-[60px] h-[60px] rounded-full object-cover object-center mb-1"
               />
             </div>
 
             <div className="flex flex-col items-start text-[13px] font-medium text-center ">
-              <h3 className="text-purple-900 text-[16px]">Kamsi Jaja</h3>
+              <h3 className="text-purple-900 text-[16px]">
+                {`${comment.createdBy.firstname} ${comment.createdBy.lastname}`}
+              </h3>
 
               <p className="flex items-center space-x-1 py-1">
                 <span className="text-[17px] text-yellow-500">
@@ -37,147 +76,58 @@ const OfferChat = () => {
               <p className="text-gray-600 text-[13px]">57% completion rate</p>
             </div>
           </div>
-          <p className="text-[14px] text-gray-600 font-medium text-justify mt-2 bg-[#f3f3f7] px-3 rounded-lg py-2 leading-relaxed ">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem
-            excepturi, suscipit quidem reprehenderit amet voluptates sapiente ab
-            perferendis, natus velit incidunt, quis earum doloremque modi
-          </p>
-        </article>
-        <article className="border-b py-3">
-          <div className="   rounded-l-lg flex flex-row items-center space-x-2 ">
-            <div>
-              <img
-                src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                alt=""
-                className="w-[30px] h-[30px] rounded-full object-cover object-center mb-1"
-              />
-            </div>
 
-            <div className="flex flex-col items-center text-[13px] font-medium text-center ">
-              <h3 className="text-purple-900 text-[14px]">Kamsi J.</h3>
+          <TextVisibility text={comment?.body} />
+        </article>
+
+        {isLoading ? (
+          <div className="w-full  flex justify-center items-center pt-16">
+            <div className="flex flex-col items-center justify-center">
+              <Spinner height={40} width={40} color="green" visible />
+              <p className="text-[13px] font-semibold mt-6 text-gray-400">
+                Loading comments...
+              </p>
             </div>
           </div>
-          <p className="text-[13px] text-gray-700  text-justify   px-10 rounded-lg  leading-relaxed ">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem
-            excepturi, suscipit quidem reprehenderit amet voluptates sapiente ab
-            perferendis, natus velit incidunt, quis earum doloremque modi
-          </p>
-        </article>
-        <article className="border-b py-3">
-          <div className="   rounded-l-lg flex flex-row items-center space-x-2 ">
-            <div>
-              <img
-                src="https://images.unsplash.com/photo-1509839862600-309617c3201e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGFzc3BvcnQlMjBwaG90b3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                alt=""
-                className="w-[30px] h-[30px] rounded-full object-cover object-center mb-1"
-              />
-            </div>
+        ) : null}
 
-            <div className="flex flex-col items-center text-[13px] font-medium text-center ">
-              <h3 className="text-purple-900 text-[14px]">Kamsi Jaja</h3>
-            </div>
-          </div>
-          <p className="text-[13px] text-gray-700  text-justify   px-10 rounded-lg  leading-relaxed ">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem
-            excepturi, suscipit quidem reprehenderit amet voluptates sapiente ab
-            perferendis, natus velit incidunt, quis earum doloremque modi
-          </p>
-        </article>
-        <article className=" py-3">
-          <div className="   rounded-l-lg flex flex-row items-center space-x-2 ">
-            <div>
-              <img
-                src="https://images.unsplash.com/photo-1509839862600-309617c3201e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGFzc3BvcnQlMjBwaG90b3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                alt=""
-                className="w-[30px] h-[30px] rounded-full object-cover object-center mb-1"
-              />
-            </div>
+        {commentReplies?.length > 0
+          ? commentReplies.map((reply) => {
+              return (
+                <article className="border-b py-3">
+                  <div className="   rounded-l-lg flex flex-row items-center space-x-2 ">
+                    <div>
+                      <img
+                        src={reply.createdBy.Avatar}
+                        alt={`prime-${reply.createdBy.firstname}-comment-image`}
+                        className="w-[30px] h-[30px] rounded-full object-cover object-center mb-1"
+                      />
+                    </div>
 
-            <div className="flex flex-col items-center text-[13px] font-medium text-center ">
-              <h3 className="text-purple-900 text-[14px]">Kamsi Jaja</h3>
-            </div>
-          </div>
-          <p className="text-[13px] text-gray-700  text-justify   px-10 rounded-lg  leading-relaxed ">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem
-            excepturi, suscipit quidem reprehenderit amet voluptates sapiente ab
-            perferendis, natus velit incidunt, quis earum doloremque modi
-          </p>
-        </article>
-      </section>
-      <Formik
-        initialValues={{ comment: "", file: "" }}
-        onSubmit={(values, actions) => {
-          console.log(values);
-          actions.resetForm();
-        }}
-      >
-        {({ values, setFieldValue }) => {
-          return (
-            <Form className="bg-gray-50 mx-6 rounded-lg pb-3 focus-within:border-violet-400 border-2">
-              <div className="px-3 ">
-                <div className="relative ">
-                  <CustomTextarea
-                    autoFocus
-                    disabled={values.comment && values.comment.length >= 1400}
-                    maxlength="1400"
-                    placeholder={`Reply to Kamsi Jaja`}
-                    name="comment"
-                    inputStyle="h-16 oveflow-y-scroll py-5 bg-gray-100 outline-0 border-0 text-gray-500 resize-none font-semibold"
-                  />
-                  <p className="absolute -bottom-6 right-2 text-[12px] fomt-semibold text-gray-600">
-                    {`${values.comment.length}  of 1400`}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between py-1 mt-6">
-                  <div className="flex-1">
-                    {values.file ? (
-                      <div className="flex items-center space-x-2 bg-gray-50 rounded">
-                        <span>
-                          <FaImage className="text-purple-600" />
-                        </span>
-                        <p className="max-w-52 truncate text-[13px] ">
-                          {values.file.name}
-                        </p>
-                        <button onClick={() => setFieldValue("file", "")}>
-                          <FaTimes className="text-gray-700 text-[13px]" />
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => displayFileUpload()}
-                        className=" rounded-full  border-purple-800 p-1 px-2 flex items-center space-x-2"
-                      >
-                        <span>
-                          <FaImage className="text-purple-600" />
-                        </span>
-                        {/* <span className="text-[11px]">Add Image</span> */}
-                        <input
-                          type="file"
-                          ref={fileUploadRef}
-                          className="hidden"
-                          name="file"
-                          onChange={(e) =>
-                            setFieldValue("file", e.currentTarget.files[0])
-                          }
-                        />
-                      </button>
-                    )}
+                    <div className="flex flex-col items-center text-[13px] font-medium text-center ">
+                      <h3 className="text-purple-900 text-[14px]">{`${
+                        reply.createdBy.firstname
+                      } ${reply.createdBy.lastname.charAt(0)}.`}</h3>
+                    </div>
                   </div>
+                  <TextVisibility text={reply?.body} />
+                </article>
+              );
+            })
+          : null}
+      </section>
 
-                  <button
-                    type="submit"
-                    className="px-3 py-1 mt-1 text-purple-700 text-[13px]  bg-purple-200 rounded-full hover:text-gray-600 font-medium "
-                  >
-                    Send Reply
-                  </button>
-                </div>
-              </div>
-            </Form>
-          );
-        }}
-      </Formik>
+      <MemoizedImageForm
+        name={`${
+          comment.createdBy.firstname
+        } ${comment.createdBy.lastname.charAt(0)}.`}
+        parent={comment._id}
+        taskId={comment.taskId}
+        createdBy={comment._id}
+        isCommentReply
+        clearValues={resetForm}
+        setClearValues={setResetForm}
+      />
     </div>
   );
 };

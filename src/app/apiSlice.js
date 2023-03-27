@@ -41,9 +41,12 @@ const baseQuerywithRefreshToken = async (args, api, extraOptions) => {
     }
     // Retry the failed request (response) again with new accessToken
     else {
-      if (refreshTokenRequest?.error?.status === 403) {
+      if (
+        refreshTokenRequest?.error?.status === 403 ||
+        refreshTokenRequest?.error?.status === 401
+      ) {
         refreshTokenRequest.error.data.message =
-          "Your login session has expired . Please Login again";
+          "Your session has expired . Please Login again";
 
         setTimeout(() => {
           api.dispatch(logOut());
@@ -64,7 +67,7 @@ export const apiSlice = createApi({
   //  Request details
   baseQuery: baseQuerywithRefreshToken,
   // Caching & invalidation types
-  tagTypes: ["Post", "Task", "Booking", "Category", "User"],
+  tagTypes: ["Post", "Task", "Booking", "Category", "User", "Message", "Chat"],
 
   // EndPoint Injections go in here
   endpoints: () => ({}),

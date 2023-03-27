@@ -85,7 +85,7 @@ export const ThirdStepValidator = yup.object().shape({
   files: yup.array(
     yup.object().shape({
       file: yup.string().nullable(false),
-      secure_url: yup.string().required(),
+      url: yup.string().required(),
       preview: yup.string().nullable(false),
     })
   ),

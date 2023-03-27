@@ -116,7 +116,6 @@ const UserSidebar = () => {
                   );
                 })}
               </ul>
-              {/* </div> */}
 
               <div className=" absolute  bottom-0  w-full">
                 <ul className="mb-0">
@@ -190,7 +189,7 @@ const UserSidebar = () => {
             <nav>
               <ul className="flex space-x-3  text-purple-600 font-medium">
                 <li>
-                  <Link>Home</Link>
+                  <Link to="/tasks/123">Home</Link>
                 </li>
                 <li>
                   <Link>Tasks</Link>

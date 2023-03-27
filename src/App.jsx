@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./components/Navbar";
 import Index from "./Pages/Index";
-import { Routes, Route, Router } from "react-router-dom";
+import { Routes, Route, Router, useOutletContext } from "react-router-dom";
 import Login from "./features/auth/pages/Login";
 import RequireAuth from "./features/auth/pages/RequireAuth";
 import Signup from "./features/auth/pages/Signup";
@@ -48,16 +48,33 @@ import UserAnalytics from "./Pages/dashboard/User/UserAnalytics";
 import Verify from "./Pages/dashboard/User/Verify";
 import Create from "./Pages/dashboard/User/Create";
 import PostTask from "./features/tasks/pages/PostTask/PostTaskForm";
-import PostMail from "./components/PostMail";
+
 import FindItems from "./components/FindItems";
 import CreateService from "./components/CreateService";
 import BrowseTasks from "./components/BrowseTasks";
-import Nav from "./components/Nav";
+
 import HomePage from "./components/HomePage";
 import ModalProvider from "./features/modal/ModalProvide";
-// const LazySignup =  React.lazy(() => import('./Pages/dashboard/dashboard'))
+import PostTaskSuccess from "./features/tasks/pages/PostTask/PostTaskSuccess";
+import TaskSidebar from "./features/tasks/pages/TaskSidebar";
 
+import Map from "./features/tasks/Map";
+import TaskMainDisplay from "./features/tasks/pages/TaskMainDisplay";
+import { useJsApiLoader } from "@react-google-maps/api";
+// import Map from "./features/tasks/Map";
+
+// const LazySignup =  React.lazy(() => import('./Pages/dashboard/dashboard'))
+const lib = ["places"];
+// AIzaSyDdYME_PrW_WGGcJOdDpGLym58HFmFpdBw"
+// AIzaSyDdYME_PrW_WGGcJOdDpGLym58HFmFpdBw
 function App() {
+  const mapAccessToken = "";
+
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: mapAccessToken,
+    libraries: lib,
+  });
+
   const darkMode = useSelector((state) => state.theme.dark);
   const colorTheme = darkMode ? "dark" : "light";
   const altTheme = colorTheme === "light" ? "dark" : "light";
@@ -72,19 +89,16 @@ function App() {
   const [theme, setTheme] = useState(localStorage.theme);
 
   return (
-    <div class="bg-[#f3f5f7] h-screen dark:bg-gray-700 dark:transform:transition-all dark:duration-700 dark:ease-in dark:delay-300">
+    <div className="bg-[#f3f5f7] h-screen dark:bg-gray-700 dark:transform:transition-all dark:duration-700 dark:ease-in dark:delay-300">
       <ModalProvider />
       <Toaster />
       <Routes>
         {/* Links visible to unauthenticated Users */}
+        {/* <Route element={<PersistLogin />}> */}
         <Route path="/" element={<Navbar />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="searchresults" element={<SearchResults />} />
-          <Route path="browse" element={<BrowseTasks />} />
-
           <Route path="single-property" element={<SingleProperty />} />
           <Route path="create/post-a-task" element={<PostTask />} />
-          <Route path="create/post-a-mail" element={<PostMail />} />
           <Route path="create/find-item" element={<FindItems />} />
           <Route path="create/create-service" element={<CreateService />} />
 
@@ -92,20 +106,35 @@ function App() {
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="password-reset" element={<PasswordReset />} />
           <Route path="signup" element={<Signup />} />
-        </Route>
 
-        {/* Routes to admin dashboard are protected by the RequireAuth Component */}
+          <Route path="tasks/" element={<TaskSidebar />}>
+            <Route index element={<TaskMainDisplay />} />
+            <Route path=":id" element={<TaskMainDisplay />} />
+          </Route>
 
-        <Route element={<PersistLogin />}>
           <Route
             element={<RequireAuth allowedRoles={["Tasker", "Customer"]} />}
           >
+            <Route
+              path="create/post-task-success"
+              element={<PostTaskSuccess />}
+            />
+          </Route>
+
+          {/* Routes to admin dashboard are protected by the RequireAuth Component */}
+
+          <Route
+            element={<RequireAuth allowedRoles={["Tasker", "Customer"]} />}
+          >
+            <Route
+              path="create/post-task-success"
+              element={<PostTaskSuccess />}
+            />
+
             <Route path="dashboard" element={<UserSidebar />}>
               <Route index element={<UserAnalytics />} />
               <Route path="verify" element={<Verify />} />
               <Route path="create" element={<Create />} />
-              <Route path="verify" element={<Verify />} />
-              <Route path="verify" element={<Verify />} />
               <Route path="verify" element={<Verify />} />
             </Route>
           </Route>
@@ -158,9 +187,11 @@ function App() {
               </Route>
             </Route>
           </Route>
+
+          {/* </Route> */}
+          <Route path="*" element={<Error />} />
         </Route>
         {/* </Route> */}
-        <Route path="*" element={<Error />} />
       </Routes>
     </div>
   );

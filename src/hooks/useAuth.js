@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../features/auth/slices/authSlice";
 import jwt_decode from "jwt-decode";
+
 const useAuth = () => {
   const token = useSelector(selectCurrentToken);
 
@@ -19,10 +20,10 @@ const useAuth = () => {
 
     // console.log(decoded.UserInfo)
 
-    isUser = roles.includes("Tasker") || roles.includes("Customer");
+    const userLoggedIn = roles.includes("Tasker") || roles.includes("Customer");
     isManager = roles.includes("Manager");
     isAdmin = roles.includes("Admin");
-    if (isUser) status = "primeUser";
+    if (userLoggedIn) status = "primeUser";
     if (isManager) status = "primeManager";
     if (isAdmin) status = "primeAdmin";
 
@@ -36,6 +37,7 @@ const useAuth = () => {
       isAdmin,
       isAgent,
       status,
+      userLoggedIn,
     };
   }
   return {
