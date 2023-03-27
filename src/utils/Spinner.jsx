@@ -9,14 +9,14 @@ const Spinner = ({
 }) => {
   return (
     <Oval
-      strokeWidth={30}
-      strokeWidthSecondary={100}
+      strokeWidth={2}
+      strokeWidthSecondary={2}
       color={color}
       secondaryColor="white"
       height={height}
       width={width}
       wrapperStyle={{}}
-      wrapperclassName=""
+      wrapperclassName={position}
       visible={visible}
       ariaLabel="oval-loading"
     />

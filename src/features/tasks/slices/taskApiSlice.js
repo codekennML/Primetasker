@@ -8,14 +8,27 @@ import { store } from "../../../app/Store";
 
 import { setPageInfo } from "../../pagination/paginate";
 
-const tasksAdapter = createEntityAdapter({
+var apiKey = "jv-QDg.oU-NBw:Oi8XM3YqxkmjlOL_S5QDt8JnyMAjtgv5aS9mUY58Ppw";
+var url =
+  "https://realtime.ably.io/event-stream?channels=tasks&v=1.2&key=" + apiKey;
+var eventSource = new EventSource(url);
+
+eventSource.onmessage = function (event) {
+  var message = JSON.parse(event.data);
+  console.log("Message: " + message.name + " - " + message.data);
+};
+
+export const tasksAdapter = createEntityAdapter({
   //   Sort tasks according by most recent based on date created
-  // sortComparer : ((a,b) => b.date.localeCompare(a.date))
+
   selectId: (task) => task._id,
 });
 
 // unpopulated initial  state of adapter
-const initialState = tasksAdapter.getInitialState();
+export const initialState = tasksAdapter.getInitialState({
+  pageData: {},
+  newCount: 0,
+});
 
 // EndPoints injected to our api for everything tasks
 export const tasksApiCalls = apiSlice.injectEndpoints({
@@ -35,13 +48,42 @@ export const tasksApiCalls = apiSlice.injectEndpoints({
       transformResponse: (responseData) => {
         // console.log(responseData);
         const { tasks, meta } = responseData.data;
+
         const loadedtasks = tasks.map((task) => {
           task.id = task._id;
           return task;
         });
 
-        store.dispatch(setPageInfo(meta));
-        return tasksAdapter.setAll(initialState, loadedtasks);
+        return tasksAdapter.setAll(
+          { ...initialState, pageData: meta, newCount: 0 },
+          loadedtasks
+        );
+        // tasksAdapter.setAll(initialState, loadedtasks);
+      },
+
+      async onCacheEntryAdded(
+        arg,
+        { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
+      ) {
+        const eventSource = new EventSource(url);
+
+        try {
+          await cacheDataLoaded;
+
+          eventSource.onmessage = function (event) {
+            var message = JSON.parse(event.data);
+            console.log("Message: " + message.name + " - " + message.data);
+
+            updateCachedData((draft) => {
+              draft.newCount += 1;
+            });
+          };
+        } catch {
+          console.log("error");
+        }
+
+        await cacheEntryRemoved;
+        eventSource.close();
       },
 
       // Use response to granulate lookup tags for caching and invalidation
@@ -55,9 +97,14 @@ export const tasksApiCalls = apiSlice.injectEndpoints({
 
     getTaskById: builder.query({
       query: (id) => `/tasks/${id}`,
-
       transformResponse: (response) => {
-        return tasksAdapter.setAll(initialState, response);
+        // console.log(response);
+        var { task } = response.data;
+        const loadedtask = task.map((task) => {
+          task.id = task._id;
+          return task;
+        });
+        return tasksAdapter.setAll(initialState, loadedtask);
       },
 
       providesTags: (result, error, arg) => {
@@ -70,8 +117,20 @@ export const tasksApiCalls = apiSlice.injectEndpoints({
       },
     }),
 
-    // ---------Update Individual Task
+    // ---------Create Individual Task
 
+    createTask: builder.mutation({
+      query: (initialTask) => ({
+        url: "/tasks",
+        method: "POST",
+        body: {
+          fields: initialTask,
+        },
+        invalidatesTags: (result, error, arg) => [{ type: "Task", id: arg }],
+      }),
+    }),
+
+    // ---------Update Individual Task
     updateTask: builder.mutation({
       query: (initialTask) => ({
         url: "/tasks",
@@ -100,6 +159,7 @@ export const tasksApiCalls = apiSlice.injectEndpoints({
 export const {
   useGetTasksQuery,
   useGetTaskByIdQuery,
+  useCreateTaskMutation,
   useUpdateTaskMutation,
   useDeleteTaskMutation,
 } = tasksApiCalls;
@@ -120,6 +180,4 @@ export const {
   selectAll: selectAllTasks,
   selectById: selectTaskById,
   selectIds: selectTaskIds,
-} = tasksAdapter.getSelectors(
-  (state) => selectTasksData(state) ?? initialState
-);
+} = tasksAdapter.getSelectors((state) => state.tasks ?? initialState);

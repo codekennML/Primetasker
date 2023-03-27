@@ -1,27 +1,63 @@
-import { formatDistance, lastDayOfMonth } from "date-fns";
+import { useState, useEffect } from "react";
+import { addDays, formatDistance, lastDayOfMonth, format } from "date-fns";
 import {
   AiFillCheckCircle,
   AiOutlineCalendar,
   AiOutlineClockCircle,
   AiOutlinePlusCircle,
 } from "react-icons/ai";
-import { BsInfoCircle } from "react-icons/bs";
+
+import {
+  BsCloudSun,
+  BsInfoCircle,
+  BsSun,
+  BsSunset,
+  BsMoonStars,
+} from "react-icons/bs";
 import CustomRadio from "../../../../utils/CustomFieldComp/CustomRadioCheck";
 import CustomText from "../../../../utils/CustomFieldComp/CustomText";
+import { useFormikContext } from "formik";
 import DatePicker from "../../../../utils/DatePicker";
+import ClickAwayListener from "react-click-away-listener";
+
+const taskTime = [
+  { name: "Morning", value: "Before 9am", icon: <BsCloudSun /> },
+  { name: "Midday", value: "10am-2pm", icon: <BsSun /> },
+  { name: "Afternoon", value: "2pm-6pm", icon: <BsSunset /> },
+  { name: "Evening", value: "After 6pm", icon: <BsMoonStars /> },
+];
 
 export const StepOne = ({
   showTaskForm,
   setShowTaskForm,
-  dateActive,
-  setDateActive,
-  date,
-  setDate,
-  formatDate,
   showDraftForm,
   setShowDraftForm,
   fields,
 }) => {
+  const [dateActive, setDateActive] = useState(false);
+
+  const [date, setDate] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 1),
+      key: "selection",
+    },
+  ]);
+
+  const formatDate = (date) => {
+    const fromDate = `${format(new Date(date[0].startDate), "eee dd LLL")}`;
+    const beforeDate = `${format(new Date(date[0].endDate), "eee dd LLL")}`;
+    const formattedDate = `On ${fromDate} / Before ${beforeDate}`;
+
+    return formattedDate;
+  };
+
+  useEffect(() => {
+    if (date[0].startDate !== date[0].endDate) {
+      setDateActive(false);
+    }
+  }, [date]);
+
   const context = useFormikContext();
   const { values } = context;
 
@@ -35,7 +71,7 @@ export const StepOne = ({
     setShowTaskForm(true);
     setShowDraftForm(false);
   }
-
+  const [flexible, setFlexible] = useState(false);
   return (
     <section>
       {showDraftForm && !showTaskForm ? (
@@ -57,13 +93,9 @@ export const StepOne = ({
                 </p>
                 {values.forsook ? (
                   <p className="flex justify-end text-[12px] pt-0">
-                    {`  about ${formatDistance(
-                      new Date(values.forsook),
-                      Date.now(),
-                      {
-                        addSuffix: true,
-                      }
-                    )} 
+                    {`  ${formatDistance(new Date(values.forsook), Date.now(), {
+                      addSuffix: true,
+                    })} 
                   `}
                   </p>
                 ) : null}
@@ -95,8 +127,9 @@ export const StepOne = ({
           </div>
         </div>
       ) : null}
+
       {!showDraftForm && showTaskForm ? (
-        <section>
+        <section className="relative">
           <h2 className="text-[30px] font-sans font-bold text-gray-900 py-2.5 text-center mb-6">
             Provide task Details
           </h2>
@@ -138,14 +171,16 @@ export const StepOne = ({
                 type="button"
               >
                 <span>
-                  {!values.date[0].endDate || values.date[0].endDate === ""
+                  {!values?.date[0]?.endDate || values?.date[0]?.endDate === ""
                     ? "On or Before "
                     : formatDate(values.date)}
                 </span>
                 <span className="arrow "></span>
               </button>{" "}
               <button
-                className="bg-blue-50 px-3 py-3 border border-gray-300 rounded-full text-[14px]"
+                className={`${
+                  flexible ? "bg-purple-800 text-white" : "bg-blue-50"
+                } px-3 py-3 border border-gray-300 rounded-full text-[14px] `}
                 type="button"
                 onClick={() => {
                   context.setFieldValue("date", [
@@ -154,21 +189,27 @@ export const StepOne = ({
                       endDate: lastDayOfMonth(new Date()),
                     },
                   ]);
+                  setFlexible((prev) => !prev);
                 }}
               >
                 Before next month
-              </button>{" "}
-              <DatePicker
-                name="date"
-                numofMonths={1}
-                dateActive={dateActive}
-                date={date}
-                setDate={setDate}
-                position={`absolute -top-24 right-2`}
-              />
+              </button>
+              {dateActive ? (
+                <>
+                  <div className="show__datepicker__angle"></div>
+
+                  <DatePicker
+                    name="date"
+                    numofMonths={1}
+                    dateActive={dateActive}
+                    date={date}
+                    setDate={setDate}
+                    position={`absolute -top-4 -left-2`}
+                  />
+                </>
+              ) : null}
             </article>
           </article>
-
           <article className="mt-8 py-2 space-y-4">
             <div className="flex items-center space-x-2">
               <p className="text-purple-900 text-[30px]">

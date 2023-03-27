@@ -35,7 +35,11 @@ const CustomRadio = ({
           </RadioGroup.Label>
           <div className={`${style}`}>
             {options.map((option, idx) => (
-              <RadioGroup.Option key={option.name} value={option.value}>
+              <RadioGroup.Option
+                key={option.name}
+                value={option.value}
+                className="w-full"
+              >
                 {({ checked }) => {
                   return renderItem(
                     option.name,
@@ -69,33 +73,3 @@ function CheckIcon(props) {
   );
 }
 export default CustomRadio;
-
-{
-  /* <div className=" w-full flex  items-center justify-between">
-                      <div className="  items-center">
-                        <div className="text-xs w-full py-3  ">
-                          <RadioGroup.Label
-                            as="p"
-                            className={`font-medium text-[13px] ${
-                              checked ? "text-white" : "text-gray-900"
-                            }`}
-                          >
-                            {option.name}
-                          </RadioGroup.Label>
-                          <RadioGroup.Description
-                            as="span"
-                            className={`inline w-full ${
-                              checked ? "text-sky-100" : "text-gray-500"
-                            }`}
-                          >
-                            <span className="w-full text-[20px]"></span>{" "}
-                          </RadioGroup.Description>
-                        </div>
-                      </div>
-                      {checked && (
-                        <div className="shrink-0 text-white">
-                          <CheckIcon className="h-6 w-6" />
-                        </div>
-                      )}
-                    </div> */
-}

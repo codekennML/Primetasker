@@ -1,32 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-const initialState = {
-  draft: {
-    title: "",
-    taskTime: "",
-    date: [{ startDate: "", endDate: "" }],
-    category: "",
-    taskType: "",
-    location: "",
-    details: "",
-    files: [],
-    budget: "",
-  },
-};
+import { tasksAdapter, initialState } from "./taskApiSlice";
 
 export const draftTaskSlice = createSlice({
   name: "draftTask",
   initialState: initialState,
+
   reducers: {
     // Action creator for setting a draft task  if a user abandons the task creation process
-    setTask: (state, action) => {
-      state.draft = action.payload;
-      // console.log(state.token);
+    clearNotifis: (state) => {
+      console.log(tasksAdapter);
+      tasksAdapter.upsertOne(state, { newCount: 0 });
+    },
+    setNotifis: (state, action) => {
+      state.notification = state.notification + 1;
+      console.log(state.notification);
     },
   },
 });
-
-export const selectDraftTask = (state) => state.draftTask.draft;
-export const { setTask } = draftTaskSlice.actions;
+// tasksAdapter.getInitialState({ newCount: 0 }),
+// clearNotifis
+export const { clearNotifis } = draftTaskSlice.actions;
 
 export default draftTaskSlice.reducer;

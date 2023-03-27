@@ -5,7 +5,7 @@ import { setDarkMode } from "../../../features/theme/themeSlice";
 import useAuth from "../../../hooks/useAuth";
 
 const TopBar = ({ headerText }) => {
-  const { avatar } = useAuth();
+  const { avatar, email } = useAuth();
   const dispatch = useDispatch();
 
   const handleMode = () => {
@@ -28,6 +28,7 @@ const TopBar = ({ headerText }) => {
             <FaSun />
           </button>
         </div>
+        <div>{email}</div>
         <div className="bg-gradient-to-tr from-pink-300 via-green-300 to-orange-300 p-1 rounded-full  ">
           <img src={avatar} alt="" className="w-[30px] h-[30px] rounded-full" />
         </div>

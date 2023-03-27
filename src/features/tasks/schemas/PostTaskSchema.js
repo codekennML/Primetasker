@@ -9,10 +9,12 @@ const allowedFileTypes = [
   "image/jfif",
 ];
 
+const numberConstraint = /^[0-9]*/;
+
 const fields = {
   title: "",
   budget: "",
-  // date:{before : "" , on : "" },
+  date: { before: "", on: "" },
   category: "",
   taskType: "",
   location: "",
@@ -54,7 +56,7 @@ export const FirstStepValidator = yup.object().shape({
   taskTime: yup
     .string()
     .required("This field is required")
-    .oneOf(["Before 9am", "10-2pm", "2pm-6pm", "After 6pm"]),
+    .oneOf(["Before 9am", "10am-2pm", "2pm-6pm", "After 6pm"]),
 });
 
 export const SecondStepValidator = yup.object().shape({
@@ -62,19 +64,21 @@ export const SecondStepValidator = yup.object().shape({
     .string()
     .required("This field is required")
     .oneOf([...options], "Please select a valid category"),
+
   taskType: yup
     .string()
     .max(15)
     .required("This field is required")
     .oneOf(["Remote", "Physical", "Hybrid"], "Please enter a valid task type"),
-  location: yup
-    .string()
-    .max(255)
-    .when("taskType", {
-      is: "Physical",
-      then: yup.string().max(255).required("Task location is required"),
-      otherwise: yup.string().nullable(true),
+
+  location: yup.object().when("taskType", {
+    is: "Physical",
+    then: yup.object().shape({
+      place: yup.string().required(),
+      lng: yup.number().required(),
+      lat: yup.number().required(),
     }),
+  }),
 });
 
 export const ThirdStepValidator = yup.object().shape({
@@ -104,8 +108,6 @@ export const ThirdStepValidator = yup.object().shape({
 export const LastStepValidator = yup.object().shape({
   budget: yup
     .number()
-    .typeError("Please enter a number between 5,000 & 1,000,000")
-    .positive("This field cannot be negative")
     .min(5000, "Budget cannot be less than 5000")
     .max(1000000, "Budget cannot be more  than 1000,000")
     .required("This field is required"),

@@ -11,7 +11,6 @@ const CustomSelect = ({
   name,
   selectArray,
   onChange,
-
   imgBfr,
   imgAfter,
 }) => {

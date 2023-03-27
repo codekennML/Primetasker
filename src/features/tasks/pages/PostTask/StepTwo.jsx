@@ -9,6 +9,7 @@ import { FaRegMap } from "react-icons/fa";
 import CustomRadio from "../../../../utils/CustomFieldComp/CustomRadioCheck";
 import CustomText from "../../../../utils/CustomFieldComp/CustomText";
 import Select from "../../../../utils/CustomSelect";
+import AutoCompleteMap from "../../utils/AutoCompleteMap";
 
 const options = [
   "Pedicure & Manicure",
@@ -61,6 +62,7 @@ export const StepTwo = () => {
         <Select
           name="category"
           items={options}
+          value={values.category}
           width={`w-full`}
           style={`py-4 text-[16px] bg-gray-50`}
         />
@@ -75,7 +77,7 @@ export const StepTwo = () => {
             What type of task is this ?
           </h3>
         </div>
-
+        {/* 0686705704 */}
         <article>
           <CustomRadio
             name="taskType"
@@ -90,7 +92,7 @@ export const StepTwo = () => {
                     checked
                       ? "bg-purple-800 text-white border-0"
                       : "bg-gray-50 text-gray-500"
-                  } relative  w-52  bg-gray-50 text-center  rounded-lg py-4 flex flex-col items-center justify-center border border-purple-500`}
+                  } relative  w-52   text-center  rounded-lg py-4 flex flex-col items-center justify-center border border-purple-500`}
                 >
                   <p
                     className={`${
@@ -119,7 +121,9 @@ export const StepTwo = () => {
               </h3>
             </div>
 
-            <CustomText
+            <AutoCompleteMap name="location" />
+
+            {/* <CustomText
               label="Task Address "
               labelstyle={`hidden`}
               name="location"
@@ -127,7 +131,7 @@ export const StepTwo = () => {
               value={values.location}
               placeholder="84 Etim Inyang Crescent, Victoria Island"
               inputstyle="py-4 my-2  rounded-lg border-2 border-violet-200 placeholder:text-[14px] placeholder:text-gray-500 focus:outline-violet-500 text-base text-gray-400 bg-gray-50 indent-2 w-full rounded"
-            />
+            /> */}
           </div>
         )}
       </article>

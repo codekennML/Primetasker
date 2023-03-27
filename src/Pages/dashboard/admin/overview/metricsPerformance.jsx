@@ -5,7 +5,7 @@ import Select from "../../../../utils/CustomSelect";
 import { useState, useEffect } from "react";
 import { addDays, format, isValid, subDays } from "date-fns";
 import Spinner from "../../../../utils/Spinner";
-import DatePicker from "../../../../utils/DatePicker";
+import DatePicker from "../../../../../../../Heristays/Heristays/src/utils/DatePicker";
 
 const options = ["Bookings", "Payments", "Commissions", "Tasks", "Users"];
 

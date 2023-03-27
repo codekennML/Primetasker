@@ -95,7 +95,7 @@ const Sidebar = () => {
   return (
     <article className="flex  flex-row mx-24 ">
       <section className=" flex flex-row lg:flex-row fixed w-56  dark:bg-gray-700 dark:text-gray-100 z-10 overflow-x-hidden h-full rounded-l-lg  ">
-        <div className=" flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 dark:bg-gray-800/50 text-gray-800">
+        <div className=" flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-800/50 text-gray-800">
           <div className="flex flex-col top-0 left-0 w-[400px] lg:w-56 dark:text-white border-r dark:border-gray-700 pb-10   ">
             <div className="flex items-center justify-start mt-6 ">
               <div className="px-5">

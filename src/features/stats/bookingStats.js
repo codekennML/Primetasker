@@ -18,6 +18,10 @@ const bookingStatApi = apiSlice.injectEndpoints({
         });
         return bookingStatsAdapter.setAll(initialState, taskers);
       },
+      providesTag: (result, error, arg) => [
+        { type: "Category", id: "id" },
+        ...result.ids.map((id) => ({ type: "Category", id })),
+      ],
     }),
   }),
 });

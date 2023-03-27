@@ -7,22 +7,27 @@ import { useDispatchGoogleSSOMutation } from "../slices/authApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { useDispatch } from "react-redux";
 import usePersist from "../../../hooks/PersistLogin";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, redirect, useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineEye } from "react-icons/ai";
 import useAuth from "../../../hooks/useAuth";
-import Nav from "../../../components/Nav";
+import Nav from "../../../components/Navbar";
 
 const Login = () => {
   const idRef = useRef;
 
+  const location = useLocation();
+  console.log(location);
+  const redirectUri = location?.state?.redirectUri;
+  const data = location?.state?.data;
+
   const handleRedirect = () => {
-    const id = setTimeout(() => {
-      navigate(`/dashboard`);
-    }, 2000);
-    idRef.current = id;
+    navigate(redirectUri ? redirectUri : `/dashboard`, {
+      state: { from: location, data: data },
+      replace: true,
+    });
   };
 
   useEffect(() => {
@@ -78,9 +83,6 @@ const Login = () => {
 
   return (
     <section>
-      {/* <div className="bg-gray-700">
-        <Nav />
-      </div> */}
       <section className="flex h-screen justify-center items-center relative">
         <div className="max-w-lg lg:max-w-lg w-full   lg:px-12 pt-4 pb-2 rounded-lg ">
           <div>
@@ -153,8 +155,6 @@ const Login = () => {
                     </div>
                   </div>
 
-                  {/* <br /> */}
-
                   <button
                     className="bg-purple-800 hover:bg-purple-900 mt-6 rounded  text-white text-sm text-[17px] lg:text-[18px] mb-4 px-8 py-3 lg:py-4 w-full  font-semibold"
                     type="submit"
@@ -192,19 +192,9 @@ const Login = () => {
                     Continue with Google
                   </span>
                 </p>
-                {/* <p className="flex items-center "> */}
-
-                {/* </p> */}
               </a>
             </div>
           </div>
-
-          {/* <div className="pt-6 mb-1.5 ">
-          <p className="text-xs text-gray-400 text-center ">
-            All Rights Reserved. Heristays Inc.Ltd &copy;{" "}
-            {new Date().getFullYear()}
-          </p>
-        </div> */}
         </div>
       </section>
     </section>

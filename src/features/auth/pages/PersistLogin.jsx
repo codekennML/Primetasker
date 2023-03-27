@@ -1,4 +1,4 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useRefreshTokenMutation } from "../slices/authApiSlice";
 import usePersist from "../../../hooks/PersistLogin";
@@ -6,7 +6,9 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../slices/authSlice";
 
 const PersistLogin = () => {
+  const navigate = useNavigate();
   const [persist] = usePersist();
+  const location = useLocation();
   const token = useSelector(selectCurrentToken);
   const effectRan = useRef(false);
 
@@ -40,35 +42,32 @@ const PersistLogin = () => {
     // eslint-disable-next-line
   }, []);
 
-  let content;
+  // let content;
 
-  if (!persist) {
-    // persist: no
-    content = <Outlet />;
-  } else if (isLoading) {
-    //persist: yes, token: no
+  // if (!persist) {
+  //   // persist: no
+  //   content = <Outlet />;
+  // } else if (isLoading) {
+  //   //persist: yes, token: no
 
-    content = <p>Loading...</p>;
-  } else if (isError) {
-    //persist: yes, token: no
-    console.log("error");
-    content = (
-      <p className="errmsg">
-        {error.data?.message}
-        <Link to="/login">Please login again</Link>.
-      </p>
-    );
-  } else if (isSuccess && credSent) {
-    //persist: yes, token: yes
-    // console.log("success");
-    content = <Outlet />;
-  } else if (token && isUninitialized) {
-    //persist: yes, token: yes
-    // console.log("token and uninit");
+  //   content = <p>Loading...</p>;
+  // } else if (isError) {
+  //   //persist: yes, token: no
 
-    content = <Outlet />;
-  }
+  //   navigate("/login", { state: { from: location }, replace: true });
+  //   // <Navigate to = "/login" state ={{from : location}} replace / >
+  //   // );
+  // } else if (isSuccess && credSent) {
+  //   //persist: yes, token: yes
+  //   // console.log("success");
+  //   content = <Outlet />;
+  // } else if (token && isUninitialized) {
+  //   //persist: yes, token: yes
+  //   // console.log("token and uninit");
 
-  return content;
+  //   content = <Outlet />;
+  // }
+
+  return <Outlet />;
 };
 export default PersistLogin;

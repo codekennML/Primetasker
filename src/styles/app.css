@@ -1,7 +1,7 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&display=swap'); */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&display=swap');
- 
- /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap'); */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rammetto+One&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,41 +9,53 @@
 
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
-html{
-    font-family: 'Inter', sans-serif;
+
     /* font-family: 'Roboto', sans-serif; */
-}
-body,html {
+
+body,html,pre {
   margin: 0;
   padding: 0;
+  font-family: 'Inter', sans-serif;
 }
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
- .scrollbar-reduce::-webkit-scrollbar-button, .scrollbar-reduce::-moz-scrollbar {
-    width: 15px;
-    height: 15px;
-} */
- .scrollbar-reduce {
-    width: 15px;
-    height: 15px;
-}
+ .scrollbar-reduce::-webkit-scrollbar, .scrollbar-reduce::-moz-scrollbar {
+    width: 12px;
+    height: 12px;
+} 
 
+.scrollbar-thin {
+  overflow: scroll;
+}
 .arrow {
   border-left: 4px solid transparent;
 	border-right: 4px solid transparent;
-	border-top: 4px solid #333;
+	border-top: 4px solid #8522d7;
+}
+
+.messageText {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #2e2e2e;
 }
 
 
-
-
-/* For IE, Edge and Firefox */
-.scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+.transHeight {
+  transition: max-height 0.5s ease-out 0s;
 }
 
+
+.show__datepicker__angle{
+
+  position: absolute; left: 0px; transform: translate3d(35px, 0px, 0px);
+}
 .rdrDayDisabled,.rdrDayDisabled .rdrInRange,.rdrDayDisabled .rdrStartEdge {
   filter: none;
   color:blue
@@ -87,18 +99,46 @@ body,html {
           }
           
 
+          .ReactCollapse--collapse {
+            transition: height 500ms;
+          }
+.single-thumb .range-slider__thumb[data-lower] {
+  width: 0;
+ 
+}
+.single-thumb .range-slider__thumb[data-upper] {
+  background: #6b21a8;
+  transition: transform 0.3s;
+}
 
-/* table, th, td {
-        padding: 12px 6px;
-       
-        text-align: center;
-  }
-tr:hover{
-    background: rgba(180, 180, 180, 0.122);
-} */
 
+.single-thumb .range-slider__range {
+  border-radius: 6px;
+  background: #6b21a8;
+  transition: height 0.3s;
+}
 
+#range-slider-yellow {
+  background: #e2e1e1;
+}
 
+#range-slider-yellow .range-slider__range {
+  background: #6b21a8;
+  transition: height 0.3s;
+}
+
+#range-slider-yellow .range-slider__thumb {
+  background: #6b21a8;
+  transition: transform 0.3s;
+}
+
+#range-slider-yellow .range-slider__thumb[data-active] {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+#range-slider-yellow .range-slider__range[data-active] {
+  height: 16px;
+}
 /* END TABLE THEME */
 
   
@@ -123,15 +163,27 @@ tr:hover{
 
   /* Tanstack ends here */
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .swiper-button-prev, .swiper-button-next{
     background: rgba(255, 255, 255, 0.829);
     position: absolute;
-    top: 45%;
+    top: 35%;
     z-index: 999;
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    margin: 0 -25px;
+    margin: 0 -9px;
     box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.16);
 
     
@@ -142,4 +194,7 @@ tr:hover{
     font-weight:700;
   
 }
-
+.bg-gradient{
+  /* background: rgb(2,0,36); */
+  background: linear-gradient(169deg, rgba(2,0,36,1) 0%, rgba(69,144,215,1) 0%, rgba(15,164,252,1) 31%, rgba(0,138,255,1) 91%);
+}

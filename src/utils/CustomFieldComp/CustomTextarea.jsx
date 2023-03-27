@@ -14,7 +14,7 @@ const CustomTextarea = ({
   return (
     <div>
       <label
-        for="message"
+        htmlFor="message"
         className={`${
           labelStyle
             ? labelStyle
