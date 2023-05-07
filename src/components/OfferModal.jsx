@@ -6,49 +6,78 @@ import CustomText from "../utils/CustomFieldComp/CustomText";
 import CustomTextarea from "../utils/CustomFieldComp/CustomTextarea";
 import { useDispatch } from "react-redux";
 import Naira from "../../assets/svgs/Naira";
+import useAuth from "../hooks/useAuth";
 
-const OfferModal = ({ modalTitle }) => {
+import { notifySuccess, notifyErr } from "../hooks/NotifyToast";
+import { useCreateOfferMutation } from "../features/Offers/slices/OfferApiSlice";
+import ModalHead from "./ModalHead";
+
+const OfferModal = ({ modalTitle, taskId }) => {
+  const [createOffer, { isLoading, isSuccess }] = useCreateOfferMutation();
+  const { id: userId } = useAuth();
+
   const dispatch = useDispatch();
 
+  const createOfferhandler = async (values) => {
+    let offerDetails = values;
+    offerDetails.createdBy = userId;
+    offerDetails.taskId = taskId;
+
+    // console.log(offerDetails);
+
+    const createdOffer = await createOffer(offerDetails);
+    console.log(createdOffer);
+    if (createdOffer.data.status === 201) {
+      notifySuccess(`Your offer has been sent.`);
+    } else {
+      notifyErr(`Error : ${createdOffer.status} - Failed to create Offer  `);
+    }
+  };
+
   return (
-    <div className="bg-white w-[450px] rounded-lg px-6  pb-16">
+    <div className="bg-white w-[450px] rounded-lg px-6  pb-2">
+      <ModalHead title="Make an Offer" />
       <div>
-        <Formik initialValues={{ offerPrice: 5000, offerDetails: "" }}>
-          {(values) => {
+        <Formik
+          initialValues={{ offerAmount: 5000, offerMessage: "" }}
+          onSubmit={(values) => createOfferhandler(values)}
+        >
+          {({ values, isSubmitting, isValid }) => {
             return (
               <Form>
                 <div className="my-6 relative ">
-                  <h3 className="text-gray-500 font-medium text-[15px]">
-                    Enter your offer
-                  </h3>
+                  <h3 className="text-gray-700 font-medium my-2">Your offer</h3>
                   <CustomText
-                    imgBfr={<Naira style={`text-gray-500`} />}
-                    name="offerPrice"
+                    name="offerAmount"
                     type="text"
                     placeholder="5000"
-                    value={values.offerPrice}
+                    value={values.offerAmount}
                     imgBfr="&#8358;"
-                    adornment="top-[22%] left-[4%] font-medium text-gray-500"
-                    inputstyle="py-2.5 border-violet-500 font-medium  rounded-lg border-2 border-violet-200 placeholder:text-[15px] placeholder:text-gray-500 focus:outline-violet-500 text-base text-gray-600 bg-gray-50 indent-2 w-full rounded auto"
+                    adornment="top-[25%] left-[6%] font-medium text-gray-500"
+                    inputstyle="py-4 border-0 font-medium  rounded-lg placeholder:text-[15px] placeholder:text-gray-500 focus:outline-green-400 text-base text-gray-600 bg-slate-100 indent-6 w-full rounded auto"
                   />
                 </div>
 
                 <div className="space-y-3">
-                  <h3 className="text-gray-500 font-medium">
+                  <h3 className="text-gray-700 font-medium my-2">
                     Extra details about your offer
                   </h3>
                   <CustomTextarea
-                    name="offerDetails"
-                    value={values.offerDetails}
+                    name="offerMessage"
+                    value={values.offerMessage}
                     placeholder={`Share how you stand out from other bidders`}
-                    inputStyle={`my-4 py-4 p-2 bg-gray-200 h-32 resize-none focus:outline-violet-500  placeholder:text-[15px] placeholder:text-gray-500 text-gray-600 `}
+                    inputStyle={`my-4 py-4 p-2 bg-slate-100 h-44 resize-none border-0 focus:outline-green-400  placeholder:text-[14px] placeholder:text-gray-500 text-gray-600 `}
                   />
+                  <p className="text-[.7rem] font-semibold text-brand-light">
+                    This will be visible to the public
+                  </p>
                 </div>
 
                 <div className="my-8">
                   <button
-                    type="button"
-                    className="py-2 bg-purple-800 text-white rounded-lg px-4 float-right"
+                    disabled={isSubmitting || !isValid}
+                    type="submit"
+                    className="py-4  bg-brand-light text-white px-4 w-full rounded-full"
                   >
                     Submit Offer
                   </button>

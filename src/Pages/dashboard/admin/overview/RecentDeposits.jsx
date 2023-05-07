@@ -16,13 +16,13 @@ const RecentDeposits = () => {
   const [selected, setSelected] = useState(options[0]);
 
   return (
-    <div className="flex flex-col justify-center h-full w-1/2">
+    <div className="flex flex-col justify-center h-full w-full">
       <div className="w-full  mx-auto bg-white dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 shadow-md rounded-lg border border-gray-200">
         <header className="px-5 py-2 border-b border-gray-100 flex justify-between items-center">
           <h2 className="font-semibold text-purple-700 dark:text-purple-400">
             Recent Deposits
           </h2>
-          <Formik initialValues={{ tasker: selected }}>
+          {/* <Formik initialValues={{ tasker: selected }}>
             {() => {
               return (
                 <Form>
@@ -39,7 +39,7 @@ const RecentDeposits = () => {
                 </Form>
               );
             }}
-          </Formik>
+          </Formik> */}
         </header>
         <div className="p-3">
           <div className="overflow-x-auto">

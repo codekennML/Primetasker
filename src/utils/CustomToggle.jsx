@@ -1,26 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Switch } from "@headlessui/react";
 import { useField } from "formik";
 
-const PrimeToggle = ({ name }) => {
+const PrimeToggle = ({ name, setFieldValue }) => {
   const [field, meta, helpers] = useField(name);
-
   const [enabled, setEnabled] = useState(field.value);
-  console.log(helpers);
-  const { setValue } = helpers;
 
-  useEffect(() => {
-    setValue(enabled);
-  }, [enabled]);
-
-  console.log(field.value);
+  const toggleValue = (value) => {
+    setEnabled(value);
+    helpers.setValue(value);
+  };
 
   return (
     <Switch
-      checked={enabled}
-      onChange={setEnabled}
+      checked={field.value}
+      onChange={toggleValue}
       className={`${
-        enabled ? "bg-purple-600" : "bg-gray-200"
+        enabled ? "bg-brand-light" : "bg-gray-200"
       } relative inline-flex h-6 w-11 items-center rounded-full`}
     >
       <span className="sr-only">Enable {name}</span>

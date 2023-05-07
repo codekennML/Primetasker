@@ -2,8 +2,8 @@ import Image from "../../../../utils/Image";
 
 const ChatReceiver = () => {
   return (
-    <article class="flex flex-row pt-2 space-x-2 justify-end px-12 text-sm ">
-      <div class="bg-violet-50 text-gray-600 py-4 px-3 rounded-xl rounded-tl-none w-[400px]">
+    <article class="flex flex-row pt-2 space-x-2 justify-end px-12 ">
+      <div class="bg-green-50 text-gray-600 text-[.8rem] font-medium py-4 px-3 rounded-xl rounded-tl-none w-[400px]">
         <p>
           Hi there. How are you ? Lorem ipsum, dolor sit amet consectetur
           adipisicing elit. Libero odio,

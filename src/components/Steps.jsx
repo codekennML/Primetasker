@@ -7,18 +7,18 @@ import { showModal } from "../features/modal/modalSlice";
 const steps = [
   {
     id: 1,
-    title: "The best for every budget",
-    body: "Find high-quality services at every price point. No hourly rates, just project-based pricing.",
+    title: "The best on every budget",
+    body: "Find high-quality services at every price point. No hourly rates, just task-based pricing.",
   },
   {
     id: 2,
     title: "Quality work done quickly",
-    body: "Find the right freelancer to begin working on your project within minutes",
+    body: "Find the right primetasker to begin working on your tasks within minutes",
   },
   {
     id: 3,
     title: "Protected payments, every time",
-    body: "Always know what you'll pay upfront. Your payment isn't released until you approve the work.",
+    body: "Always know what you'll pay upfront. Your payment isn't released until you approve the task .",
   },
   //   {
   //     id: 4,
@@ -26,39 +26,41 @@ const steps = [
   //     body: "Questions? Our round-the-clock support team is available to help anytime, anywhere.Always know what you'll pay upfront. Your payment isn't released until you approve the work.",
   //   },
 ];
-
+// bg-gradient-to-tr  from-slate-200 via-green-100 to-slate-200
 const Steps = () => {
   const dispatch = useDispatch();
   const videoRef = useRef();
 
   return (
-    <section className="flex items-center w-full py-20  bg-gradient-to-tr  from-gray-200 via-purple-100 to-blue-200   ">
+    <section className="flex items-center w-full py-20    ">
       <div class="w-[80%] mx-auto">
-        <div class="flex flex-items-center">
-          <div class="w-1/2 ">
-            <h2 className="text-[35px] font-bold pr-6 w-3/4 my-3 mb-6">
-              A whole world of freelance talent at your fingertips
-            </h2>
-            <ul className="space-y-5 pr-32 ">
+        <h2 className="text-[30px] font-bold   my-3 mb-6 lg:mb-16">
+          A whole world of talents at your fingertips
+        </h2>
+        <div class="flex flex-col-reverse lg:flex-row gap-y-8 flex-items-center w-full ">
+          <div class="w-full lg:w-1/2  lg:mt-3  ">
+            <ul className="space-y-5 lg:space-y-10 lg:w-[90%]">
               {steps.map((step) => {
                 return (
                   <li key={step.id}>
                     <p className="inline-flex items-center">
                       <span class="" aria-hidden="true">
-                        <AiOutlineCheckCircle className="w-8 h-8 text-purple-900" />
+                        <AiOutlineCheckCircle className="w-8 h-8 text-brand-light" />
                       </span>
                       <span className="text-[18px] font-roboto font-bold pl-3">
                         {step.title}
                       </span>
                     </p>
-                    <p class="text-[18px]">{step.body}</p>
+                    <p class="text-[.85rem] lg:text-[1.2em] text-brand-text-deep font-medium">
+                      {step.body}
+                    </p>
                   </li>
                 );
               })}
             </ul>
           </div>
 
-          <div class="w-1/2 flex items-center ">
+          <div class=" flex items-center w-full lg:w-1/2 ">
             <div class="video-modal relative ">
               <div class="picture-wrapper w-full h-full  ">
                 <img

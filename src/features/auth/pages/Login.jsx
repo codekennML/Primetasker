@@ -83,7 +83,7 @@ const Login = () => {
 
   return (
     <section>
-      <section className="flex h-screen justify-center items-center relative">
+      <section className="flex  justify-center items-center relative">
         <div className="max-w-lg lg:max-w-lg w-full   lg:px-12 pt-4 pb-2 rounded-lg ">
           <div>
             <div className="flex flex-wrap items-center justify-center mb-6">

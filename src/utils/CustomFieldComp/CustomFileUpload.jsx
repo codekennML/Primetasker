@@ -102,9 +102,8 @@ const FileUpload = ({ label, float, name, ...props }) => {
   return (
     <div
       {...getRootProps()}
-      className={`${
-        float === "absolute" ? "absolute left-[5%] top-[27%]" : ""
-      } top border-2 rounded-full p-1 bg-gradient-to-bl from-violet-200/40 to-gray-200/40`}
+      className={`
+       top border-2 rounded-full p-1 bg-gradient-to-bl from-violet-200/40 to-gray-200/40`}
     >
       <Image
         width={`150px`}
@@ -114,7 +113,7 @@ const FileUpload = ({ label, float, name, ...props }) => {
 
       <button
         type="button"
-        className="absolute right-3 bottom-2 p-2 bg-purple-800 rounded-full text-white text-xs"
+        className="absolute right-3 bottom-2 p-2 bg-brand-light rounded-full text-white text-xs"
       >
         <input {...getInputProps()} />
         <FaPencilAlt />
@@ -122,7 +121,6 @@ const FileUpload = ({ label, float, name, ...props }) => {
       <label htmlFor={props.name} className="">
         {label}
       </label>
-
 
       {invalid && <div className="text-red-600"> {meta.error}</div>}
     </div>

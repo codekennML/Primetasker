@@ -49,7 +49,9 @@ const CustomSelect = ({
                 {imgBfr ? <span className="inline-block"> {imgBfr} </span> : ""}
 
                 <span className="text-[13px] w-full inline-block ">
-                  {field.value ? field.value : selected.name}
+                  {field.value
+                    ? selectArray[Number(field.value) - 1].name
+                    : selected.name}
                 </span>
                 {imgBfr ? (
                   ""
@@ -67,7 +69,7 @@ const CustomSelect = ({
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Listbox.Options className=" dark:bg-gray-700 dark:text-gray-400   py-2  border-none focus:outline-none  text-[20px] text-indigo-800 font-medium absolute z-10 w-full overflow-auto rounded-md bg-white  text-sm shadow-lg ring-1 ring-black ring-opacity-5 sm:text-sm">
+                <Listbox.Options className=" dark:bg-gray-700 dark:text-gray-400   py-2  border-none focus:outline-none  text-[20px]  font-medium absolute z-10 w-full overflow-auto rounded-md bg-white  text-sm shadow-lg ring-1 ring-black ring-opacity-5 sm:text-sm">
                   {selectArray.map((item, idx) => (
                     <Listbox.Option
                       key={idx}
@@ -75,7 +77,7 @@ const CustomSelect = ({
                       className={({ active }) =>
                         `relative cursor-pointer dark:bg-gray-700 dark:text-gray-400 select-none py-2 px-6 ${
                           active
-                            ? "bg-violet-100 text-blue-900 "
+                            ? "bg-green-100 text-green-800 "
                             : "text-gray-900 dark:text-gray-400"
                         }`
                       }
@@ -90,7 +92,7 @@ const CustomSelect = ({
                             {item.name}
                           </span>
                           {selected ? (
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-violet-600">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-text">
                               <AiOutlineCheckCircle
                                 className="h-5 w-5"
                                 aria-hidden="true"

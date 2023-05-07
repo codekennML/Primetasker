@@ -53,9 +53,11 @@ const PersonalInfo = () => {
 
     content = (
       <article className=" relative">
-        <div className="flex flex-row justify-between mb-4 border-b text-gray-600 my-4 pb-4 pt-2 ">
+        <div className="flex flex-row justify-between mb-4 border-b text-gray-600  pb-4  ">
           <div className="w-[300px] pr-3 ">
-            <h2 className="text-[16px] font-medium">Personal Info</h2>
+            <h2 className="text-[16px] font-semibold text-brand-text mb-2">
+              Personal Information
+            </h2>
             <p className="text-[12px] font-medium mb-3">
               Edit and verify your personal information and details
             </p>
@@ -83,64 +85,42 @@ const PersonalInfo = () => {
                     <div className="grid grid-cols-2 gap-x-6 w-full ">
                       <CustomText
                         label="First Name"
+                        labelstyle={`text-brand-text font-semibold`}
                         name="firstname"
                         type="text"
-                        inputstyle="py-1.5 my-1.5 indent-2 placeholder:text-gray-700  border-2 border-violet-200/90 placeholder:text-[12px] focus:outline-violet-500 text-[12px] w-full  rounded"
-                        // imgAfter={<AiOutlineEye />}
+                        inputstyle="my-2 py-1.5 lg:py-2.5 p-2 w-full bg-slate-100   indent-4 placeholder:text-[.85rem]  placeholder:text-gray-600 text-brand-text font-medium   rounded-md "
                         placeholder="Enter your first name"
                         value={values?.values?.firstname}
                       />
                       <CustomText
                         label="Last Name"
+                        labelstyle={`text-brand-text font-semibold`}
                         name="lastname"
                         type="text"
-                        inputstyle="py-1.5 my-1.5 indent-2 placeholder:text-gray-700  border-2 border-violet-200/90 placeholder:text-[12px] focus:outline-violet-500 text-[12px] w-full  rounded"
+                        inputstyle="my-2 py-1.5 lg:py-2.5 p-2 w-full bg-slate-100   indent-4 placeholder:text-[.85rem]  placeholder:text-gray-600 text-brand-text font-medium   rounded-md "
                         placeholder="Enter your surname"
                         value={values.values.lastname}
                       />
                       {/* {console.log(values.values.email)} */}
                       <CustomText
                         label="E-mail address"
+                        labelstyle={`text-brand-text font-semibold`}
                         name="email"
                         type="email"
-                        inputstyle="py-1.5 my-1.5 indent-2 placeholder:text-gray-700  border-2 border-violet-200/90 placeholder:text-[12px] focus:outline-violet-500 text-[12px] w-full   rounded"
+                        inputstyle="my-2 py-1.5 lg:py-2.5 p-2 w-full bg-slate-100   indent-4 placeholder:text-[.85rem]  placeholder:text-gray-600 text-brand-text font-medium   rounded-md "
+                        placeholder="Enter your first name"
                         value={values?.values?.email}
                         disabled
                       />
 
                       <CustomText
-                        label="Phone Number"
-                        name="phone"
-                        type="text"
-                        inputstyle="py-1.5 my-1.5 indent-2 placeholder:text-gray-700  border-2 border-violet-200/90 placeholder:text-[12px] focus:outline-violet-500 text-[12px] w-full   rounded"
-                        placeholder="0810 234 567"
-                        value={values?.values?.phone}
-                      />
-
-                      {/* <CustomText
-                        label="Date of Birth"
-                        name="birthDate"
-                        type="date"
-                        inputstyle="py-1 my-1.5 indent-2 placeholder:text-violet-700  border-2 border-violet-200/90 placeholder:text-[12px] focus:outline-violet-500 text-[12px] w-full   rounded"
-                        placeholder="Date of birth"
-                        value={values?.values?.birthDate}
-                        disabled
-                      /> */}
-                      <CustomText
                         label="Home Address"
+                        labelstyle={`text-brand-text font-semibold`}
                         name="homeaddress"
                         type="text"
-                        inputstyle="py-1.5 my-1.5 indent-2 placeholder:text-gray-700  border-2 border-violet-200/90 placeholder:text-[12px] focus:outline-violet-500 text-[12px] w-full  rounded"
+                        inputstyle="my-2 py-1.5 lg:py-2.5 p-2 w-full bg-slate-100   indent-4 placeholder:text-[.85rem]  placeholder:text-gray-600 text-brand-text font-medium   rounded-md "
                         placeholder="Home Address"
                         value={values?.values?.homeaddress}
-                      />
-                      <CustomText
-                        label="State of Origin"
-                        name="stateOfOrigin"
-                        type="text"
-                        inputstyle="py-1.5 my-1.5 indent-2 placeholder:text-gray-700  border-2 border-violet-200/90 placeholder:text-[12px] focus:outline-violet-500 text-[12px] w-full  rounded"
-                        placeholder="State of Origin"
-                        value={values?.values?.stateOfOrigin}
                       />
 
                       <CustomFileUpload
@@ -149,30 +129,6 @@ const PersonalInfo = () => {
                         // placeholder="Choose File"
                         float={`absolute`}
                       />
-                      {/* <div className="w-full">
-                        <div className=" py-2 text-xs  items-center rounded-lg  w-full ">
-                          <CustomSelect label="Gender" name="gender">
-                            <option value="">Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                      
-                          </CustomSelect>
-                        </div>
-                      </div>
-                      <div className="w-full">
-                        <div className="  py-2   items-center rounded-lg  w-full ">
-                          <CustomSelect
-                            label="Marital Status"
-                            name="maritalstatus"
-                            value={values?.values?.maritalstatus}
-                          >
-                            <option value="">Select Marital Status</option>
-                            <option value="Single">Single</option>
-                            <option value="Married">Married</option>
-                            <option value="Divorced">Divorced</option>
-                          </CustomSelect>
-                        </div>
-                      </div> */}
                     </div>
                     {/* <button
                       type="submit"

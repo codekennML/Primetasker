@@ -15,12 +15,18 @@ const useAuth = () => {
   if (token) {
     const decoded = jwt_decode(token);
 
-    const { email, roles, userId, avatar } = decoded.UserInfo;
+    const { email, roles, userId, avatar, verified } = decoded.UserInfo;
+
     const username = decoded.UserInfo?.username;
 
     // console.log(decoded.UserInfo)
 
     const userLoggedIn = roles.includes("Tasker") || roles.includes("Customer");
+    let canMakeOffer = false;
+    if (verified && Object.keys(verified).length > 1) {
+      canMakeOffer = Object.keys(verified).every((value) => value === true);
+    }
+
     isManager = roles.includes("Manager");
     isAdmin = roles.includes("Admin");
     if (userLoggedIn) status = "primeUser";
@@ -35,9 +41,10 @@ const useAuth = () => {
       avatar: avatar,
       isManager,
       isAdmin,
-      isAgent,
       status,
       userLoggedIn,
+      verified,
+      canMakeOffer,
     };
   }
   return {

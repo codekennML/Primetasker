@@ -18,4 +18,5 @@ export const notifyErr = (msg) =>
   toast.error(msg, {
     position: "bottom-right",
     duration: 4000,
+    className: "text-xs bg-purple",
   });

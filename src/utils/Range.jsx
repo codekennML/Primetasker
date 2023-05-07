@@ -32,14 +32,12 @@ export const SingleRange = ({ name }) => {
   const { setValue } = helpers;
 
   useEffect(() => {
-    console.log(range);
     setValue(range);
   }, [range]);
 
-  console.log(field);
   return (
     <RangeSlider
-      className="single-thumb"
+      className="single-thumb bg-black"
       min={10}
       max={100}
       defaultValue={range}

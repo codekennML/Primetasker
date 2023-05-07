@@ -1,6 +1,6 @@
 import Select from "../../../../utils/CustomSelect";
 import { useState } from "react";
-import { useGetTopCategoriesQuery } from "../../../../features/categories/slices/categorySlice";
+import { useGetTopCategoriesQuery } from "../../../../features/categories/slices/categoryApiSlice";
 import millify from "millify";
 import Spinner from "../../../../utils/Spinner";
 import { Formik, Form } from "formik";

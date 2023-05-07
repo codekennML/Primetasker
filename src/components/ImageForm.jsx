@@ -65,6 +65,7 @@ const ImageForm = forwardRef(({ ...props }, ref) => {
   const createReply = async (commentDetails) => {
     // if (parent) {
     let newReply;
+
     try {
       if (userId) {
         newReply = Object.assign(commentDetails, {
@@ -93,26 +94,11 @@ const ImageForm = forwardRef(({ ...props }, ref) => {
 
   return (
     <div className="mt-2">
-      {!isCommentReply ? (
-        <div className={`flex  space-x-4 items-center  `}>
-          <div>
-            <img
-              src="https://eu7cmie.cloudimg.io/v7/https://assets-airtasker-com.s3.amazonaws.com/uploads/user/avatar/4459042/image-9279721cde59631055f0cdab084e3ab2.jpg?width=136&height=136"
-              alt=""
-              className="w-[40px] h-[40px] rounded-full object-cover object-center mb-1"
-            />
-          </div>
-
-          <h3 className=" py-2 text-gray-900/80 font-bold mb-2 text-sm">
-            Have Questions ? Ask away !
-          </h3>
-        </div>
-      ) : null}
-      <div className="flex flex-row ">
+      <div className="">
         <Formik
           innerRef={ref}
           enableReinitialize
-          className="flex-1"
+          // className="flex-1"
           initialValues={initialValues}
           onSubmit={(values, { resetForm }) => {
             handleCreate ? handleCreateComment(values) : createReply(values);
@@ -124,9 +110,9 @@ const ImageForm = forwardRef(({ ...props }, ref) => {
               <Form
                 className={`flex ${
                   !isCommentReply ? "flex-col space-y-3 " : "flex-col-reverse"
-                } relative  mx-8 rounded-lg pb-3 mt-4  focus-within:border-violet-300 `}
+                } relative   rounded-lg pb-3 mt-2 md:mt-2 focus-within:border-violet-300 `}
               >
-                <div className="px-3 bg-slate-100  rounded-lg ">
+                <div className="px-3 rounded-lg bg-slate-100 ">
                   <div className="relative ">
                     <CustomTextarea
                       autoFocus
@@ -139,7 +125,7 @@ const ImageForm = forwardRef(({ ...props }, ref) => {
                           : "Have an offer ? Sign-in to the conversation"
                       }  `}
                       name="body"
-                      inputStyle="h-20 text-[12px] oveflow-y-scroll py-5 bg-gray-100 outline-0 border-none outline-0 text-gray-600 resize-none font-medium placeholder:text-[13px] placeholder:text-slate-600"
+                      inputStyle="h-20 w-full text-[12px] oveflow-y-scroll py-5 bg-slate-100 outline-0 border-none outline-0 text-gray-600 resize-none font-medium placeholder:text-[13px] placeholder:text-slate-600 focus:outline-brand-light"
                     />
                   </div>
 
@@ -149,21 +135,21 @@ const ImageForm = forwardRef(({ ...props }, ref) => {
                         type="button"
                         disabled={!isLoggedIn}
                         onClick={openDropzone}
-                        className=" rounded-full  p-1 px-2 flex items-center space-x-2"
+                        className="flex items-center p-1 px-2 space-x-2 rounded-full "
                       >
-                        <span>
-                          <FaImage className="text-purple-600" />
+                        <span className="p-2 border rounded-full">
+                          <FaImage size={20} className="text-brand-light" />
                         </span>
                       </button>
                     </div>
-                    <div className="space-x-4 flex flex-row items-center">
+                    <div className="flex flex-row items-center space-x-4">
                       <p className=" text-[12px] text-gray-400 font-semibold">
                         {`${1400 - Number(values.body.length)} `}
                       </p>
                       <button
                         disabled={!isLoggedIn || values.body.length < 1}
                         type="submit"
-                        className="px-3 py-0.5  text-purple-700 text-[13px]   rounded-full font-bold  disabled:bg-transparent disabled:text-gray-400"
+                        className="px-3 py-0.5  text-brand-text text-[13px]   rounded-full font-bold  disabled:bg-transparent disabled:text-gray-400"
                       >
                         Send
                       </button>
@@ -179,6 +165,7 @@ const ImageForm = forwardRef(({ ...props }, ref) => {
                     clearValues={clearValues}
                     ref={dropzoneRef}
                     files={values.files}
+                    name="files"
                   />
                 </div>
               </Form>

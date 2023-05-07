@@ -165,36 +165,13 @@ const TaskMainDisplay = ({ task, showBrief, clearValues, setClearValues }) => {
                   Task Details
                 </h3>
 
-                <TextVisibility text={task.description} files={task.files} />
-                {/* <p className="px-6 text-[13.5px] leading-[1.5rem] mt-4 text-slate-700/90 text-justify font-semibold ">
-           
-                  {task.description}
-                </p>
-
-                {task.files.length > 0 ? (
-                  <div className="w-full flex justify-end">
-                    <button
-                      onClick={() =>
-                        dispatch(
-                          showModal({
-                            currentModal: "CommentImages",
-                            modalData: task.files,
-                          })
-                        )
-                      }
-                      className="flex items-center space-x-1 mr-3"
-                    >
-                      <span className="text-purple-600 text-[16px]">
-                        <FaImage />
-                      </span>
-                      <span className="text-[13px] font-bold text-purple-600">
-                        ({task.files.length})
-                      </span>
-                    </button>
-                  </div>
-                ) : null} */}
+                <TextVisibility
+                  text={task.description}
+                  files={task.files}
+                  type="details"
+                />
               </div>
-              {console.log(task)}
+
               <MemoizedImageForm
                 name={`${
                   task.creator_details.firstname
@@ -316,7 +293,7 @@ const TaskMainDisplay = ({ task, showBrief, clearValues, setClearValues }) => {
                           <button className="p-2 rounded-full bg-blue-600 text-white">
                             <FaFacebookF />
                           </button>
-                          <button className="p-2 rounded-full bg-green-600 text-white">
+                          <button className="p-2 rounded-full bg-brand-light text-white">
                             <AiOutlineWhatsApp />
                           </button>
                           <button className="p-2 rounded-full bg-[#00aced] text-white">

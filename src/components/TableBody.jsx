@@ -93,7 +93,7 @@ const TableBody = () => {
           <article class="flex flex-wrap gap-x-2 gap-y-1 mt-3">
             {amenities.map((item) => (
               <p key={item.key} class="inline-flex items-center">
-                <FontAwesomeIcon icon={faCheck} class="pr-1 text-green-600" />
+                <FontAwesomeIcon icon={faCheck} class="pr-1 text-brand-light" />
                 <span>{item.item}</span>
               </p>
             ))}
