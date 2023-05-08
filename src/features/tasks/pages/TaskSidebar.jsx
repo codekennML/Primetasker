@@ -30,7 +30,8 @@ import TaskCard from "./TaskCard.jsx";
 import MapContainer from "../Map.jsx";
 import { setCoordinates } from "react-advanced-cropper";
 
-import MobileFilter from "./MobileFilter.js";
+// import MobileFilter from "./MobileFilter.js";
+import MobileFilter from "./MobileFilter.jsx";
 
 // let connection;
 
@@ -238,7 +239,7 @@ const TaskSidebar = () => {
   const handleSubmit = useCallback(
     (values) => {
       // console.log(values);
-      setShowMobileFilter((prev) => !prev);
+      setShowMobileFilter(false);
 
       let newQuery = {};
 
@@ -321,9 +322,17 @@ const TaskSidebar = () => {
         <TaskCard task={task} idx={idx} setOpen={setOpen} />
       ))
     ) : !loadFilter && pageInfo.count === 0 ? (
-      <p className="text-gray-700 text-[1rem] font-semibold whitespace-pre-wrap ">
-        No matching tasks was found. Try widening your search
-      </p>
+      <div className="flex flex-col justify-center">
+        <p className="text-gray-700 text-[.85rem] md:text-[.9rem] text-center font-semibold whitespace-pre-wrap mt-6 ">
+          No matching tasks was found. Try widening your search
+        </p>
+        {/* <Link
+          to="/tasks"
+          className="text-primary text-white bg-brand-light/80 hover:bg-brand-light rounded-md py-2 px-4 mt-4 w-3/4 mx-auto "
+        >
+          Reset
+        </Link> */}
+      </div>
     ) : null;
 
   useEffect(() => {
@@ -380,10 +389,6 @@ const TaskSidebar = () => {
               initialValues={initialFormData}
               onSubmit={(values, { resetForm }) => {
                 handleSubmit(values);
-
-                // console.log(values);
-                // resetForm();
-                // setFilterName(undefined);
               }}
               className="bg-gray-600"
             >
@@ -395,32 +400,34 @@ const TaskSidebar = () => {
                     className="  border-y "
                   >
                     <div className=" w-full flex flex-col md:flex-row  md:w-[80%]  mx-auto md:justify-center lg:justify-start  space-x-1 md:space-x-14 items-center  ">
-                      {/* <div className="w-full md:hidden px-2 flex justify-between"> */}
-                      <div className="w-full md:w-96 md:block relative flex-1 rounded-lg md:flex-none    max-w-72  ">
+                      <div className="flex w-full md:w-96 md:block relative flex-1 rounded-lg md:flex-none   sm:py-0 px-2  ">
                         <CustomText
                           name="search"
                           labelstyle={`sr-only`}
                           wrapperclass={`relative `}
-                          inputstyle={`w-full   py-2.5 md:py-3 rounded-full md:rounded  outline-none text-[12px]  h-full  caret-indigo-400 dark:caret-gray-300 bg-slate-100  pr-8 dark:bg-gray-700  outline-none  border-purple-100 dark:border-gray-600  dark:text-gray-400 placeholder:text-[14px] placeholder:text-gray-500 indent-3  w-full text-xs font-medium text-gray-700 border pr-8  `}
+                          inputstyle={`w-full   py-2.5 md:py-3 rounded md:rounded  outline-none text-[12px]  h-full  caret-indigo-400 dark:caret-gray-300 bg-slate-100  pr-8 dark:bg-gray-700  outline-none  border-purple-100 dark:border-gray-600  dark:text-gray-400 placeholder:text-[12px] placeholder:md:text-[14px] placeholder:text-gray-500 indent-3  w-full text-xs font-medium text-gray-700 border   `}
                           placeholder="Search for tasks"
                           adornment={`text-[0.8rem]  lg:block text-gray-400 font-thin dark:text-gray-400 absolute top-[37%] right-[4.5%]  z-10  `}
                         />
-                        <span
+                        <button
+                          type="button"
                           onClick={() => setShowMobileFilter((prev) => !prev)}
-                          className="absolute top-1/4 right-3 md:hidden cursor-pointer "
+                          className="my-1.5 absolute right-2 top-2 bg-brand-secondary   rounded-md  md:hidden cursor-pointer px-2 "
                           role="button"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            className="text-brand-text-light"
-                          >
-                            <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"></path>
-                          </svg>
-                        </span>
-
+                          <span className="w-5 h-5">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="22"
+                              height="22"
+                              viewBox="0 0 24 24"
+                              fill="#374151"
+                              className="text-brand-accent"
+                            >
+                              <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"></path>
+                            </svg>
+                          </span>
+                        </button>
                         <span
                           className="hidden md:block absolute top-1/3 right-5 cursor-pointer "
                           role="button"
@@ -473,10 +480,10 @@ const TaskSidebar = () => {
                               </button>
 
                               {showFilter.category && (
-                                <div className="absolute z-30 w-[650px] max-w-[700px] max-h-[75vh] py-2  top-[3.6rem] bg-white  rounded-lg shadow-md  ">
-                                  <section className="relative flex flex-col  pt-2 h-full px-6 ">
-                                    <div className="flex flex-col items-center justify-start py-1 md:py-3 md:flex-row md:justify-between ">
-                                      <p className="py-2 text-md md:text-[1rem] font-semibold text-green-800 hidden md:block ">
+                                <div className="absolute z-30 w-[650px] max-w-[700px] max-h-[75vh] py-2  top-[3rem] bg-white  rounded-lg shadow-md  ">
+                                  <section className="relative flex flex-col  h-full px-6 ">
+                                    <div className="flex flex-col items-center justify-start py-1  md:flex-row md:justify-between ">
+                                      <p className="text-[0.8rem] text-gray-500 font-bold mb-3 uppercase">
                                         Filter Categories{" "}
                                         <p>{showFilter.category}</p>
                                       </p>
@@ -552,7 +559,7 @@ const TaskSidebar = () => {
                                       <button
                                         type="button"
                                         onClick={() => setFilterName(undefined)}
-                                        className="bg-brand-secondary text-gray-600 py-1.5 rounded  w-full"
+                                        className="bg-brand-secondary  text-brand-text text-primary py-1.5 w-full rounded px-6"
                                       >
                                         Cancel
                                       </button>
@@ -560,7 +567,7 @@ const TaskSidebar = () => {
                                       <button
                                         type="submit"
                                         onClick={() => setFilterName(undefined)}
-                                        className="bg-brand-light text-white py-1.5 rounded w-full"
+                                        className="bg-brand-light text-white text-primary py-1.5 w-full rounded px-6"
                                       >
                                         Apply
                                       </button>
@@ -585,7 +592,7 @@ const TaskSidebar = () => {
                               <div className="absolute z-20  py-2  top-[3rem] max-w-[700px] rounded-lg shadow-md bg-white  w-[400px] overflow-y-hidden ">
                                 <section className="relative w-full h-full md:px-4  ">
                                   <div className="w-full px-4 mt-6 ">
-                                    <h3 className="text-[.9rem] text-brand-light font-bold mb-3 uppercase">
+                                    <h3 className="text-[0.8rem] text-gray-500 font-bold mb-3 uppercase">
                                       To be done
                                     </h3>
                                     <div className="py-1 pb-4 rounded-md ">
@@ -615,7 +622,7 @@ const TaskSidebar = () => {
                                                 checked
                                                   ? "bg-brand-light text-white border-0"
                                                   : "bg-slate-100 text-gray-500"
-                                              } relative  px-2 w-full flex-1   text-center  rounded-lg py-4 flex flex-col items-center justify-center  cursor-pointer `}
+                                              } relative  px-2 w-full flex-1   text-center text-primary rounded-lg py-4 flex flex-col items-center justify-center  cursor-pointer `}
                                             >
                                               <p
                                                 className={`${
@@ -627,7 +634,7 @@ const TaskSidebar = () => {
                                                 <AiFillCheckCircle className="text-[20px] font-medium absolute top-2 right-2" />
                                               </p>
 
-                                              <p className="text-[0.9rem] font-semibold  px-4">
+                                              <p className="text-[0.85rem] font-semibold px-4">
                                                 {name}
                                               </p>
                                             </div>
@@ -637,7 +644,7 @@ const TaskSidebar = () => {
                                     </div>
 
                                     <div className="mt-2">
-                                      <h3 className="text-[1rem] text-brand-light font-bold mb-3 uppercase">
+                                      <h3 className="text-[0.8rem] text-gray-500 font-bold mb-3 uppercase">
                                         {" "}
                                         Where ?{" "}
                                       </h3>
@@ -648,8 +655,8 @@ const TaskSidebar = () => {
                                       />
                                     </div>
 
-                                    <div className="mt-2">
-                                      <h3 className="text-[0.8rem] text-gray-500 font-bold mb-1 uppercase">
+                                    <div className="mt-4">
+                                      <h3 className="text-[0.8rem] text-gray-500 font-bold mb-3 uppercase">
                                         {" "}
                                         Distance ?{" "}
                                       </h3>
@@ -660,11 +667,11 @@ const TaskSidebar = () => {
                                     </div>
                                   </div>
 
-                                  <div className="flex items-center justify-between mx-6 mt-16 mb-2 space-x-3 ">
+                                  <div className="flex items-center justify-between mx-6 mt-12 mb-2 space-x-3 ">
                                     <button
                                       type="button"
                                       onClick={() => setFilterName(undefined)}
-                                      className="bg-brand-secondary text-gray-600 py-1.5 rounded  w-full"
+                                      className="bg-brand-secondary  text-brand-text text-primary py-1.5 w-full rounded px-6"
                                     >
                                       Cancel
                                     </button>
@@ -672,7 +679,7 @@ const TaskSidebar = () => {
                                     <button
                                       type="submit"
                                       onClick={() => setFilterName(undefined)}
-                                      className="bg-brand-light text-white py-1.5 rounded w-full"
+                                      className="bg-brand-light text-white text-primary py-1.5 w-full rounded px-6"
                                     >
                                       Apply
                                     </button>
@@ -693,7 +700,7 @@ const TaskSidebar = () => {
                             </button>
 
                             {showFilter.pricing && (
-                              <div className="absolute  z-20  py-2  top-[3.6rem] max-w-[700px] rounded-lg shadow-md bg-white  w-[400px] px-4 ">
+                              <div className="absolute  z-20  py-2  top-[3rem] max-w-[700px] rounded-lg shadow-md bg-white  w-[400px] px-4 ">
                                 <section className="relative w-full h-full pt-2 ">
                                   <div className="w-full pr-64 ">
                                     <h3 className="text-[0.8rem] text-gray-500 font-bold mb-3 uppercase">
@@ -702,18 +709,18 @@ const TaskSidebar = () => {
                                   </div>
                                 </section>
                                 <div className="px-5 mt-8 space-y-6 ">
-                                  <p className="text-center text-[1rem] font-semibold text-gray-500 ">
+                                  <p className="text-center text-[.9rem] font-semibold text-brand-text tracking-wider ">
                                     &#8358; {values.range[0]} - &#8358;{" "}
                                     {values.range[1]}
                                   </p>
 
                                   <Range name="range" />
                                 </div>
-                                <div className="flex items-center justify-between mx-6 mt-16 mb-2 space-x-3 ">
+                                <div className="flex items-center justify-between mx-6 mt-12 mb-2 space-x-3 ">
                                   <button
                                     type="button"
                                     onClick={() => setFilterName(undefined)}
-                                    className="bg-brand-secondary text-gray-600 py-1.5 rounded  w-full"
+                                    className="bg-brand-secondary  text-brand-text text-primary py-1.5 w-full rounded px-6"
                                   >
                                     Cancel
                                   </button>
@@ -721,7 +728,7 @@ const TaskSidebar = () => {
                                   <button
                                     type="submit"
                                     onClick={() => setFilterName(undefined)}
-                                    className="bg-brand-light text-white py-1.5 rounded w-full"
+                                    className="bg-brand-light text-white text-primary py-1.5 w-full rounded px-6"
                                   >
                                     Apply
                                   </button>
@@ -741,7 +748,7 @@ const TaskSidebar = () => {
                             </button>
 
                             {showFilter.sort && (
-                              <div className="absolute  z-20  py-2  top-[3.6rem] max-w-[700px] rounded-lg shadow-md bg-white  w-[400px] ">
+                              <div className="absolute  z-20  py-2  top-[3rem] max-w-[700px] rounded-lg shadow-md bg-white  w-[400px] ">
                                 <section className="relative w-full ml-6 mr-10 ">
                                   <div className="w-full pr-64 ">
                                     <h3 className="text-[0.8rem] text-gray-500 font-bold mb-3 uppercase">
@@ -771,9 +778,9 @@ const TaskSidebar = () => {
                                             checked
                                               ? "bg-brand-secondary text-white"
                                               : ""
-                                          } py-3 px-6 w-full text-left hover:bg-green-50 select-none cursor-pointer rounded-md `}
+                                          } py-3 px-6 w-full text-left hover:bg-brand-secondary select-none cursor-pointer rounded-md `}
                                         >
-                                          <span className="py-2 text-[1rem]  font-medium text-gray-700">
+                                          <span className="py-2 text-[.85rem]  font-medium text-brand-text">
                                             {name}
                                           </span>
                                         </button>
@@ -785,7 +792,7 @@ const TaskSidebar = () => {
                                     <button
                                       type="button"
                                       onClick={() => setFilterName(undefined)}
-                                      className="bg-brand-secondary text-gray-600 py-1.5 rounded  w-full"
+                                      className="bg-brand-secondary  text-brand-text text-primary py-1.5 w-full rounded px-6"
                                     >
                                       Cancel
                                     </button>
@@ -793,7 +800,7 @@ const TaskSidebar = () => {
                                     <button
                                       type="submit"
                                       onClick={() => setFilterName(undefined)}
-                                      className="bg-brand-light text-white py-1.5 rounded w-full"
+                                      className="bg-brand-light text-white text-primary py-1.5 w-full rounded px-6"
                                     >
                                       Apply
                                     </button>
@@ -813,7 +820,7 @@ const TaskSidebar = () => {
                             </button>
 
                             {showFilter.status && (
-                              <div className="absolute  z-20  py-2  top-[3.6rem] max-w-[700px] rounded-lg shadow-md bg-white  w-[400px] ">
+                              <div className="absolute  z-20  py-2  top-[3rem] max-w-[700px] rounded-lg shadow-md bg-white  w-[400px] ">
                                 <section className="relative w-full ml-6 mr-10 ">
                                   <div className="w-full pr-64 ">
                                     <h3 className="text-[0.8rem] text-gray-500 font-bold mb-3 uppercase">
@@ -851,11 +858,11 @@ const TaskSidebar = () => {
                                         />
                                       </li>
                                     </ul>
-                                    <div className="flex items-center justify-between mx-6 mt-8 mb-2 space-x-3 ">
+                                    <div className="flex items-center justify-between mx-6 mt-12 mb-2 space-x-3 ">
                                       <button
                                         type="button"
                                         onClick={() => setFilterName(undefined)}
-                                        className="bg-brand-secondary text-gray-600 py-1.5 rounded  w-full"
+                                        className="bg-brand-secondary  text-brand-text text-primary py-1.5 w-full rounded px-6"
                                       >
                                         Cancel
                                       </button>
@@ -863,7 +870,7 @@ const TaskSidebar = () => {
                                       <button
                                         type="submit"
                                         onClick={() => setFilterName(undefined)}
-                                        className="bg-brand-light text-white py-1.5 rounded w-full"
+                                        className="bg-brand-light text-white text-primary py-1.5 w-full rounded px-6"
                                       >
                                         Apply
                                       </button>
@@ -877,7 +884,17 @@ const TaskSidebar = () => {
                       </div>
                     </div>
                     {/* Mobile Filters */}
-                    <MobileFilter />
+
+                    {/* {console.log(showMobileFilter)} */}
+                    {showMobileFilter && (
+                      <MobileFilter
+                        setShowMobileFilter={setShowMobileFilter}
+                        setShowMobileCategories={setShowMobileCategories}
+                        closeButton={closeButton}
+                        values={values}
+                        showMobileCategories={showMobileCategories}
+                      />
+                    )}
                   </Form>
                 );
               }}

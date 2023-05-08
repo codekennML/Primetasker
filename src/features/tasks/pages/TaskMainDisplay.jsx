@@ -36,6 +36,7 @@ import TextVisibility from "../../../components/TextVisibility";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { MdAlarmOn, MdNewLabel, MdOutlineAddTask } from "react-icons/md";
+import { useMatch } from "react-router-dom";
 
 const TaskMainDisplay = () => {
   const [
@@ -50,62 +51,39 @@ const TaskMainDisplay = () => {
 
   const location = useLocation();
   const urlId = location?.pathname.split("-").slice(-1)[0];
+  console.log(urlId);
 
   // console.log(urlId);
   const [showMap, setShowMap] = useState(true);
   const [taskId, setTaskId] = useState("");
 
   const mapRef = useRef();
+  // const matches = useMatch("/tasks/title-id");
+
+  // console.log(matches);
   // const handleShowMap = useCallback(() => {
   //   setOpen(false);
   //   setTaskId(undefined);
   // }, [showMap]);
 
-  const handleShowMap = () => {
-    console.log("Sent");
-    setOpen(false);
-    setTaskId(undefined);
-  };
-
   useEffect(() => {
-    console.log(typeof urlId);
+    // console.log(typeof urlId);
     if (urlId !== "/tasks") {
       setTaskId(urlId);
       setShowTaskSidebar(false);
     } else {
       setTaskId(undefined);
-
       setOpen(false);
     }
   }, [urlId]);
 
-  console.log(taskId);
+  // console.log(taskId);
 
   const [clearValues, setClearValues] = useState(false);
   const [task, setTask] = useState([]);
   const navigate = useNavigate();
 
-  const {
-    data: selectedTask,
-    isError: taskError,
-    isLoading: taskLoading,
-    isSuccess: taskSuccess,
-  } = useGetTaskByIdQuery(taskId, {
-    skip: taskId === "/tasks" || taskId == undefined,
-    refetchOnMountOrArgChange: true,
-  });
-
-  console.log(selectedTask);
-
-  useEffect(() => {
-    console.log(selectedTask);
-    if (selectedTask) {
-      const { ids, entities } = selectedTask;
-      setTask(entities[ids[0]]);
-    }
-  }, [selectedTask]);
-
-  console.log(task);
+  // console.log(task);
 
   useEffect(() => {
     if (closeMap) {
@@ -261,13 +239,32 @@ const TaskMainDisplay = () => {
     // navigate("")
   };
 
-  <div className="z-50 h-screen bg-white">
-    {/* {isLoading && ( */}
+  const {
+    data: selectedTask,
+    isError: taskError,
+    isLoading: taskLoading,
+    isSuccess: taskSuccess,
+  } = useGetTaskByIdQuery(taskId, {
+    skip: taskId === "/tasks" || taskId == undefined,
+    refetchOnMountOrArgChange: true,
+  });
 
-    <div className="w-16 h-16 rounded-full"></div>
+  // console.log(selectedTask);
 
-    {/* )} */}
-  </div>;
+  useEffect(() => {
+    // console.log(selectedTask);
+    if (selectedTask) {
+      const { ids, entities } = selectedTask;
+      setTask(entities[ids[0]]);
+    }
+  }, [selectedTask]);
+
+  const handleShowMap = useCallback(() => {
+    // console.log("Sent");
+    setOpen(false);
+    setTaskId(undefined);
+  }, []);
+
   return (
     <SkeletonTheme baseColor="#f7f9fb">
       {/* {!taskLoading && !taskError ? ( */}

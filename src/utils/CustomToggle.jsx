@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { Switch } from "@headlessui/react";
 import { useField } from "formik";
 
-const PrimeToggle = ({ name, setFieldValue }) => {
+const PrimeToggle = ({ name }) => {
   const [field, meta, helpers] = useField(name);
   const [enabled, setEnabled] = useState(field.value);
 
