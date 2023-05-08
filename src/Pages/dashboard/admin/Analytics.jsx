@@ -155,7 +155,7 @@ const Analytics = () => {
                   <span className="block py-1 font-bold text-[16px] text-green-500">
                     N20m
                   </span>
-                  <span className="block font-semibold text-green-600 text-[16px]">
+                  <span className="block font-semibold text-brand-light text-[16px]">
                     Paid Deposits
                   </span>
                 </p>

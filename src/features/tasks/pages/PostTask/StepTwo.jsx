@@ -1,80 +1,61 @@
+import { useEffect } from "react";
 import { useFormikContext } from "formik";
 import {
   AiFillCheckCircle,
   AiOutlineEnvironment,
-  AiOutlinePlusCircle,
+  // AiOutlinePlusCircle,
 } from "react-icons/ai";
 import { BsPhoneVibrate } from "react-icons/bs";
-import { FaRegMap } from "react-icons/fa";
+// import { FaRegMap } from "react-icons/fa";
 import CustomRadio from "../../../../utils/CustomFieldComp/CustomRadioCheck";
-import CustomText from "../../../../utils/CustomFieldComp/CustomText";
-import Select from "../../../../utils/CustomSelect";
+// import CustomText from "../../../../utils/CustomFieldComp/CustomText";
+// import Select from "../../../../utils/CustomSelect";
 import AutoCompleteMap from "../../utils/AutoCompleteMap";
-
-const options = [
-  "Pedicure & Manicure",
-  "Facials",
-  "Massage",
-  "Bead Making",
-  "Graphic Design",
-  "Data Analysis",
-  "Content Creation",
-  "Bricklaying",
-  "Homework",
-  "",
-];
+// import Example from "../../../../utils/CustomComboBox";
+import AutoCompleteCombobox from "../../../../utils/CustomComboBox";
+import { useSelector } from "react-redux";
+import { allTaskCategories } from "../../../categories/slices/categorySlice";
 
 const taskType = [
   {
-    name: "Select this if the task requires physical attention",
+    name: "This task requires physical attention",
     value: "Physical",
     icon: <AiOutlineEnvironment />,
   },
 
   {
-    name: "Select this if this task can be done online",
+    name: "This task can be done online",
     value: "Remote",
     icon: <BsPhoneVibrate />,
   },
 ];
 
 export const StepTwo = () => {
+  const categories = useSelector(allTaskCategories);
+
   const context = useFormikContext();
   const { values } = context;
 
   // const [selected, setSelected] = useState(options[0]);
   return (
     <section>
-      <h2 className="text-[30px] font-bold text-slate-900 py-2.5 text-center mb-6">
-        Where ?
-      </h2>
+      <p className="lg:hidden uppercase font-semibold text-green-900/50 text-[.75rem]  ">
+        Step 2/4
+      </p>
+      <h2 className="title-heading">Where ?</h2>
       <div>
         <div className="flex items-center space-x-2 ">
-          <p className="text-purple-900 text-[30px]">
-            <AiOutlinePlusCircle />
-          </p>
-          <h3 className="text-purple-900 font-medium">
-            How would you classify this task ?
-          </h3>
+          <h3 className="task-input-label">What type of task is this ?</h3>
         </div>
       </div>
       <div className="relative my-3">
-        <Select
-          name="category"
-          items={options}
-          value={values.category}
-          width={`w-full`}
-          style={`py-4 text-[16px] bg-gray-50`}
-        />
+        <AutoCompleteCombobox name="categoryId" categories={categories} />
       </div>
 
       <article className="mt-8">
         <div className="flex items-center space-x-2 ">
-          <p className="text-purple-900 text-[30px]">
-            <AiOutlinePlusCircle />
-          </p>
-          <h3 className="text-purple-900 font-medium">
-            What type of task is this ?
+          <h3 className="task-input-label">
+            How would you classify this task ?
           </h3>
         </div>
         {/* 0686705704 */}
@@ -83,16 +64,16 @@ export const StepTwo = () => {
             name="taskType"
             options={taskType}
             checked={values.taskType}
-            style={`flex justify-center space-x-12 mt-6`}
+            style={`grid grid-cols-2 justify-center gap-3 mt-6`}
             renderItem={(name, idx, icon, value, checked) => {
               return (
                 <div
                   key={idx}
                   className={` ${
                     checked
-                      ? "bg-purple-800 text-white border-0"
-                      : "bg-gray-50 text-gray-500"
-                  } relative  w-52   text-center  rounded-lg py-4 flex flex-col items-center justify-center border border-purple-500`}
+                      ? "bg-brand-light  border-0  text-white"
+                      : "bg-slate-100  text-brand-text"
+                  } relative  text-center  rounded-lg py-4 flex flex-col items-center justify-center `}
                 >
                   <p
                     className={`${
@@ -102,8 +83,8 @@ export const StepTwo = () => {
                     <AiFillCheckCircle className="text-[20px] font-medium absolute top-2 right-2" />
                   </p>
                   <p className="text-[24px] ">{icon}</p>
-                  <p className="text-[17px] font-medium mt-2"> {value}</p>
-                  <p className="text-[12px] font-medium  px-4">{name}</p>
+                  <p className="text-[.9rem] font-medium mt-2 "> {value}</p>
+                  <p className="text-[12px] font-medium  px-4 ">{name}</p>
                 </div>
               );
             }}
@@ -113,25 +94,16 @@ export const StepTwo = () => {
         {values.taskType !== "Physical" ? null : (
           <div className="mt-8">
             <div className="flex items-center space-x-3 mb-3">
-              <p className="text-purple-900 text-[30px]">
-                <FaRegMap />
-              </p>
-              <h3 className="text-purple-900 font-medium">
+              <h3 className="text-brand-text font-medium">
                 Where do you need this task done ?
               </h3>
             </div>
 
-            <AutoCompleteMap name="location" />
-
-            {/* <CustomText
-              label="Task Address "
-              labelstyle={`hidden`}
+            <AutoCompleteMap
               name="location"
-              type="text"
-              value={values.location}
-              placeholder="84 Etim Inyang Crescent, Victoria Island"
-              inputstyle="py-4 my-2  rounded-lg border-2 border-violet-200 placeholder:text-[14px] placeholder:text-gray-500 focus:outline-violet-500 text-base text-gray-400 bg-gray-50 indent-2 w-full rounded"
-            /> */}
+              placeType={[]} //This searches regions, places etc
+              paddingHeight="py:3 lg:py-5"
+            />
           </div>
         )}
       </article>

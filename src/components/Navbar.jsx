@@ -69,16 +69,12 @@ const Nav = () => {
     <section>
       <header
         className={`${
-          isHome && !isScroll
-            ? "bg-transparent text-white "
-            : "bg-white text-black"
-        } ${
           pathname === "/create/post-a-task" ? "hidden" : "visible"
-        } transition-all ease duration-400 w-full   pt-2 fixed top-0 z-20`}
+        } text-brand-text-deep sticky top-0 transition-all ease duration-400 w-full h-[70px] border-gray-200 border-b  pt-2 flex items-center bg-white   z-20`}
       >
-        <div className="">
-          <div className="flex justify-between items-center lg:w-[80%] lg:mx-auto ">
-            <div className="">
+        <div className="w-full px-2">
+          <div className="flex justify-between items-center lg:w-[70%] lg:mx-auto ">
+            <div className="ml-1">
               <Link to="/" className="cursor-pointer ">
                 <Logo />
               </Link>
@@ -87,12 +83,12 @@ const Nav = () => {
             {/* Nav links */}
             <nav className="">
               <ul
-                className={`hidden font-medium lg:flex text-[14px]   lg:flex-row lg:space-x-8  text-center space-y-4 lg:space-y-0 items-center lg:justify-between 
+                className={`hidden  font-medium md:flex text-[14px] md:flex-row md:space-x-8  text-center space-y-4 lg:space-y-0 items-center md:justify-end
           
             
             `}
               >
-                <li className="cursor-pointer border border-gray-400  px-6 rounded-full py-1.5 hover:transition duration-200 hover:bg-purple-800 hover:border-purple-800 hover:text-white">
+                <li className="cursor-pointer   px-6 rounded-full py-1.5 hover:transition duration-200 bg-brand-accent  text-white hover:bg-brand-light">
                   <Link to="/create/post-a-task">Post a task</Link>
                 </li>
                 <li>
@@ -102,16 +98,27 @@ const Nav = () => {
                   <Link to="/explore">Explore </Link>
                 </li>
                 {isLoggedIn ? (
-                  <li>
-                    <Link to="/dashboard">
-                      <img
-                        src={avatar}
-                        height={40}
-                        width={40}
-                        className="rounded-full h-10 w-10 p-1 "
-                      />
-                    </Link>
-                  </li>
+                  <>
+                    <li>
+                      <Link to="/my-tasks">Your tasks</Link>
+                    </li>
+
+                    <li>
+                      <Link to="/notification">Notifications </Link>
+                    </li>
+
+                    <li></li>
+                    <li>
+                      <Link to="/dashboard">
+                        <img
+                          src={avatar}
+                          height={40}
+                          width={40}
+                          className="w-10 h-10 p-1 rounded-full "
+                        />
+                      </Link>
+                    </li>
+                  </>
                 ) : (
                   <>
                     <li>
@@ -120,7 +127,7 @@ const Nav = () => {
                     <li>
                       <Link
                         to="/login"
-                        className="bg-purple-800 text-white px-5 py-2 rounded"
+                        className="px-5 py-2 text-white bg-brand-light rounded"
                       >
                         Login
                       </Link>
@@ -129,63 +136,112 @@ const Nav = () => {
                 )}
               </ul>
 
-              <ul
-                className={`fixed pt-40  items-center justify-start space-y-12 flex flex-col text-white left-0 lg:relative  w-full h-screen lg:h-max  z-20 shadow-md py-[2em]  top-0 bottom-0 transition:opacity delay-600 opacity-100 duration-1000  bg-gray-900 lg:hidden ${
+              {/* Mobile navigaton dropdown */}
+              <div
+                className={`fixed md:hidden   items-start justify-start  flex flex-col text-gray-600 left-0 lg:relative  w-full min-h-screen h-full z-50 shadow-md pt-6  top-0 bottom-0 transition:opacity delay-600  duration-1000  bg-slate-50  ${
                   showNav
-                    ? "left-[0%] opacity-100"
-                    : "opacity-0  left-[150%] lg:hidden"
+                    ? "top-[0%] opacity-100"
+                    : "opacity-0  -top-[150%] md:hidden"
                 } `}
               >
-                <li className="">
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="details">Rooms</Link>
-                </li>
-                <li>
-                  <Link to="/details">Restaurant</Link>
-                </li>
-                <li>
-                  <Link to="/details">Event Space</Link>
-                </li>
-                <li>
-                  <Link to="/details">Facilities</Link>
-                </li>
+                <div className="flex flex-col w-full h-full px-8 overflow-hidden">
+                  <div className="flex flex-row justify-center pt-3">
+                    <Logo />
+                  </div>
 
-                <li className="bg-primary px-6 py-1 rounded w-[30%] text-center">
-                  <Link
-                    to="/login"
-                    className={`${isScroll ? "text-white" : ""}`}
-                  >
-                    Login
-                  </Link>
-                </li>
-                <li>
-                  <button
-                    onClick={() => {
-                      setShowNav(false);
-                    }}
-                    className="absolute top-9  text-[2em] text-primary bg-white right-6 lg:hidden z-50"
-                  >
-                    <AiOutlineClose />
-                  </button>
-                </li>
-              </ul>
+                  <div className="text-[.9rem] font-medium mt-4 h-full overflow-y-auto overflow-x-hidden w-full  scrollbar-thin">
+                    <ul className="space-y-7 ">
+                      {/* <li className="">
+                        <Link to="/" className="font-medium rounded-full ">
+                          Post a task
+                        </Link>
+                      </li> */}
+                      <li
+                        onClick={() => {
+                          setShowNav(false);
+                        }}
+                      >
+                        <Link to="/create/post-a-task">Post a task</Link>
+                      </li>
+                      <li
+                        onClick={() => {
+                          setShowNav(false);
+                        }}
+                      >
+                        <Link to="/tasks">Browse tasks</Link>
+                      </li>
+                      <li>
+                        <Link to="/explore">Discover</Link>
+                      </li>
+                      <li>
+                        <Link to="/how-it-works">How it works</Link>
+                      </li>
+
+                      <li>
+                        <Link to="/signup">Join Primetasker </Link>
+                      </li>
+
+                      <li>
+                        <Link to="/contact">Contact us</Link>
+                      </li>
+                      <li className="py-1 rounded bg-primary ">
+                        <Link
+                          to="/login"
+                          className={`${isScroll ? "text-white" : ""}`}
+                        >
+                          Log In
+                        </Link>
+                      </li>
+
+                      <li>
+                        <Link to="/terms-and-conditions">Blog</Link>
+                      </li>
+                      <li>
+                        <Link to="/terms-and-conditions">Careers</Link>
+                      </li>
+                      <li>
+                        <Link to="/privacy-policy">Privacy Policy </Link>
+                      </li>
+                      <li>
+                        <Link to="/terms-and-conditions">Service Guide</Link>
+                      </li>
+                      <li>
+                        <Link to="/terms-and-conditions">
+                          Terms &amp; Conditions
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="flex justify-center py-2 ">
+                    <button
+                      onClick={() => {
+                        setShowNav(false);
+                      }}
+                      className="  text-[1em] text-brand-light border border-green-400 p-2 rounded-full right-6 lg:hidden z-50 text-center "
+                    >
+                      <AiOutlineClose />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile navigation trigger */}
+
+              {/* Nav toggle  */}
+              <div className="md:hidden ">
+                <button
+                  className="p-2  text-white bg-green-500 border rounded-full "
+                  onClick={() => setShowNav((prev) => !prev)}
+                >
+                  <AiOutlineMenu className="w-[23px] h-[23px] " />
+                </button>
+              </div>
             </nav>
-
-            {/* Nav toggle  */}
-            <div className="lg:hidden ">
-              <button
-                className=" text-white"
-                onClick={() => setShowNav((prev) => !prev)}
-              >
-                <AiOutlineMenu className="w-[30px] h-[40px] " />
-              </button>
-            </div>
           </div>
-          <div
-            className={`w-full border-t shadow bg-transparent  ${
-              isScroll ? "block" : "hidden"
+          {/* <div
+            className={`w-full border-t shadow bg-transparent hidden  ${
+              isScroll ? "md:block " : ""
             }`}
           >
             <ul className="flex flex-row justify-between text-sm  font-medium   lg:w-[80%] lg:mx-auto">
@@ -200,7 +256,7 @@ const Nav = () => {
                 );
               })}
             </ul>
-          </div>
+          </div> */}
         </div>
       </header>
 

@@ -9,8 +9,8 @@ const Spinner = ({
 }) => {
   return (
     <Oval
-      strokeWidth={2}
-      strokeWidthSecondary={2}
+      strokeWidth={4}
+      strokeWidthSecondary={4}
       color={color}
       secondaryColor="white"
       height={height}

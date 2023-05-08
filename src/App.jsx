@@ -14,7 +14,7 @@ import Sidebar from "./Pages/dashboard/admin/Sidebar";
 import Analytics from "./Pages/dashboard/admin/Analytics";
 import Agents from "./Pages/dashboard/admin/Agents";
 import Guests from "./Pages/dashboard/admin/Guests";
-import Notes from "./Pages/dashboard/admin/Notes";
+// import Notes from "./Pages/dashboard/admin/Notes";
 import Tasks from "./features/tasks/pages/Tasks";
 import CreateTask from "./features/tasks/pages/CreateTask";
 import EditTask from "./features/tasks/pages/EditTask";
@@ -60,21 +60,25 @@ import TaskSidebar from "./features/tasks/pages/TaskSidebar";
 
 import Map from "./features/tasks/Map";
 import TaskMainDisplay from "./features/tasks/pages/TaskMainDisplay";
-import { useJsApiLoader } from "@react-google-maps/api";
-// import Map from "./features/tasks/Map";
 
-// const LazySignup =  React.lazy(() => import('./Pages/dashboard/dashboard'))
+import MyTasks from "./Pages/dashboard/User/MyTaskView";
+import MyTasksInfiniteScroll from "./Pages/dashboard/User/MyTaskScroll";
+import MyTasksView from "./Pages/dashboard/User/MyTaskView";
+
+import UserProfile from "./Pages/dashboard/User/Profile";
+import Notes from "./Pages/dashboard/User/Notes";
+import ChatUser from "./Pages/dashboard/User/Messages/ChatUser";
+import Transaction from "./Pages/dashboard/User/Transaction";
+// import Portfolio from "./Pages/dashboard/User/Portfolio";
+import Showcase from "./Pages/dashboard/User/Showcase";
+import Alerts from "./Pages/dashboard/User/Alerts";
+import CreateAlert from "./Pages/dashboard/User/CreateAlert";
+
 const lib = ["places"];
 // AIzaSyDdYME_PrW_WGGcJOdDpGLym58HFmFpdBw"
 // AIzaSyDdYME_PrW_WGGcJOdDpGLym58HFmFpdBw
+//AIzaSyDdYME_PrW_WGGcJOdDpGLym58HFmFpdBw
 function App() {
-  const mapAccessToken = "";
-
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: mapAccessToken,
-    libraries: lib,
-  });
-
   const darkMode = useSelector((state) => state.theme.dark);
   const colorTheme = darkMode ? "dark" : "light";
   const altTheme = colorTheme === "light" ? "dark" : "light";
@@ -89,58 +93,76 @@ function App() {
   const [theme, setTheme] = useState(localStorage.theme);
 
   return (
-    <div className="bg-[#f3f5f7] h-screen dark:bg-gray-700 dark:transform:transition-all dark:duration-700 dark:ease-in dark:delay-300">
+    <div className="  dark:bg-gray-700 dark:transform:transition-all dark:duration-700 dark:ease-in dark:delay-300">
       <ModalProvider />
       <Toaster />
       <Routes>
         {/* Links visible to unauthenticated Users */}
         {/* <Route element={<PersistLogin />}> */}
-        <Route path="/" element={<Navbar />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="single-property" element={<SingleProperty />} />
-          <Route path="create/post-a-task" element={<PostTask />} />
-          <Route path="create/find-item" element={<FindItems />} />
-          <Route path="create/create-service" element={<CreateService />} />
+        <Route element={<Prefetch />}>
+          <Route path="/" element={<Navbar />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="single-property" element={<SingleProperty />} />
+            <Route path="create/post-a-task" element={<PostTask />} />
+            <Route path="create/find-item" element={<FindItems />} />
+            <Route path="create/create-service" element={<CreateService />} />
 
-          <Route path="login" element={<Login />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="password-reset" element={<PasswordReset />} />
-          <Route path="signup" element={<Signup />} />
+            <Route path="login" element={<Login />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="password-reset" element={<PasswordReset />} />
+            <Route path="signup" element={<Signup />} />
 
-          <Route path="tasks/" element={<TaskSidebar />}>
-            <Route index element={<TaskMainDisplay />} />
-            <Route path=":id" element={<TaskMainDisplay />} />
-          </Route>
-
-          <Route
-            element={<RequireAuth allowedRoles={["Tasker", "Customer"]} />}
-          >
-            <Route
-              path="create/post-task-success"
-              element={<PostTaskSuccess />}
-            />
-          </Route>
-
-          {/* Routes to admin dashboard are protected by the RequireAuth Component */}
-
-          <Route
-            element={<RequireAuth allowedRoles={["Tasker", "Customer"]} />}
-          >
-            <Route
-              path="create/post-task-success"
-              element={<PostTaskSuccess />}
-            />
-
-            <Route path="dashboard" element={<UserSidebar />}>
-              <Route index element={<UserAnalytics />} />
-              <Route path="verify" element={<Verify />} />
-              <Route path="create" element={<Create />} />
-              <Route path="verify" element={<Verify />} />
+            <Route path="tasks/" element={<TaskSidebar />}>
+              <Route path=":id" element={<TaskMainDisplay />} />
             </Route>
-          </Route>
 
-          <Route element={<RequireAuth allowedRoles={["Manager", "Admin"]} />}>
-            <Route element={<Prefetch />}>
+            <Route
+              element={<RequireAuth allowedRoles={["Tasker", "Customer"]} />}
+            >
+              <Route
+                path="create/post-task-success"
+                element={<PostTaskSuccess />}
+              />
+            </Route>
+
+            {/* Routes to admin dashboard are protected by the RequireAuth Component */}
+
+            <Route
+              element={<RequireAuth allowedRoles={["Tasker", "Customer"]} />}
+            >
+              <Route
+                path="create/post-task-success"
+                element={<PostTaskSuccess />}
+              />
+
+              <Route path="dashboard" element={<UserSidebar />}>
+                <Route index element={<UserAnalytics />} />
+                <Route path="verify" element={<Verify />} />
+                <Route path="create">
+                  <Route index element={<Create />} />
+                  <Route path="create-alert" element={<CreateAlert />} />
+                </Route>
+                <Route path="verify" element={<Verify />} />
+                <Route path="messages" element={<Notes />} />
+                <Route path="messages" element={<Notes />} />
+                <Route path="transactions" element={<Transaction />} />
+
+                <Route path="settings">
+                  <Route path="my-profile" element={<UserProfile />} />
+                  {/* <Route path="my-portfolio" element={<Portfolio />} /> */}
+                  <Route path="my-showcase" element={<Showcase />} />
+                  <Route path="my-alert-settings" element={<Alerts />} />
+                </Route>
+              </Route>
+
+              <Route path="my-tasks/" element={<MyTasksInfiniteScroll />}>
+                <Route path=":id" element={<MyTasksView />} />
+              </Route>
+            </Route>
+
+            <Route
+              element={<RequireAuth allowedRoles={["Manager", "Admin"]} />}
+            >
               <Route path="admin-dashboard" element={<Sidebar />}>
                 <Route index element={<Analytics />} />
                 {/* <Route path="overview" element={<Analytics />} /> */}
@@ -149,10 +171,10 @@ function App() {
                 <Route path="agents" element={<Agents />} />
                 <Route path="guests" element={<Guests />} />
 
-                <Route path="notes">
+                {/* <Route path="notes">
                   <Route index element={<Notes />} />
                   <Route path=":id" element={<EditNotes />} />
-                </Route>
+                </Route> */}
 
                 <Route path="bookings">
                   <Route index element={<Booking />} />
@@ -186,12 +208,11 @@ function App() {
                 </Route>
               </Route>
             </Route>
-          </Route>
 
-          {/* </Route> */}
-          <Route path="*" element={<Error />} />
+            {/* </Route> */}
+            <Route path="*" element={<Error />} />
+          </Route>
         </Route>
-        {/* </Route> */}
       </Routes>
     </div>
   );

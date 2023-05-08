@@ -31,7 +31,7 @@ const OptionsRenderer = ({ value }) => {
       break;
     case value === "Completed":
       content = (
-        <span className=" w-full bg-green-100 text-green-600 px-3 py-1.5  text-xs rounded-full ">
+        <span className=" w-full bg-green-100 text-brand-light px-3 py-1.5  text-xs rounded-full ">
           {value}
         </span>
       );

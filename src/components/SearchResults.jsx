@@ -245,7 +245,7 @@ const SearchResults = () => {
                       Standard King Room
                     </p>
                     <p class="text-[11px] "> 1 large double bed </p>
-                    <p class="text-[12px] font-medium text-green-600">
+                    <p class="text-[12px] font-medium text-brand-light">
                       FREE cancellation • No prepayment needed
                     </p>
 
@@ -380,7 +380,7 @@ const SearchResults = () => {
                       Standard King Room
                     </p>
                     <p class="text-[11px] "> 1 large double bed </p>
-                    <p class="text-[12px] font-medium text-green-600">
+                    <p class="text-[12px] font-medium text-brand-light">
                       FREE cancellation • No prepayment needed
                     </p>
                     <p class="text-[11px] font-medium">
@@ -519,7 +519,7 @@ const SearchResults = () => {
                       Standard King Room
                     </p>
                     <p class="text-[11px] "> 1 large double bed </p>
-                    <p class="text-[12px] font-medium text-green-600">
+                    <p class="text-[12px] font-medium text-brand-light">
                       FREE cancellation • No prepayment needed
                     </p>
                     <p class="text-[11px] font-medium">

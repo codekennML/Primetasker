@@ -5,10 +5,9 @@ import pageReducer from "../features/pagination/paginate";
 import modalReducer from "../features/modal/modalSlice";
 import darkModeReducer from "../features/theme/themeSlice";
 import uploadReducer from "../features/fileUploads/uploadSlice";
-
-import draftTaskReducer, {
-  draftTaskSlice,
-} from "../features/tasks/slices/taskSlice";
+import categoryReducer from "../features/categories/slices/categorySlice";
+import taskReducer from "../features/tasks/slices/taskApiSlice";
+import userInfoReducer from "../features/geolocate/slices/geolocateSlice";
 import {
   persistReducer,
   FLUSH,
@@ -29,12 +28,13 @@ const persistConfig = {
 };
 
 const reducer = combineReducers({
-  page: pageReducer,
+  category: categoryReducer,
   theme: darkModeReducer,
   auth: authReducer,
   modal: modalReducer,
-  draftTask: draftTaskReducer,
+  task: taskReducer,
   progress: uploadReducer,
+  userInfo: userInfoReducer,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 

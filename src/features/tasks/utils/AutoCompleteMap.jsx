@@ -1,59 +1,108 @@
-import React, { useEffect, useState } from "react";
-import { StandaloneSearchBox } from "@react-google-maps/api";
+import React, { useCallback, useEffect, useState } from "react";
 import { useField } from "formik";
-import CustomText from "../../../utils/CustomFieldComp/CustomText";
+import poweredGoogle from "../../../assets/images/poweredGoogle.png";
+import usePlacesService from "react-google-autocomplete/lib/usePlacesAutocompleteService";
 
-// const key = "AIzaSyDdYME_PrW_WGGcJOdDpGLym58HFmFpdBw";
+const mapAccessToken = "AIzaSyDdYME_PrW_WGGcJOdDpGLym58HFmFpdBw";
 
-const AutoCompleteMap = ({ name }) => {
-  const [field, meta, helpers] = useField(name);
+const AutoCompleteMap = ({
+  name,
+  paddingHeight = "py-3 lg:py-3.5",
+  placeType = ["(regions)"],
+}) => {
+  const [field, meta, { setValue }] = useField(name);
+  const [selectedPlaceId, setSelectedPlaceId] = useState();
+  const [showLocationDropdown, setShowLocationDropdown] = useState(true);
 
-  console.log(field, name);
-  const [query, setQuery] = useState();
-  const [selectedLocation, setSelectedLocation] = useState({});
+  const [userLocation, setUserLocation] = useState(field.value.place.name);
 
-  const { setValue } = helpers;
+  console.log(field);
 
-  const onPlaceSelected = () => {
-    let places = query.getPlaces();
-    console.log(places);
-    setSelectedLocation({
-      place: places[0].name,
-      lng: places[0].geometry.location.lng(),
-      lat: places[0].geometry.location.lat(),
-    });
-  };
+  const handleClick = useCallback(
+    (addressInfo) => {
+      // console.log(addressInfo);
+      setSelectedPlaceId(addressInfo.place_id);
+      setUserLocation(addressInfo.description);
+    },
+    [selectedPlaceId, userLocation]
+  );
+
+  const {
+    placesService,
+    placePredictions,
+    getPlacePredictions,
+    isPlacePredictionsLoading,
+  } = usePlacesService({
+    apiKey: mapAccessToken,
+    debounce: 1000,
+  });
+
+  // const [value, setValue] = useState("");
 
   useEffect(() => {
-    setValue(selectedLocation);
-  }, [selectedLocation]);
-  //Restrict to Nigeria
-  const options = {
-    componentRestrictions: { country: "ng" },
-  };
+    if (selectedPlaceId) {
+      placesService?.getDetails(
+        {
+          placeId: selectedPlaceId,
+        },
+        (placeDetails) => {
+          const lat = placeDetails.geometry.location.lat();
+          const lng = placeDetails.geometry.location.lng();
+          const place = {
+            name: placeDetails.name,
+            placeId: placeDetails.place_id,
+          };
 
-  const onLoad = (ref) => setQuery(ref);
+          setValue({
+            place: place,
+            lat: lat,
+            lng: lng,
+          });
+
+          setShowLocationDropdown(false);
+        }
+      );
+    }
+  }, [selectedPlaceId]);
+  {
+    console.log(field.value);
+  }
 
   return (
-    <>
-      <StandaloneSearchBox
-        onLoad={onLoad}
-        onPlacesChanged={onPlaceSelected}
-        options={options}
-      >
-        <>
-          <label htmlFor="location" className="sr-only">
-            GPS
-          </label>
-          <input
-            type="text"
-            value={field.value?.place}
-            placeholder="Enter Location"
-            className="py-4 my-2  rounded-lg border-2 border-violet-500 placeholder:text-[14px] placeholder:text-gray-500 focus:outline-violet-500 text-base text-gray-400 bg-gray-50 indent-2 w-full "
-          />
-        </>
-      </StandaloneSearchBox>
-    </>
+    <div className="relative ">
+      <input
+        className={`bg-slate-100 ${paddingHeight} w-full rounded-md pl-3 text-primary `}
+        placeholder="Enter Location"
+        name={name}
+        // defaultValue={userLocation}
+        value={userLocation}
+        onChange={(e) => {
+          setUserLocation(e.target.value);
+          getPlacePredictions({
+            input: e.target.value ?? field.value.place.name,
+            types: placeType,
+            componentRestrictions: { country: "ng" },
+          });
+        }}
+        loading={isPlacePredictionsLoading}
+      />
+      {placePredictions.length > 0 && showLocationDropdown && (
+        <ul className="shadow-md rounded-md list-none space-y-1.5 max-h-[150px]  z-10 absolute  overflow-y-auto scrollbar-thin  overflow-x-hidden w-full bg-white mt-2 ">
+          {placePredictions.map((addressInfo) => (
+            <li
+              key={addressInfo.place_id}
+              onClick={() => handleClick(addressInfo)}
+              className="w-full py-1.5 text-primary cursor-pointer border-b px-3 "
+            >
+              {addressInfo.description}
+            </li>
+          ))}
+          <li className="py-1 pb-3 flex justify-end ">
+            <img src={poweredGoogle} />
+          </li>
+        </ul>
+      )}
+    </div>
   );
 };
 

@@ -3,81 +3,38 @@ import { useState } from "react";
 import { addDays, format, isValid } from "date-fns";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import {
-  FaArrowRight,
-  FaArrowUp,
-  FaChevronCircleDown,
-  FaEllipsisV,
-  FaMoon,
-  FaChartBar,
-  FaStar,
-  FaCheckCircle,
-  FaBriefcase,
-  FaRegCreditCard,
-  FaCheck,
-  FaRegCheckCircle,
-  FaExclamationCircle,
-  FaLaptop,
-  FaMobileAlt,
-  FaTabletAlt,
-  FaPhone,
-  FaDesktop,
-} from "react-icons/fa";
-import { MdOutlineErrorOutline, MdErrorOutline } from "react-icons/md";
+import { FaChartBar } from "react-icons/fa";
+// import { MdOutlineErrorOutline, MdErrorOutline } from "react-icons/md";
 import {
   AiOutlineReconciliation,
-  AiOutlineUser,
+  // AiOutlineUser,
   AiOutlineShoppingCart,
+  // AiOutlineInfo,
+  AiOutlineInfoCircle,
+  AiFillPlusCircle,
 } from "react-icons/ai";
-import DatePicker from "../../../../../../Heristays/Heristays/src/utils/DatePicker";
-import ChartLine from "../../../features/charts/ChartLine";
+// import DatePicker from "../../../../../../Heristays/Heristays/src/utils/DatePicker";
+// import ChartLine from "../../../features/charts/ChartLine";
 import { useGetBookingStatsQuery } from "../../../features/bookings/slices/bookingApiSlice";
-// import {useGetUsersStats} from "../../../features/bookings/slices/bookingApiSlice"
-// import {useGetTasksStats} from "../../../features/bookings/slices/bookingApiSlice"
-// import {useGetBookingStats} from "../../../features/bookings/slices/bookingApiSlice"
+
 import { useDispatch, useSelector } from "react-redux";
 import { setDarkMode } from "../../../features/theme/themeSlice";
 import StatCard from "../../../utils/StatCard";
-import Spinner from "../../../utils/Spinner";
-import ChartPie from "../../../features/charts/ChartPie";
-import Images from "../../../components/Images";
-import BasicTable from "../../../features/tables/BasicTable";
-import SimpleTable from "../../../features/tables/SimpleTable";
-import Select from "../../../utils/CustomSelect";
-import Flags from "../../../utils/Flags";
+
 import { Link } from "react-router-dom";
-import Performance from "../admin/overview/metricsPerformance";
-import TopBar from "./TopBar";
+
+import { showModal } from "../../../features/modal/modalSlice";
+import RecentDeposits from "../admin/overview/RecentDeposits";
+import RecentWithdrawals from "../admin/overview/RecentWithdrawals";
 
 const UserAnalytics = () => {
-  const { data, isLoading, isFetching, isSuccess } = useGetBookingStatsQuery();
-
-  let chartData;
-
-  if (isSuccess) {
-    const { entities, ids } = data;
-    const chartDataArray = ids.map((id) => entities[id]);
-    chartData = [
-      {
-        id: "Bookings",
-        color: "hsl(313, 70%, 50%)",
-        data: [...chartDataArray],
-      },
-    ];
-  }
-
   const dispatch = useDispatch();
-  const [themeMode, setThemeMode] = useState();
+  // const [themeMode, setThemeMode] = useState();
   const theme = useSelector((state) => state.theme.dark);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const percentage = 67.5;
   let content;
-
-  // function getDateRange(data) {
-  //   setStartDate(format(new Date(data?.from), "dd.MM.yyyy"));
-  //   setEndDate(format(new Date(data?.to), "dd.MM.yyyy"));
-  // }
 
   const [openDateFilter, setOpenDateFilter] = useState(false);
 
@@ -86,110 +43,126 @@ const UserAnalytics = () => {
   };
 
   return (
-    <div className="w-full  mx-auto bg-slate-100 dark:bg-gray-700">
-      <TopBar headerText={`Dashboard`} />
-      <section className="px-12">
-        <section className="mt-8 ">
-          <article className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 lg:grid-rows-1 gap-x-4 gap-y-4 mt-3  rounded-lg">
-            <StatCard
-              Svg={
-                <FaChartBar className="font-medium w-16 h-12  text-gray-700 " />
-              }
-              currSymbol={`₦`}
-              title="Earnings"
-              mainAmt={`2,500,000`}
-              changePercent={`16`}
-              changeAmount={`89k`}
-              timeframe={`today`}
-            />
-            <StatCard
-              Svg={
-                <AiOutlineShoppingCart className="font-medium w-16 h-12  text-gray-700 " />
-              }
-              title="Bookings"
-              mainAmt={`2,500,000`}
-              changePercent={`16`}
-              changeAmount={`89k`}
-              timeframe={`today`}
-            />
-            <StatCard
-              Svg={
-                <AiOutlineReconciliation className="font-medium w-16 h-12  text-gray-700 " />
-              }
-              title="Transactions"
-              mainAmt={`2,500`}
-              changePercent={`16`}
-              changeAmount={`89k`}
-              timeframe={`today`}
-            />
-          </article>
+    <section className="w-full   dark:bg-gray-700  ">
+      <article className="">
+        <div className="flex flex-row justify-between items-center mb-6">
+          <button
+            onClick={() =>
+              dispatch(showModal({ modalData: null, currentModal: "Pay" }))
+            }
+            className="bg-brand-secondary flex flex-row items-center rounded-md space-x-2 px-4 font-medium py-2 text-[.85rem]"
+          >
+            <span className="text-green-600">
+              <AiFillPlusCircle size={20} />
+            </span>
+            <span>NGN 0.00</span>
+          </button>
+          <h1 className="title-heading my-0 py-0 ">Good Morning Udemeobong </h1>
+        </div>
+
+        <section className="mt-2">
+          <section className="">
+            <article
+              className="
+              grid 
+              grid-cols-1 
+              md:grid-cols-2  
+              lg:grid-cols-3 
+              lg:grid-rows-1
+              gap-x-4 
+              gap-y-4  
+               rounded-lg
+            "
+            >
+              <StatCard
+                Svg={<FaChartBar className="font-medium w-16 h-12  " />}
+                currSymbol={`₦`}
+                title="Earnings"
+                mainAmt={`2,500,000`}
+              />
+              <StatCard
+                Svg={
+                  <AiOutlineShoppingCart className="font-medium w-16 h-12  " />
+                }
+                title="Bookings"
+                mainAmt={`2,500,000`}
+              />
+              <StatCard
+                Svg={
+                  <AiOutlineReconciliation className="font-medium w-16 h-12   " />
+                }
+                title="Transactions"
+                mainAmt={`2,500`}
+              />
+            </article>
+          </section>
         </section>
+        <div className="">
+          <RecentDeposits />
+          <RecentWithdrawals />
+        </div>
+        {/* 
+        <div>
+          <h2 className="font-semibold text-[1.2rem]">Latest Activity</h2>
+          <ul className="space-y-4">
+            <li className="marker:text-green-500 text-[.85rem] font-medium">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo
+              excepturi recusandae harum earum accusamus!
+            </li>
+            <li className="marker:text-rose-500 text-[.85rem] font-medium">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo
+              excepturi recusandae harum earum accusamus!
+            </li>
+            <li className="marker:text-green-500 text-[.85rem] font-medium">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo
+              excepturi recusandae harum earum accusamus!
+            </li>
+          </ul>
+        </div> */}
 
-        <section className="mt-6 flex gap-x-5  w-full  ">
-          <article className="w-full bg-white dark:bg-gray-700 dark:text-gray-100 rounded-xl ">
-            <div className="flex flex-row justify-between items-center relative  px-8 mx-2">
-              <div className="flex items-center space-x-2 mr-1 ">
-                {/* <Select />
-                  <Select /> */}
-              </div>
-            </div>
-            <div className=" chartLine h-full ">
-              {/* {isSuccess ? <ChartLine data={chartData} /> : <Spinner />} */}
-              <Performance />
-            </div>
-          </article>
-
-          {/* <article className="w-1/3 h-full ">
-            <section className=" ">
-              <div className=" rounded-lg  mx-2  border shadow-md  h-full bg-white">
-                <article className=" px-3 ">
-                  <h2 className="border-b border-gray-200 dark:border-gray-400 pt-4 px-3  pb-2 font-semibold text-gray-500 dark:text-gray-100 text-[18px]">
-                    Users by device
-                  </h2>
-                </article>
-
-                <div>
-                  <ChartPie
-                    marginSpecs={{ top: 30, right: 10, bottom: 20, left: 10 }}
-                    height="h-[260px]"
-                  />
-                </div>
-                <div className="flex flex-row justify-center items-center text-center text-[18px] pt-18 space-x-4 mb-5">
-                  <p className=" border-gray-200 pr-3">
-                    <span className="block py-1 font-bold text-[25px] text-blue-300">
-                      <FaDesktop className="w-16" />
-                    </span>
-                    <span className="block font-semibold text-gray-500 text-[14px]">
-                      Desktop
-                    </span>
-                    <span className="font-semibold text-gray-400">20%</span>
-                  </p>
-                  <p className="text-center border-gray-200 pr-3">
-                    <span className="py-2 font-bold text-[30px] text-blue-300">
-                      <FaTabletAlt className="w-16" />
-                    </span>
-                    <span className="block font-semibold text-gray-500 text-[14px] ">
-                      Tablet
-                    </span>
-                    <span className="font-semibold text-gray-400">10%</span>
-                  </p>
-
-                  <p className="text-blue-500  ">
-                    <span className="py-1 font-bold text-[30px] text-blue-300">
-                      <FaMobileAlt className="w-16" />
-                    </span>
-                    <span className="block font-semibold text-gray-500 text-[14px]">
-                      Mobile
-                    </span>
-                    <span className="font-semibold text-gray-400">70%</span>
-                  </p>
-                </div>
-              </div>
-            </section>
-          </article> */}
-        </section>
-      </section>
-    </div>
+        <div className=" flex flex-row items-center bg-brand-secondary my-6 rounded-lg px-6">
+          <div className="w-1/2">
+            <h2 className="text-[2rem] font-bold text-brand-text  ">
+              Need something done ?{" "}
+            </h2>
+            <ul className="flex flex-row items-center list-none pb-3 text-[.85rem] font-medium py-2">
+              <li>Post a task. </li>
+              <li>Receive offers. </li>
+              <li>Hire the best.</li>
+              <li>Its that simple. </li>
+            </ul>
+            <Link to="/create/post-a-task">
+              <button className="bg-brand-light border border-brand-light text-white font-medium text-[1rem]  px-6 py-1 rounded-full hover:bg-brand-light hover:text-white mt-4">
+                Post a task
+              </button>
+            </Link>
+            <p className="text-[.7rem] pt-4  flex flex-row items-center gap-x-2">
+              <span>
+                <AiOutlineInfoCircle size={12} className="text-brand-text" />
+              </span>
+              <span>How it works</span>
+            </p>
+          </div>
+          <div className="w-1/2">
+            <img
+              src="https://ouch-cdn2.icons8.com/0OjdSfNYYCI3vZOSeCDNz203S5Cz1EixHIIUCPAahT0/rs:fit:512:512/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9wbmcvNzE3/LzUxMWQyYWZmLTRi/MzQtNGFhOS04NzI5/LTE1M2VjNTdjODcy/OC5wbmc.png"
+              alt=""
+              width={300}
+              height={300}
+            />
+          </div>
+        </div>
+        <div className=" space-y-8 py-5">
+          <ul className="flex flex-row gap-x-4 items-center text-[.9rem] list-none font-medium text-brand-text">
+            <li>View latest task offers</li>
+            <li>My messages</li>
+            <li>Primetasker Help</li>
+            <li>See my metrics</li>
+            <li>Contact Us</li>
+          </ul>
+        </div>
+      </article>
+    </section>
   );
 };
 

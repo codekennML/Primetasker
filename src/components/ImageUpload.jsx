@@ -5,6 +5,7 @@ import React, {
   useRef,
   useImperativeHandle,
   useMemo,
+  memo,
 } from "react";
 import MultipleFileUpload from "../utils/CustomFieldComp/MultipleFileUpload";
 import Spinner from "../utils/Spinner";
@@ -75,7 +76,7 @@ const ImageUpload = forwardRef(({ ...props }, ref) => {
           value={props.files}
           type="file"
           ref={openRef}
-          name="files"
+          name={props.name}
           setErrorFiles={setErrorFiles}
         />
       </div>
@@ -138,7 +139,9 @@ const ImageUpload = forwardRef(({ ...props }, ref) => {
                     <div className="relative ">
                       <img
                         src={file.preview}
-                        className="w-full h-full max-w-full max-h-full rounded-lg object-cover object-fit"
+                        className={`  w-full ${
+                          props.postForm ? "h-20" : "h-16"
+                        } max-w-full max-h-full rounded-lg object-cover object-fit `}
                         // Revoke data uri after image is loaded
                         onLoad={() => {
                           URL.revokeObjectURL(file.preview);
@@ -156,4 +159,6 @@ const ImageUpload = forwardRef(({ ...props }, ref) => {
   );
 });
 
+const memoizedImageUpload = memo(ImageUpload);
+// export default memoizedImageUpload;
 export default ImageUpload;

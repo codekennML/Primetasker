@@ -1,12 +1,15 @@
 import { Form, Formik } from "formik";
 import CustomText from "../../../../utils/CustomFieldComp/CustomText";
-import CustomFileUpload from "../../../../utils/CustomFieldComp/CustomFileUpload";
-import { loginSchema } from "../../../../features/auth/schemas/LoginFormSchema";
-import Verification from "./ProfileElements.jsx/Verification";
-import TaskInfo from "./ProfileElements.jsx/TaskInfo";
-import SvgComponent from "../../../../../assets/svgs/ccMaster";
-import CustomRadio from "../../../../utils/CustomFieldComp/CustomRadio";
-import PersonalInfo from "./ProfileElements.jsx/PersonalInfo";
+
+import Verification from "./ProfileElements.jsx/IDVerify";
+import MobileVerify from "./ProfileElements.jsx/MobileVerify";
+import BankDetails from "../BankDetails";
+import DatePicker from "../../../../utils/DatePick";
+
+const subtitleNIN =
+  "Verifying your mobile number helps us know you're a genuine human! We won't show it to anyone or sell it on to any 3rd party, it's just for us to send you some good stuff";
+const subtitleUtil =
+  "Verifying your mobile number helps us know you're a genuine human! We won't show it to anyone or sell it on to any 3rd party, it's just for us to send you some good stuff";
 
 const Profile = () => {
   const onSubmit = async (values, actions) => {
@@ -15,77 +18,59 @@ const Profile = () => {
   };
   return (
     <section className="max-w-screen-lg pb-12">
-      <div className="px-7 space-y-8 pt-4 ">
-        <PersonalInfo />
+      <div className="px-7 space-y-8  ">
+        <h1 className="text-primary text-[1.6rem] font-bold">Verification</h1>
+        <Verification title="Verify your ID" subtitle={subtitleNIN} name="" />
 
-        <Verification />
+        <Formik
+          initialValues={{
+            date: {
+              birthDate: "",
+            },
+          }}
+        >
+          {({ values }) => (
+            <Form>
+              <div className="my-3 flex flex-col justify-between space-y-3">
+                <h2 className="text-brand-text text-[.95rem] font-semibold">
+                  Verify your Birthday
+                </h2>
+                <p className="text-[.75rem] font-medium py-3">
+                  Verifying your mobile number helps us know you're a genuine
+                  human! We won't show it to anyone or sell it on to any 3rd
+                  party, it's just for us to send you some good stuff.
+                </p>
 
-        {/* <TaskInfo /> */}
-      </div>
+                <div className="">
+                  <DatePicker
+                    offset={0}
+                    name="birthDate"
+                    label="Date of birth"
+                    showYearDropdown
+                    dateFormatCalendar="MMMM"
+                    yearDropdownItemNumber={80}
+                    scrollableYearDropdown
+                    dateFormat="PP"
+                  />
+                </div>
+              </div>
+            </Form>
+          )}
+        </Formik>
+        <MobileVerify />
+        <Verification
+          title="Verify your Address"
+          subtitle={subtitleUtil}
+          name="Utility Bill"
+        />
+        <BankDetails />
 
-      {/* <article className="px-6 ">
-        <div className="flex flex-row justify-between mb-4 border-b text-gray-600 my-4 pb-4 pt-2">
-          <div className="w-[300px] ">
-            <h2 className="text-[16px] font-medium">Billings &amp; Payments</h2>
-            <p className="text-[12px] font-medium mb-3">
-              Update your billing details and address for payments and
-              withdrawals
-            </p>
-          </div>
-          <div className="text-[14px] flex-1 px-4 ">
-          
-
-            <div className="  ">
-              <Formik
-                initialValues={{ name: "", profession: "", acceptedTos: false }}
-                validationSchema={loginSchema}
-                onSubmit={onSubmit}
-              >
-                {() => (
-                  <Form>
-                    <div className="grid grid-cols-1 w-[400px] gap-x-6 pl-8 ">
-                      <CustomText
-                        label="Account Name *"
-                        name="accountName"
-                        type="text"
-                        inputstyle="py-1.5 my-1.5 indent-2 placeholder:text-gray-700  border-2 border-violet-200/90 placeholder:text-[12px] focus:outline-violet-500 text-[12px] w-full  rounded"
-                        placeholder="Ciroma Chukwuma"
-                      />
-                      <CustomText
-                        label="Account number *"
-                        name="accountNumber"
-                        type="text"
-                        inputstyle="py-1.5 my-1.5 indent-2 placeholder:text-gray-700  border-2 border-violet-200/90 placeholder:text-[12px] focus:outline-violet-500 text-[12px] w-full  rounded"
-                        placeholder="Olivia Kehye"
-                      />
-                      <CustomText
-                        label="Bank Name *"
-                        name="accountNumber"
-                        type="text"
-                        inputstyle="py-1.5 my-1.5 indent-2 placeholder:text-gray-700  border-2 border-violet-200/90 placeholder:text-[12px] focus:outline-violet-500 text-[12px] w-full  rounded"
-                        placeholder="GTBank"
-                      />
-                    </div>
-               
-                    <button
-                      type="submit"
-                      className="bg-purple-700 mt-4 px-6 py-2  text-white font-medium rounded-lg float-right"
-                    >
-                      Update Details
-                    </button>
-                  </Form>
-                )}
-              </Formik>
-            </div>
-          </div>
+        <div className="flex flex-col md:flex-row items-center gap-4 my-5">
+          <button className="bg-brand-light px-4 py-2 text-white text-primary rounded-md ">
+            Save Profile
+          </button>
         </div>
-      </article> */}
-      <button
-        type="submit"
-        className="bg-purple-700  px-6 py-2.5 ml-12 text-white font-medium rounded float-right hover:bg-purple-800 font-sans"
-      >
-        Save Details
-      </button>
+      </div>
     </section>
   );
 };

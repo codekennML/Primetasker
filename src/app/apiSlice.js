@@ -5,12 +5,16 @@ import { setCredentials, logOut } from "../features/auth/slices/authSlice";
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:3500",
   credentials: "include",
+
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token; //retrieve the current accessToken in state
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
     return headers;
+  },
+  headers: {
+    "Content-Type": "application/json",
   },
 });
 
@@ -22,7 +26,7 @@ const baseQuerywithRefreshToken = async (args, api, extraOptions) => {
   // Check if any api request to backend via baseQery has an error of 403(expired access token error)
   let response = await baseQuery(args, api, extraOptions);
 
-  if (response?.error?.status === 403) {
+  if (response?.error?.status === 401) {
     console.log("Refreshing Token");
 
     // Request a new Refresh token from refresh url
@@ -41,10 +45,7 @@ const baseQuerywithRefreshToken = async (args, api, extraOptions) => {
     }
     // Retry the failed request (response) again with new accessToken
     else {
-      if (
-        refreshTokenRequest?.error?.status === 403 ||
-        refreshTokenRequest?.error?.status === 401
-      ) {
+      if (refreshTokenRequest?.error?.status === 403) {
         refreshTokenRequest.error.data.message =
           "Your session has expired . Please Login again";
 

@@ -1,5 +1,5 @@
 import { useField } from "formik";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 
 const CustomText = ({
@@ -12,9 +12,9 @@ const CustomText = ({
 }) => {
   const [passwordIcon, sePasswordIcon] = useState();
 
-  const [field, meta, helpers] = useField(props);
-  const errorStyle = "border border-rose-400 ";
-  const validStyle = "border-gray-400 border";
+  const [field, meta, helpers] = useField(props.name);
+
+  const errorStyle = "outline-red-500";
   const invalid = meta.touched && meta.error;
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -31,7 +31,7 @@ const CustomText = ({
       <label
         htmlFor={props?.name}
         className={
-          props.name ? `font-medium text-[12px] ${labelstyle}` : `hidden`
+          props.name ? `${labelstyle} font-medium text-[12px] ` : `sr-only`
         }
       >
         {label}
@@ -54,9 +54,9 @@ const CustomText = ({
           type={passwordVisible ? "text" : type}
           {...field}
           {...props}
-          className={`${invalid ? errorStyle : validStyle} ${
-            imgBfr ? "pl-7" : "pl-2"
-          } ${props.inputstyle} `}
+          className={` ${imgBfr ? "pl-7" : "pl-2"} ${props.inputstyle} ${
+            invalid ? errorStyle : "focus:outline-brand-light"
+          } `}
         />
         {imgAfter ? (
           <button

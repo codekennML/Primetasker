@@ -1,24 +1,12 @@
 import { useState, useEffect } from "react";
 import { addDays, formatDistance, lastDayOfMonth, format } from "date-fns";
-import {
-  AiFillCheckCircle,
-  AiOutlineCalendar,
-  AiOutlineClockCircle,
-  AiOutlinePlusCircle,
-} from "react-icons/ai";
+import { AiFillCheckCircle } from "react-icons/ai";
 
-import {
-  BsCloudSun,
-  BsInfoCircle,
-  BsSun,
-  BsSunset,
-  BsMoonStars,
-} from "react-icons/bs";
+import { BsCloudSun, BsSun, BsSunset, BsMoonStars } from "react-icons/bs";
 import CustomRadio from "../../../../utils/CustomFieldComp/CustomRadioCheck";
 import CustomText from "../../../../utils/CustomFieldComp/CustomText";
 import { useFormikContext } from "formik";
-import DatePicker from "../../../../utils/DatePicker";
-import ClickAwayListener from "react-click-away-listener";
+import PopperDatePicker from "../../../../utils/DatePick";
 
 const taskTime = [
   { name: "Morning", value: "Before 9am", icon: <BsCloudSun /> },
@@ -34,30 +22,6 @@ export const StepOne = ({
   setShowDraftForm,
   fields,
 }) => {
-  const [dateActive, setDateActive] = useState(false);
-
-  const [date, setDate] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 1),
-      key: "selection",
-    },
-  ]);
-
-  const formatDate = (date) => {
-    const fromDate = `${format(new Date(date[0].startDate), "eee dd LLL")}`;
-    const beforeDate = `${format(new Date(date[0].endDate), "eee dd LLL")}`;
-    const formattedDate = `On ${fromDate} / Before ${beforeDate}`;
-
-    return formattedDate;
-  };
-
-  useEffect(() => {
-    if (date[0].startDate !== date[0].endDate) {
-      setDateActive(false);
-    }
-  }, [date]);
-
   const context = useFormikContext();
   const { values } = context;
 
@@ -71,28 +35,24 @@ export const StepOne = ({
     setShowTaskForm(true);
     setShowDraftForm(false);
   }
-  const [flexible, setFlexible] = useState(false);
+
   return (
     <section>
       {showDraftForm && !showTaskForm ? (
         <div className="">
-          <div className="bg-slate-100   flex flex-col mt-[20%] left-10">
-            <div className=" bg-gray-200 rounded-md font-medium p-4 pb-8">
-              <h2 className="text-[25px] font-sans font-bold text-purple-800 py-2.5 text-center mb-2 ">
+          <div className=" mt-8 lg:mt-10 lg:py-4   flex flex-col left-10">
+            <div className=" lg:border rounded-md font-medium lg:p-4 pb-8">
+              <h2 className=" title-heading font-bold text-brand-text py-2.5 text-center mb-2 ">
                 Resume unfinished task ?
               </h2>
-              <div className=" mx-auto text-sm tracking-wide leading-relaxed pt-3 py-2 px-4 ">
+              <div className=" mx-auto text-xs lg:text-sm tracking-wide leading-relaxed pt-3 py-2 px-4 ">
                 <p className="my-2">{`We noticed you had created an unposted task before with details  :   `}</p>
 
-                <p className="text-[15px] font-bold text-purple-800 flex space-x-4 items-start relative mt-3">
-                  <span className="text-[18px] pt-1">
-                    <BsInfoCircle />
-                  </span>
-
+                <p className="text-[15px] font-bold text-brand-text-deep flex space-x-4 items-start relative mt-3">
                   <span>{`${values.title}`}</span>
                 </p>
                 {values.forsook ? (
-                  <p className="flex justify-end text-[12px] pt-0">
+                  <p className="flex justify-end text-[11px] pt-0">
                     {`  ${formatDistance(new Date(values.forsook), Date.now(), {
                       addSuffix: true,
                     })} 
@@ -104,11 +64,11 @@ export const StepOne = ({
                   Would you like to resume this task now ?
                 </p>
               </div>
-              <div className="w-full flex flex-row justify-end">
+              <div className="w-full flex flex-row justify-end text-xs sm:text-sm ">
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="bg-gray-600 text-white px-5 py-2  mt-3  self-end rounded-md   mr-4"
+                  className=" bg-green-100 transition text-brand-text px-5 py-2  mt-3  self-end rounded-md font-medium  mr-4  hover:bg-green-300 hover:border-slate-600"
                 >
                   Start a new task
                 </button>
@@ -118,7 +78,7 @@ export const StepOne = ({
                     setShowDraftForm(false);
                     setShowTaskForm(true);
                   }}
-                  className="bg-purple-700 text-white px-5 py-2  mt-3  self-end rounded-md  float-right mr-4"
+                  className="bg-brand-light text-white px-5 py-2  mt-3  self-end rounded-md  float-right mr-4"
                 >
                   Resume task
                 </button>
@@ -130,124 +90,87 @@ export const StepOne = ({
 
       {!showDraftForm && showTaskForm ? (
         <section className="relative">
-          <h2 className="text-[30px] font-sans font-bold text-gray-900 py-2.5 text-center mb-6">
-            Provide task Details
-          </h2>
+          <p className="lg:hidden uppercase font-semibold text-green-900/50 text-[.75rem] ">
+            Step 1/4
+          </p>
+          <h2 className="title-heading">Provide your task details</h2>
           <article>
             <div className="flex items-center space-x-2 ">
-              <p className="text-purple-900 text-[30px]">
-                <AiOutlinePlusCircle />
-              </p>
-              <h3 className="text-purple-900 font-medium">
+              <h3 className="task-input-label">
                 In a few words, what do you need done ? ?
               </h3>
             </div>
           </article>
 
           <CustomText
+            key="title"
             name="title"
             type="text"
             value={values.title}
             placeholder="e.g  Plan a surprise birthday party"
-            inputstyle="py-4 my-3.5  rounded-lg border-2 border-violet-200 placeholder:text-[15px] placeholder:text-gray-500 focus:outline-violet-500 text-base text-gray-700 bg-gray-50 indent-2 w-full rounded auto"
+            inputstyle="my-4 py-3.5 lg:py-5 p-2 w-full bg-slate-100   indent-4 placeholder:text-[.95rem]  placeholder:text-gray-600 text-brand-text font-medium   rounded-md "
           />
 
           <article className="py-2 mt-6">
             <div className="flex items-center space-x-2 ">
-              <p className="text-purple-900 text-[30px]">
-                <AiOutlineCalendar />
-              </p>
-              <h3 className="text-purple-900 font-medium">
-                When do you need this done ?
-              </h3>
+              <h3 className="task-input-label">When do you need this done ?</h3>
             </div>
 
-            <article className="flex items-center space-x-2 mt-5 relative">
-              <button
-                onClick={() => {
-                  setDateActive((prev) => !prev);
-                }}
-                className="bg-blue-50 flex items-center space-x-3 py-3 border border-gray-300 rounded-full text-[14px] relative px-3"
-                type="button"
-              >
-                <span>
-                  {!values?.date[0]?.endDate || values?.date[0]?.endDate === ""
-                    ? "On or Before "
-                    : formatDate(values.date)}
-                </span>
-                <span className="arrow "></span>
-              </button>{" "}
-              <button
-                className={`${
-                  flexible ? "bg-purple-800 text-white" : "bg-blue-50"
-                } px-3 py-3 border border-gray-300 rounded-full text-[14px] `}
-                type="button"
-                onClick={() => {
-                  context.setFieldValue("date", [
-                    {
-                      startDate: new Date(),
-                      endDate: lastDayOfMonth(new Date()),
-                    },
-                  ]);
-                  setFlexible((prev) => !prev);
-                }}
-              >
-                Before next month
-              </button>
-              {dateActive ? (
-                <>
-                  <div className="show__datepicker__angle"></div>
-
-                  <DatePicker
-                    name="date"
-                    numofMonths={1}
-                    dateActive={dateActive}
-                    date={date}
-                    setDate={setDate}
-                    position={`absolute -top-4 -left-2`}
-                  />
-                </>
-              ) : null}
+            <article className="flex flex-row items-center relative gap-x-3 mt-4">
+              <div className=" ">
+                <PopperDatePicker
+                  label="On date"
+                  name="onDate"
+                  minDate={new Date()}
+                />
+              </div>
+              <div>
+                <PopperDatePicker
+                  label="Before date"
+                  name="beforeDate"
+                  minDate={new Date()}
+                />
+              </div>
             </article>
           </article>
           <article className="mt-8 py-2 space-y-4">
             <div className="flex items-center space-x-2">
-              <p className="text-purple-900 text-[30px]">
-                <AiOutlineClockCircle />
-              </p>
-              <h3 className="font-medium text-purple-900">
-                Preffered time of day
-              </h3>
+              <h3 className="task-input-label">Preffered time of day</h3>
             </div>
 
-            <div className="flex space-x-3 ">
+            <div className=" ">
               <CustomRadio
                 options={taskTime}
                 name="taskTime"
                 checked={values.taskTime}
-                style={`flex flex-row w-full justify-between z-0`}
+                style={`grid grid-cols-2  sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full max-w-full w-full flex-wrap  `}
                 renderItem={(name, idx, icon, value, checked) => {
                   return (
                     <div
                       className={`${
                         checked
-                          ? "bg-purple-800 text-white border-0"
-                          : "bg-gray-50 text-gray-500"
-                      } relative w-32  text-center  rounded-lg cursor-pointer py-4 flex flex-col items-center justify-center border border-purple-500 `}
+                          ? "bg-brand-light text-white border-0"
+                          : "bg-slate-100 text-brand-text"
+                      } relative w-full   text-center  rounded-lg cursor-pointer py-4 flex flex-col items-center justify-center   `}
                       key={idx}
                     >
                       <p
                         className={`${
                           checked
-                            ? "bg-purple-800 text-white border-0"
+                            ? "bg-green-600 text-white border-0"
                             : "hidden"
                         }`}
                       >
                         <AiFillCheckCircle className="text-[20px] font-medium absolute top-2 right-2" />
                       </p>
-                      <p className="text-[24px] ">{icon}</p>
-                      <p className="text-[17px] font-medium  mt-2"> {name}</p>
-                      <p className="text-[15px] font-medium ">{value}</p>
+                      <p className="text-[20px] lg:text-[24px] ">{icon}</p>
+                      <p className="text-[15px] lg:text-[17px] font-medium  mt-2">
+                        {" "}
+                        {name}
+                      </p>
+                      <p className="text-[12px] lg:text-[15px] font-medium ">
+                        {value}
+                      </p>
                     </div>
                   );
                 }}

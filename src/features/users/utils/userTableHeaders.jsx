@@ -61,7 +61,7 @@ export const userTableHeaders = [
     accessor: "active",
     Cell: ({ row }) => {
       return row.values.active ? (
-        <span className="bg-green-100 text-green-600 px-3 py-1 rounded text-xs ">
+        <span className="bg-green-100 text-brand-light px-3 py-1 rounded text-xs ">
           Active
         </span>
       ) : (

@@ -282,55 +282,55 @@ const SingleProperty = () => {
                 <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faSwimmer}
-                    class={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-brand-light pr-1 w-5 h-5`}
                   />{" "}
                   1 Swimming Pool
                 </p>
                 <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faShuttleVan}
-                    class={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-brand-light pr-1 w-5 h-5`}
                   />{" "}
                   Airport shuttle
                 </p>
                 <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faDumbbell}
-                    class={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-brand-light pr-1 w-5 h-5`}
                   />{" "}
                   very good fitness
                 </p>
                 <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faSmokingBan}
-                    class={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-brand-light pr-1 w-5 h-5`}
                   />{" "}
                   Non-smoking rooms
                 </p>
                 <p class="inline-flex items-center pr-3">
-                  <Icon icon={faWifi} class={`text-green-600 pr-1 w-5 h-5`} />{" "}
+                  <Icon icon={faWifi} class={`text-brand-light pr-1 w-5 h-5`} />{" "}
                   Free WiFi
                 </p>
                 <p class="inline-flex items-center pr-3">
-                  <Icon icon={faSpa} class={`text-green-600 pr-1 w-5 h-5`} />{" "}
+                  <Icon icon={faSpa} class={`text-brand-light pr-1 w-5 h-5`} />{" "}
                   Spa and wellness centre
                 </p>
                 <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faUtensils}
-                    class={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-brand-light pr-1 w-5 h-5`}
                   />{" "}
                   Restaurant{" "}
                 </p>
                 <p class="inline-flex items-center pr-3">
                   <Icon
                     icon={faChampagneGlasses}
-                    class={`text-green-600 pr-1 w-5 h-5`}
+                    class={`text-brand-light pr-1 w-5 h-5`}
                   />{" "}
                   Bar
                 </p>
                 <p class="inline-flex items-center pr-3">
-                  <Icon icon={faMugHot} class="text-green-600 pr-1 w-5 h-5" />{" "}
+                  <Icon icon={faMugHot} class="text-brand-light pr-1 w-5 h-5" />{" "}
                   Breakfast
                 </p>
               </div>

@@ -24,21 +24,58 @@ import { StepTwo } from "./StepTwo";
 import { StepThree } from "./StepThree";
 import { StepFour } from "./StepFour";
 import { FormikStep, FormikStepper } from "./FormStepper";
+import { useGetCategoriesQuery } from "../../../categories/slices/categoryApiSlice";
 
 export const UploadContext = createContext();
 
 const PostTask = () => {
+  const {
+    data: categories,
+    isSuccess,
+    isLoading,
+    isError,
+  } = useGetCategoriesQuery();
+
+  console.log(categories);
+
+  useEffect(() => {
+    if (categories?.ids) {
+      console.log(categories, "Hiii");
+      const { ids, entities } = categories;
+      const categoryArray = [
+        ...ids.map((id) => ({
+          id: entities[id]?.categoryId,
+          name: entities[id]?.title,
+          value: entities[id]?.categoryId,
+        })),
+      ];
+      console.log(categoryArray);
+
+      localStorage.setItem("categories", JSON.stringify(categoryArray));
+    }
+  }, [categories]);
+
   const fields = {
     title: "",
     taskTime: "",
-    date: [{ startDate: "", endDate: "" }],
-    category: "",
-    taskType: "",
-    location: "",
+    date: {
+      onDate: "",
+      beforeDate: "",
+    },
     details: "",
+    categoryId: "",
+    taskType: "",
+
+    location: {
+      place: {
+        name: "",
+      },
+    },
+
     files: [],
     budget: "",
   };
+
   const [uploading, setUploading] = useState(false);
   const [showTaskForm, setShowTaskForm] = useState(true);
   const [showDraftForm, setShowDraftForm] = useState(false);
@@ -89,6 +126,8 @@ const PostTask = () => {
     },
   ];
 
+  //Obtain a secure form token for validating the form from the server;
+
   const saveTaskLocal = async (sendToHome = true, submitted = false) => {
     const draft = ref.current.values;
     draft.forsook = new Date();
@@ -102,56 +141,60 @@ const PostTask = () => {
 
   return (
     <UploadContext.Provider value={{ uploading, setUploading }}>
-      <section className="relative">
-        <div className="  ">
-          <div className="absolute left-28 top-6">
-            <Logo />
+      <section className="relative bg-white   w-full flex flex-col">
+        <div className="  bg-white sticky top-0 z-10 mb-6 md:mb-2 h-16 lg:h-10 ">
+          <div className="w-[80%] mx-auto flex flex-row justify-between items-center py-4 ">
+            <div className="">
+              <Logo />
+            </div>
+            <button
+              onClick={() => saveTaskLocal(true)}
+              className=" flex items-center"
+            >
+              <span className="sr-only">Close</span>
+              <AiOutlineClose className="text-[20px] text-gray-800 w-[40px]" />
+            </button>
           </div>
         </div>
-        <button
-          onClick={() => saveTaskLocal(true)}
-          className="absolute top-10 right-20 flex items-center"
-        >
-          <span>Close</span>
-          <AiOutlineClose className="text-[20px] text-gray-800 w-[40px]" />
-        </button>
 
-        <div className="flex  flex-row mx-auto  justify-center items-start h-screen overflow-y-scroll ">
-          <article className="w-1/5 sticky top-40 left-[12%] ">
-            <ol className="relative text-gray-600 border-l border-gray-300 dark:border-gray-700 dark:text-gray-400">
-              {steps.map((stepper, idx) => {
-                return (
-                  <li key={idx} className="mb-12 ml-8">
-                    <span
-                      className={`absolute flex items-center justify-center w-8 h-8 ${
-                        step === idx ? "bg-blue-100" : "bg-purple-200"
-                      } ${
-                        idx + 1 < currentStep || complete
-                          ? "bg-purple-800 text-white"
-                          : "bg-blue-100"
-                      }
+        <div className="flex  flex-row mx-auto  justify-center items-start   w-full max-h-screen ">
+          {!showDraftForm && (
+            <article className="w-1/5 sticky top-40 left-[12%] hidden lg:block ">
+              <ol className="relative text-gray-600 border-l border-gray-300 dark:border-gray-700 dark:text-gray-400">
+                {steps.map((stepper, idx) => {
+                  return (
+                    <li key={idx} className="mb-12 ml-8">
+                      <span
+                        className={`absolute flex items-center justify-center w-8 h-8 ${
+                          step === idx ? "bg-gray-100" : "bg-gray-200"
+                        } ${
+                          idx + 1 < currentStep || complete
+                            ? "bg-brand-light text-white"
+                            : "bg-green-100"
+                        }
                     } 
                       rounded-full -left-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900 w-7 h-7 text-gray-800-500 dark:text-green-400`}
-                    >
-                      {idx + 1 < currentStep || complete ? (
-                        <AiOutlineCheck />
-                      ) : (
-                        stepper.icon
-                      )}
-                    </span>
-                    <h3 className="font-semibold leading-tight tracking-wide text-[14px] text-purple-800">
-                      {stepper.title}
-                    </h3>
-                    <p className="text-[12px]"> {stepper.subtitle}</p>
-                  </li>
-                );
-              })}
-            </ol>
-          </article>
+                      >
+                        {idx + 1 < currentStep || complete ? (
+                          <AiOutlineCheck />
+                        ) : (
+                          stepper.icon
+                        )}
+                      </span>
+                      <h3 className="font-semibold leading-tight tracking-wide text-[14px] text-brand-text-deep">
+                        {stepper.title}
+                      </h3>
+                      <p className="text-[12px]"> {stepper.subtitle}</p>
+                    </li>
+                  );
+                })}
+              </ol>
+            </article>
+          )}
 
-          <article className="w-4/5 min-h-[600px] self-center  ">
+          <article className="w-full lg:w-2/5  self-center  ">
             <div>
-              <div className=" w-[58%] pl-4 pr-36  mx-auto ">
+              <div className="w-full   mx-auto ">
                 <FormikStepper
                   showDraftForm={showDraftForm}
                   saveTaskLocal={saveTaskLocal}

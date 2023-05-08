@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  memo,
 } from "react";
 import { useDropzone } from "react-dropzone";
 import { useAddNewFileMutation } from "../../features/fileUploads/uploadApiSlice";
@@ -14,8 +15,12 @@ import { useDispatch } from "react-redux";
 import { notifyErr } from "../../hooks/NotifyToast";
 
 const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
-  // const [fileErrors, setFileErrors] = useState([]);
   const [addNewFile, { isSuccess }] = useAddNewFileMutation();
+
+  const fileFormat = {
+    "image/png": [".png", ".jpg", ".jpeg"],
+  };
+  console.log(props.acceptableFileFormats || fileFormat);
   const [file, setFile] = useState();
 
   const openDropzoneRef = useRef();
@@ -72,10 +77,11 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
     });
 
     rejectedFiles.map(({ errors }) => {
+      console.log(errors);
       let error;
       error =
         errors[0].code == "file-invalid-type"
-          ? "File must be an image"
+          ? errors[0].message
           : errors[0].code == "file-too-large"
           ? "Max.file size to upload is 5MB "
           : null;
@@ -106,9 +112,7 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
   }
 
   const { getRootProps, getInputProps, acceptedFiles, open } = useDropzone({
-    accept: {
-      "image/*": [],
-    },
+    accept: props.acceptableFileFormats || fileFormat,
     noDrag: true,
     onDrop,
     minSize: 0,
@@ -123,7 +127,7 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
     setValue(cloudAddress);
     setFile(null);
   }, [cloudAddress]);
-  console.log(field.value);
+
   return (
     <div className={`${props.style ? props.style : ""}`}>
       <section
@@ -136,7 +140,7 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
           type="button"
           onClick={() => open()}
           ref={openDropzoneRef}
-          className="bg-purple-600 text-white  "
+          className="text-white bg-purple-600 "
         ></button>
         <input {...getInputProps()} />
       </section>
@@ -144,4 +148,6 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
   );
 });
 
+// const memoizedUploadForm = memo(MultipleFileUpload);
+// export default memoizedUploadForm;
 export default MultipleFileUpload;

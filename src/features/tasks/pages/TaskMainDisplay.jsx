@@ -1,10 +1,4 @@
-import React, {
-  useDeferredValue,
-  useRef,
-  useState,
-  useEffect,
-  useId,
-} from "react";
+import React, { useRef, useState, useEffect, useId, useCallback } from "react";
 import {
   AiOutlineFlag,
   AiOutlineEnvironment,
@@ -13,83 +7,83 @@ import {
   AiOutlineWhatsApp,
   AiOutlineCopy,
   AiOutlineClockCircle,
-  AiFillStar,
   AiOutlineBell,
+  AiOutlineShoppingCart,
 } from "react-icons/ai";
-
-import { FaImage, FaTimes } from "react-icons/fa";
-import { formatDistance } from "date-fns";
-
-import { useDispatch, useSelector } from "react-redux";
-import { HiReply } from "react-icons/hi";
+import { IoCreateOutline } from "react-icons/io5";
+import { BsCalendar4Week } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { CiTimer } from "react-icons/ci";
 import { motion } from "framer-motion";
-import {
-  Link,
-  Navigate,
-  useLocation,
-  useMatch,
-  useNavigate,
-  useOutletContext,
-  useParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 
-import { FaFacebookF, FaLinkedinIn, FaRegFlag } from "react-icons/fa";
+import { FaFacebookF, FaLinkedin, FaLinkedinIn } from "react-icons/fa";
 // import { formatDate } from "../utils/formatDate";
 import millify from "millify";
 import TaskComments from "./TaskComments";
-import { useGetTaskByIdQuery, useGetTasksQuery } from "../slices/taskApiSlice";
+import { useGetTaskByIdQuery } from "../slices/taskApiSlice";
 import useAuth from "../../../hooks/useAuth";
-import { showModal, hideModal } from "../../modal/modalSlice";
+import { showModal } from "../../modal/modalSlice";
 import MemoizedImageForm from "../../../components/ImageForm";
-import {
-  useGetCommentsfortaskQuery,
-  useCreateCommentMutation,
-} from "../../comments/slices/commentApiAlice";
+import { useGetCommentsfortaskQuery } from "../../comments/slices/commentApiAlice";
 import Naira from "../../../../assets/svgs/Naira";
-import Spinner from "../../../utils/Spinner";
-import CustomTextarea from "../../../utils/CustomFieldComp/CustomTextarea";
-import ImageUpload from "../../../components/ImageUpload";
+
 import { formatDate } from "../../../utils/formatDate";
 import "react-loading-skeleton/dist/skeleton.css";
-import Map from "../Map";
+
 import TextVisibility from "../../../components/TextVisibility";
 
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { MdAlarmOn, MdNewLabel, MdOutlineAddTask } from "react-icons/md";
+import { useMatch } from "react-router-dom";
+
 const TaskMainDisplay = () => {
-  const newId = useId();
+  const [
+    open,
+    setOpen,
+    closeMap,
+    // taskId,
+    showTaskSidebar,
+    // setTaskId,
+    setShowTaskSidebar,
+  ] = useOutletContext();
+
   const location = useLocation();
   const urlId = location?.pathname.split("-").slice(-1)[0];
+  console.log(urlId);
 
-  const [taskId, setTaskId] = useState(undefined);
-  const [open, setOpen, closeMap] = useOutletContext();
-  const [clearValues, setClearValues] = useState(false);
-  const [task, setTask] = useState();
-  const navigate = useNavigate();
-  const mapRef = useRef(null);
+  // console.log(urlId);
+  const [showMap, setShowMap] = useState(true);
+  const [taskId, setTaskId] = useState("");
+
+  const mapRef = useRef();
+  // const matches = useMatch("/tasks/title-id");
+
+  // console.log(matches);
+  // const handleShowMap = useCallback(() => {
+  //   setOpen(false);
+  //   setTaskId(undefined);
+  // }, [showMap]);
 
   useEffect(() => {
-    if (urlId === "/tasks") {
+    // console.log(typeof urlId);
+    if (urlId !== "/tasks") {
+      setTaskId(urlId);
+      setShowTaskSidebar(false);
+    } else {
       setTaskId(undefined);
       setOpen(false);
-    } else {
-      setTaskId(urlId);
     }
   }, [urlId]);
 
-  const {
-    data: selectedTask,
-    isError: taskError,
-    isLoading: taskLoading,
-    isSuccess: taskSuccess,
-  } = useGetTaskByIdQuery(taskId, {
-    skip: taskId === "/tasks" || taskId === undefined,
-  });
+  // console.log(taskId);
 
-  useEffect(() => {
-    if (taskSuccess) {
-      const { ids, entities } = selectedTask;
-      setTask(entities[ids[0]]);
-    }
-  }, [selectedTask]);
+  const [clearValues, setClearValues] = useState(false);
+  const [task, setTask] = useState([]);
+  const navigate = useNavigate();
+
+  // console.log(task);
 
   useEffect(() => {
     if (closeMap) {
@@ -98,19 +92,18 @@ const TaskMainDisplay = () => {
   }, [closeMap]);
 
   const [pagination, setPagination] = useState({});
+  const [offerPage, setOfferPage] = useState(1);
   const [commentPage, setCommentPage] = useState(1);
   const [taskComments, setTaskComments] = useState([]);
+  const [taskOffers, setTaskOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  let text = task?.description;
+  // let text = task?.description;
 
-  const [displayText, setDisplayText] = useState(text);
-
-  const { userLoggedIn: isLoggedIn } = useAuth();
+  const { userLoggedIn: isLoggedIn, canMakeOffer } = useAuth();
 
   const ref = useRef();
   const dispatch = useDispatch();
-
-  const [showFullText, setShowFullText] = useState(false);
 
   const {
     data: comments,
@@ -126,10 +119,40 @@ const TaskMainDisplay = () => {
       skip: taskId === "/tasks/" || commentPage === 1,
     }
   );
+  const {
+    data: offers,
+    isLoading: offerLoading,
+    isSuccess: offerSuccess,
+    isError: offerError,
+  } = useGetCommentsfortaskQuery(
+    {
+      page: offerPage,
+      taskId: taskId,
+    },
+    {
+      skip: taskId === "/tasks/" || offerPage === 1,
+    }
+  );
 
   useEffect(() => {
     setClearValues((prev) => !prev);
   }, [taskId]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      const { ids, entities, pageData } = offers;
+      setPagination(pageData);
+      setTask((prev) => {
+        return {
+          ...prev,
+          offers: [...prev.comments, ...ids.map((id) => entities[id])],
+        };
+      });
+    }
+    return () => {
+      setTask([]);
+    };
+  }, [offers]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -151,9 +174,8 @@ const TaskMainDisplay = () => {
     setCommentPage((prev) => prev + 1);
   };
 
-  const handleToggleDisplay = () => {
-    setShowFullText(!showFullText);
-    setDisplayText(showFullText ? text.slice(0, 200) : text);
+  const loadMoreOffers = () => {
+    setOfferPage((prev) => prev + 1);
   };
 
   const createSimilarTask = (task) => {
@@ -185,324 +207,543 @@ const TaskMainDisplay = () => {
         );
   };
 
-  const handleShowMap = () => {
-    setOpen(false);
-    setTaskId(undefined);
-  };
-
   const handleMakeOffer = () => {
-    if (isLoggedIn) {
+    if (!isLoggedIn) {
+      navigate("/login", { state: { redirectUri: location } });
+    } else if (isLoggedIn && !canMakeOffer) {
+      dispatch(
+        showModal({
+          currentModal: "TaskVerifyModal",
+          modalData: null,
+        })
+      );
+    } else {
       dispatch(
         showModal({
           currentModal: "offerModal",
           modalData: task?._id,
         })
       );
-    } else {
-      navigate("/login", { state: { redirectUri: location } });
     }
   };
 
+  const handleAlertCreate = () => {
+    const alertPage = "/dashboard/create/create-alert";
+
+    if (!isLoggedIn) {
+      navigate("/login", { state: { redirectUri: alertPage } });
+    } else {
+      navigate(alertPage);
+    }
+
+    // navigate("")
+  };
+
+  const {
+    data: selectedTask,
+    isError: taskError,
+    isLoading: taskLoading,
+    isSuccess: taskSuccess,
+  } = useGetTaskByIdQuery(taskId, {
+    skip: taskId === "/tasks" || taskId == undefined,
+    refetchOnMountOrArgChange: true,
+  });
+
+  // console.log(selectedTask);
+
+  useEffect(() => {
+    // console.log(selectedTask);
+    if (selectedTask) {
+      const { ids, entities } = selectedTask;
+      setTask(entities[ids[0]]);
+    }
+  }, [selectedTask]);
+
+  const handleShowMap = useCallback(() => {
+    // console.log("Sent");
+    setOpen(false);
+    setTaskId(undefined);
+  }, []);
+
   return (
-    <>
-      <div className="w-full h-full absolute overflow-x-hidden top-0 right-0 bottom-0 left-0 z-0 ">
-        <Map />
-      </div>
+    <SkeletonTheme baseColor="#f7f9fb">
+      {/* {!taskLoading && !taskError ? ( */}
+      {/*  open ||  */}
+      <motion.section
+        initial="initial"
+        animate={
+          open || (taskId !== undefined && taskId !== "/tasks")
+            ? "animate"
+            : "initial"
+        }
+        variants={{
+          initial: { y: taskId && showMap ? -300 : -900, opacity: 1 },
+          animate: {
+            y: 0,
+            opacity: 1,
+            transition: { duration: 0.5 },
+          },
+        }}
+        className="bg-white absolute top-0 bottom-0 right-0  left-0 w-full flex px-2.5 md:px-4 lg:px-6 py-4 overflow-y-scroll z-5 lg:flex  max-h-screen  scrollbar-thin scrollbar-thumb-gray-300/30 scrollbar-track-gray-200  scrollbar-thumb-rounded-full overflow-x-hidden  scrollbar-track-rounded-full z-5 "
+      >
+        <div className="w-full h-full px-3 lg:w-[60%] ">
+          <div className="flex items-center ">
+            <div className="flex-1 ">
+              <ul className="flex flex-row justify-between md:justify-start my-2 space-x-6 md:my-5">
+                <li className="flex items-center justify-between w-full md:w-max">
+                  {!taskLoading && !taskError ? (
+                    <button className="py-1 px-3 font-bold text-[0.9rem] rounded-full bg-brand-accent uppercase text-white">
+                      Open
+                    </button>
+                  ) : (
+                    <Skeleton width="60px" />
+                  )}
+                </li>
 
-      {task?.title ? (
-        <>
-          <motion.section
-            initial="initial"
-            animate={
-              open || (taskId !== undefined && taskId !== "/tasks")
-                ? "animate"
-                : "initial"
-            }
-            variants={{
-              initial: { y: taskId && closeMap ? -300 : -900, opacity: 1 },
-              animate: {
-                y: 0,
-                opacity: 1,
-                transition: { duration: 1 },
-              },
-            }}
-            className="bg-white absolute top-0 bottom-0 right-0  left-0 w-full flex px-6 py-4 overflow-y-scroll z-10 lg:flex  max-h-screen  scrollbar-thin scrollbar-thumb-gray-400/30 scrollbar-track-gray-300  scrollbar-thumb-rounded-full overflow-x-hidden  scrollbar-track-rounded-full "
-          >
-            <div className=" w-2/3 h-full  ">
-              <div className="flex items-center  ">
-                <div className="flex-1 ">
-                  <ul className="flex flex-row justify-start space-x-6 my-3">
-                    <li>
-                      <button className="py-1 px-3 font-bold text-[0.9rem] rounded-full bg-purple-500/40 uppercase text-gray-600">
-                        Open
-                      </button>
-                    </li>
-                    <li>
-                      <button className="py-1 px-3 font-semibold text-[0.9rem] rounded-full uppercase text-slate-400">
-                        Assigned
-                      </button>
-                    </li>
-                    <li>
-                      <button className="py-1 px-4 rounded-full font-bold text-[0.9rem]  uppercase text-slate-400">
-                        Completed
-                      </button>
-                    </li>
-                  </ul>
-                  <h2 className="text-[1.7rem] font-[400] text-slate-900/80 font-heading  pl-2 px-12 mt-8 ">
-                    {" "}
-                    {task.title}
-                  </h2>
-                  <button
-                    ref={mapRef}
-                    onClick={handleShowMap}
-                    className="text-xs text-purple-700 font-medium mt-4 pl-2"
-                  >
-                    Back to Map
-                  </button>
-                </div>
+                <li className="hidden md:block">
+                  {/* <button className="py-1 px-3 font-semibold text-[0.9rem] rounded-full uppercase text-slate-400"> */}
+                  {!taskLoading && !taskError ? (
+                    <button className=" text-slate-400 py-1 px-3 font-bold text-[0.9rem] rounded-full  uppercase ">
+                      Assigned
+                    </button>
+                  ) : (
+                    <Skeleton width="60px" />
+                  )}
+                  {/* </button> */}
+                </li>
+
+                <li className="hidden md:block">
+                  {/* <button className="py-1 px-3 font-semibold text-[0.9rem] rounded-full uppercase text-slate-400"> */}
+                  {!taskLoading && !taskError ? (
+                    <button className=" text-slate-400 py-1 px-3 font-bold text-[0.9rem] rounded-full  uppercase ">
+                      Completed
+                    </button>
+                  ) : (
+                    <Skeleton width="60px" />
+                  )}
+                  {/* </button> */}
+                </li>
+
+                <li className="md:hidden">
+                  {!taskLoading && !taskError ? (
+                    <button className=" text-slate-400 py-1 px-3 font-medium text-[0.8rem] rounded-full brand-text-deep md:hidden ">
+                      4 hours ago
+                    </button>
+                  ) : (
+                    <Skeleton width="60px" />
+                  )}
+                </li>
+              </ul>
+              <h2 className="text-[1.7rem] md:text-[1.7rem] pr-4 font-extrabold text-gray-700  pl-2 whitespace-normal text-left mt-8 md:mt-6 ">
+                {" "}
+                {!taskLoading && !taskError ? (
+                  task.title
+                ) : (
+                  <Skeleton width="200px" />
+                )}
+              </h2>
+              <div className="flex items-center justify-between pr-4">
+                <button
+                  ref={mapRef}
+                  onClick={handleShowMap}
+                  className="hidden pl-2 mt-4 text-xs font-medium text-brand-light md:block"
+                >
+                  {!taskLoading && !taskError ? "Back to Map" : <Skeleton />}
+                </button>
+
+                <button
+                  onClick={() => setShowTaskSidebar(true)}
+                  className="pl-2 mt-4 text-xs font-medium text-brand-light md:hidden"
+                >
+                  {!taskLoading && !taskError ? "Back to tasks" : <Skeleton />}
+                </button>
+
+                <p className="text-xs font-medium text-brand-text">
+                  about 4 hours ago
+                </p>
               </div>
-              <div className="  mt-6 ">
-                <div className="flex items-center space-x-3  ">
-                  <img
-                    src="https://flowbite.com/docs/images/people/profile-picture-4.jpg"
-                    alt=""
-                    className="w-[50px] h-[50px] rounded-full object-cover onject-center"
-                  />
+            </div>
+          </div>
+          <div className="mt-6 ml-2 ">
+            <div className="flex items-center space-x-4 ">
+              {task?.creator ? (
+                <img
+                  src={task?.creator?.Avatar}
+                  alt=""
+                  className="w-[50px] h-[50px] md:w-[60px] md:h-[60px] rounded-full object-cover onject-center"
+                />
+              ) : (
+                <Skeleton height="50px" width="50px" circle />
+              )}
 
-                  <p className="flex flex-col text-[14px] font-medium">
-                    <span className="font-bold">Posted By</span>
-                    <span className="text-[13px]">
-                      {`${task?.creator.firstname} ${task?.creator?.lastname}`}
+              <p className="flex flex-col text-[.8rem] font-medium">
+                {task?.creator ? (
+                  <span className="font-bold text-[.7rem] text-slate-600 uppercase tracking-wider">
+                    Posted By
+                  </span>
+                ) : (
+                  <Skeleton width="60px" height="20px" />
+                )}
+
+                <span className="text-[.9rem] tracking-tight brand-text mt-1 ">
+                  {task?.creator ? (
+                    `${task?.creator?.firstname} ${task?.creator?.lastname} .`
+                  ) : (
+                    <span className="flex ">
+                      {" "}
+                      <Skeleton width="80px" /> <Skeleton width="40px" />
                     </span>
+                  )}
+                </span>
+              </p>
+            </div>
+
+            <ul className="text-[13px] mt-6 flex flex-col sm:flex-row sm:justify-between lg:flex-col lg:items-start sm:gap-x-4 items-start gap-y-5  md:space-y-0 md:items-center   md:space-x-3 md:border-y rounded-lg py-4  ">
+              <li className="xs:w-full sm:max-w-max lg:w-full">
+                <div className="flex flex-col justify-between gap-5 mr-8 sm:justify-between md:space-x-3 md xs:flex-row lg:w-full ">
+                  <li className="  py-1 rounded-full flex items-center lg:items-start text-gray-700/90 font-medium space-x-2 lg:space-x-0 text-[12px] md:px-3 gap-x-3">
+                    <p className="text-[25px] md:text-[30px] text-brand-text-deep ">
+                      <BsCalendar4Week />
+                    </p>
+                    <div className="flex flex-col  lg:flex-col lg:gap-x-4 space-x-.5 items-start ">
+                      <h3 className="uppercase font-bold text-[.75rem] text-slate-600">
+                        {!taskLoading && !taskError ? (
+                          "DUE DATE"
+                        ) : (
+                          <Skeleton height="20px" width="60px" />
+                        )}
+                      </h3>
+                      <p className="text-[.85rem] text-brand-accent font-bold capitalize">
+                        {task?.taskDeadline ? (
+                          ` ${formatDate(task?.taskDeadline, "eee dd LLL")}`
+                        ) : (
+                          <Skeleton height="20px" width="60px" />
+                        )}
+                      </p>
+                    </div>
+                  </li>
+                  <li className="sm:hidden  rounded-full lg:flex lg:flex-row lg:justify-between items-center lg:items-start text-gray-700/90 font-medium space-x-2 text-[13px] md:px-3 py-1">
+                    <p className="text-[20px] md:text-[30px] text-brand-text-deep">
+                      <CiTimer />
+                    </p>
+                    <div className="flex flex-col lg:flex-col lg:items-start space-y-.5 lg:gap-x-4">
+                      <h3 className="uppercase font-bold text-[.75rem]">
+                        {task?.taskTime ? (
+                          `TO BE DONE ON`
+                        ) : (
+                          <Skeleton height="" />
+                        )}
+                      </h3>
+                      <p className="text-[1rem] text-green-800 font-bold capitalize">
+                        {" "}
+                        {task?.taskTime || (
+                          <Skeleton height="20px" width="60px" />
+                        )}
+                      </p>
+                    </div>
+                  </li>
+                </div>
+              </li>
+              <li className="hidden  rounded-full sm:flex lg:hidden items-center text-gray-700/90 font-medium space-x-2 text-[13px] md:px-3 py-1">
+                <p className="text-[20px] md:text-[40px] text-brand-text-deep">
+                  <CiTimer />
+                </p>
+                <div className="flex flex-col space-y-.5">
+                  <h3 className="uppercase font-bold text-[.75rem]">
+                    {task?.taskTime ? (
+                      `TO BE DONE ON`
+                    ) : (
+                      <Skeleton height="20px" width="60px" />
+                    )}
+                  </h3>
+                  <p className="text-[0.9rem] text-green-800 font-bold capitalize">
+                    {" "}
+                    {task?.taskTime || <Skeleton height="20px" width="60px" />}
                   </p>
                 </div>
-                <ul className="text-[13px] mt-6 flex items-center  space-x-3 border-y py-2  ">
-                  <li className=" rounded-full flex  items-center text-gray-700/90 font-medium space-x-2 text-[13px] px-3 py-1">
-                    <p className="text-[20px] text-purple-500">
-                      <AiOutlineEnvironment />
-                    </p>
-                    <p className="text-[0.9rem] text-gray-500 font-bold capitalize">
-                      {" "}
-                      {task.taskType === "Remote" ? "Remote" : task.location}
-                    </p>
-                  </li>
-                  <li className="  py-1 rounded-full flex items-center text-gray-700/90 font-medium space-x-2 text-[12px] px-3">
-                    <p className="text-[15px] text-purple-500">
-                      <AiOutlineCalendar />
-                    </p>
-                    <p>
-                      {`Expires : ${formatDate(
-                        task.taskDeadline,
-                        "eee dd LLL"
-                      )}`}
-                    </p>
-                  </li>
-                  <li className="rounded-full flex items-center text-gray-700/90 font-medium space-x-2 text-[13px] px-3 py-1">
-                    <p className="text-[20px] text-purple-500">
-                      <AiOutlineClockCircle />
-                    </p>
-                    <p> {task.taskTime}</p>
-                  </li>
-                </ul>
-              </div>
-              <div className=" border-b px-2 py-6  ">
-                <h3 className="  text-slate-900/80 font-bold text-lg font-heading mb-4">
-                  Task Details
-                </h3>
-
-                <TextVisibility text={task.description} files={task.files} />
-                {/* <p className="px-6 text-[13.5px] leading-[1.5rem] mt-4 text-slate-700/90 text-justify font-semibold ">
-                  {task.description}
+              </li>
+              <li className=" rounded-full flex  items-start text-gray-700/90 font-medium space-x-2 text-[13px]  py-1">
+                <p className="text-[20px] md:text-[30px] text-brand-text-deep">
+                  <AiOutlineEnvironment />
                 </p>
-
-                {task.files.length > 0 ? (
-                  <div className="w-full flex justify-end">
-                    <button
-                      onClick={() =>
-                        dispatch(
-                          showModal({
-                            currentModal: "CommentImages",
-                            modalData: task.files,
-                          })
-                        )
-                      }
-                      className="flex items-center space-x-1 mr-3"
-                    >
-                      <span className="text-purple-600 text-[16px]">
-                        <FaImage />
-                      </span>
-                      <span className="text-[13px] font-bold text-purple-600">
-                        ({task.files.length} )
-                      </span>
-                    </button>
-                  </div>
-                ) : null} */}
-              </div>
-
-              <article className=" pb-20">
-                <div className="my-6 pr-4  mb-12 py-3">
-                  <h3 className="  text-slate-900/80 font-bold text-lg font-heading mb-4">
-                    All Offers
+                <div className="flex flex-col space-y-.5">
+                  <h3 className="uppercase font-bold text-[.75rem] text-slate-600">
+                    Location
                   </h3>
+                  <p className="text-[.95rem] text-brand-accent font-bold capitalize">
+                    {" "}
+                    {task?.taskType ? (
+                      task?.taskType === "Remote" ? (
+                        "Remote"
+                      ) : (
+                        task?.taskAddress
+                      )
+                    ) : (
+                      <Skeleton width="60px" />
+                    )}
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
 
-                  <div className="space-y-8 ml-4 ">
-                    {task.comments.length > 0
-                      ? task.comments.map((comment, idx) => {
-                          return (
-                            <li key={idx} className="list-none">
-                              <TaskComments comment={comment} />
-                            </li>
-                          );
-                        })
-                      : null}
-                  </div>
+          {/* BUDGET BAR SMALL SCREENS */}
 
-                  {task?.hasMoreComments ? (
-                    <div className="flex justify-center my-4">
-                      <button
-                        onClick={loadMoreComments}
-                        className="bg-gray-50 border text-purple-600 text-[14px] font-semibold px-4 py-2 rounded-full "
-                      >
-                        Load more comments
+          <article className=" rounded-lg  mb-5 mt-6 bg-slate-100 pb-[0.5rem] lg:hidden ">
+            <div className=" text-[30px]      border-b   ">
+              <div>
+                <p className="text-[12px] uppercase text-center pt-3 pb-1 font-medium text-gray-500">
+                  Task Budget
+                </p>
+              </div>
+              <div className="flex flex-row items-center justify-center font-bold text-gray-700 ">
+                <p className="text-[4.2rem]">
+                  <Naira style={`w-8 h-8 font-medium`} />
+                </p>
+                <p className="text-[40px] ">
+                  {task?.budget ? (
+                    millify(Math.floor(Number(task.budget)), 2)
+                  ) : (
+                    <Skeleton height="60px" width="40px" />
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="mx-3">
+              <button
+                onClick={handleMakeOffer}
+                className="text-center bg-green-500 hover:bg-brand-light rounded-full my-3  text-white font-bold  text-[16px]  py-3  w-full"
+              >
+                Make an Offer
+              </button>
+            </div>
+          </article>
+
+          {/* END OF BUDGET BAR  */}
+
+          <div className="py-2 md:py-6 ">
+            <h3 className="mb-4 font-bold text-slate-900/80 text-md md:px-2">
+              Task Details
+            </h3>
+
+            <TextVisibility text={task?.description} files={task?.files} />
+          </div>
+
+          <article className="pb-4 ">
+            <div className="py-3 my-6 mb-2 md:pr-4">
+              <h3 className="mb-4 font-bold text-slate-900/80 text-md ">
+                All Offers
+              </h3>
+              <div className="space-y-12">
+                {task?.offers?.length > 0 ? (
+                  task?.offers.map((offer, idx) => {
+                    if (!offer.userDeleted) {
+                      return (
+                        <li key={idx} className="list-none">
+                          <TaskComments comment={offer} type="offer" />
+                        </li>
+                      );
+                    }
+                  })
+                ) : (
+                  <div className="flex flex-col items-center justify-center ">
+                    <p>
+                      <AiOutlineShoppingCart className="text-[6rem] text-brand-text -rotate-12" />
+                    </p>
+
+                    <div className="text-[.95rem] font-semibold text-gray-800 mt-6 font-inter  ">
+                      No offers for this task yet.
+                      <button className="pl-2 text-brand-light">
+                        {" "}
+                        Be the first ?
                       </button>
                     </div>
-                  ) : null}
+
+                    <button
+                      onClick={handleMakeOffer}
+                      className="bg-slate-100 text-green-800 mt-8 w-60 rounded-full py-3 font-bold"
+                    >
+                      Make offer
+                    </button>
+                  </div>
+                )}
+              </div>
+              {task?.hasMoreOffers && isLoggedIn ? (
+                <div className="flex justify-center my-4">
+                  <button
+                    onClick={loadMoreOffers}
+                    className="bg-gray-50 border text-brand-light text-[14px] font-semibold px-4 py-2 rounded-full "
+                  >
+                    More Offers
+                  </button>
                 </div>
-              </article>
-              <div className="pb-20">
+              ) : task?.hasMoreOffers && !isLoggedIn ? (
+                <div className="flex flex-col items-center justify-center">
+                  <p className="text-[.8rem] font-medium text=brand-text-deep pb-4 ">
+                    To see more offers ?
+                  </p>
+                  <div className="flex flex-row items-center space-x-3 text-[.75rem]">
+                    <button className="px-4 py-2 font-semibold text-white rounded-full bg-brand-light/90  ">
+                      Join Primetasker
+                    </button>
+                    <p className="font-medium">or</p>
+                    <button className="px-5 py-2 font-semibold text-green-800 rounded-full bg-green-50 ">
+                      Log In
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </article>
+
+          <div className="pb-60 ">
+            <div className="pt-6 mt-6 ml-4 space-y-8 border-t">
+              <h3 className=" text-gray-900/80 font-bold  mb-2 text-[.7rem] uppercase">
+                {`Questions (${task?.comments?.length} )` || (
+                  <Skeleton height="" />
+                )}
+              </h3>
+              <p className="text-[.85rem] text-brand-text font-medium">
+                Please don't share personal info - insurance won't apply to
+                tasks not done through Primetasker!
+              </p>
+
+              <div className="">
                 <MemoizedImageForm
                   name={`${
-                    task.creator.firstname
-                  } ${task.creator.lastname.charAt(0)}`}
+                    task?.creator?.firstname
+                  } ${task?.creator?.lastname.charAt(0)}`}
                   handleCreate={true}
                   clearValues={clearValues}
                   ref={ref}
                   setClearValues={setClearValues}
-                  taskId={task._id}
+                  taskId={task?._id}
                 />
-
-                <div className="space-y-8 ml-4 ">
-                  {task.comments.length > 0
-                    ? task.comments.map((comment, idx) => {
-                        return (
-                          <li key={idx} className="list-none">
-                            <TaskComments comment={comment} />
-                          </li>
-                        );
-                      })
-                    : null}
-                </div>
-
-                {task?.hasMoreComments ? (
-                  <div className="flex justify-center my-4">
-                    <button
-                      onClick={loadMoreComments}
-                      className="bg-gray-50 border text-purple-600 text-[14px] font-semibold px-4 py-2 rounded-full "
-                    >
-                      Load more comments
-                    </button>
-                  </div>
-                ) : null}
               </div>
+
+              {task?.comments?.length > 0
+                ? task.comments.map((comment, idx) => {
+                    return (
+                      <li key={idx} className="list-none">
+                        <TaskComments comment={comment} type="comment" />
+                      </li>
+                    );
+                  })
+                : null}
             </div>
 
-            <aside className="w-1/3 right-0 sticky  top-0     ">
-              <section className="w-[250px]  left-0 bottom-0 top-0 mx-auto  ">
-                <article className="relative    ">
-                  <article className=" rounded-lg  mb-5 mt-2 bg-slate-100 pb-[0.5rem]  ">
-                    <div className=" text-[30px]      border-b   ">
-                      <div>
-                        <p className="text-[12px] uppercase text-center pt-3 pb-1 font-medium text-gray-500">
-                          Task Budget
-                        </p>
-                      </div>
-                      <div className="flex flex-row items-center justify-center font-bold  text-gray-700 ">
-                        <p className="text-[50px]">
-                          <Naira style={`w-8 h-8 font-medium`} />
-                        </p>
-                        <p className="text-[40px] ">
-                          {millify(Math.floor(Number(task.budget)), 2)}
-                        </p>
-                      </div>
-                    </div>
-                    <li className=" cursor-pointer bg-purple-600 hover:bg-purple-700 rounded-full my-3 flex justify-center items-center text-white font-bold space-x-2 text-[16px] px-6 mx-3 py-3 ">
-                      <button onClick={handleMakeOffer} className="text-center">
-                        {" "}
-                        Make an Offer
-                      </button>
-                    </li>
-                  </article>
+            {task?.hasMoreComments ? (
+              <div className="flex justify-center my-4">
+                <button
+                  onClick={loadMoreComments}
+                  className="bg-gray-50 border text-purple-600 text-[14px] font-semibold px-4 py-2 rounded-full "
+                >
+                  Load more comments
+                </button>
+              </div>
+            ) : null}
+          </div>
+        </div>
 
-                  <div className="share ">
-                    <div className="bg-slate-100 border text-[12px] font-medium mt-4 rounded-lg">
-                      <button
-                        onClick={() => createSimilarTask(task)}
-                        className="py-4 border-b w-full flex items-center justify-center space-x-3 "
-                      >
-                        <span>
-                          <AiOutlineCopy />
-                        </span>
-                        <span>Post Similar Task</span>
-                      </button>
-                      <button className="py-4 w-full border-b flex items-center justify-center space-x-3 ">
-                        <span>
-                          <AiOutlineBell />
-                        </span>
-                        <span>Set Alerts for similar tasks</span>
-                      </button>
-                      <button
-                        onClick={handleFlag}
-                        disabled={!isLoggedIn}
-                        className="py-4 w-full  flex items-center justify-center space-x-3 "
-                      >
-                        <span>
-                          <AiOutlineFlag />
-                        </span>
-                        <span>Report this task</span>
-                      </button>
-                    </div>
+        <aside className="sticky top-0 right-0 hidden lg:w-1/3 lg:block ">
+          <section className="w-[250px]   left-0 bottom-0 top-0 mx-auto  ">
+            <article className="relative ">
+              <article className=" rounded-lg  mb-5  bg-slate-100 pb-[0.5rem]  ">
+                <div className=" text-[30px]      border-b   ">
+                  <div>
+                    <p className="text-[12px] uppercase text-center pt-3 pb-1 font-medium text-gray-500">
+                      Task Budget
+                    </p>
                   </div>
-                  <article className="more options w-full mt-8 border p-3 rounded-lg bg-slate-200">
-                    <h2 className="text-[13px] font-medium text-center">
-                      Join the conversation ?{" "}
-                    </h2>
-                    <div className="text-[12px] flex flex-col justify-center items-center space-x-5  p-2 mt-2 rounded-lg  ">
-                      <button className="p-2 text-[12px] rounded-full w-1/2 bg-purple-800 text-white">
-                        <Link to="/login">Sign In</Link>
-                      </button>
+                  {task?.budget ? (
+                    <div className="flex flex-row items-center justify-center font-bold text-gray-700 ">
+                      <p className="text-[4.2rem]">
+                        {/* <Naira style={`w-8 h-8 font-medium`} /> */}
+                      </p>
+                      <p className="text-[35px] text-brand-text-deep ">
+                        {/* {millify(Math.floor(Number(task.budget)), 2)} */}
+                        {/* {task.budget} */}
+                        {/* &#8358;1M */}
+                        &#8358;100K
+                      </p>
                     </div>
-                    <div className="share  ">
-                      <div className="bg-gradient-to-br from-purple-50 via-gray-50 to-purple-50 border text-[12px] font-medium mt-8 rounded-lg">
-                        <button className="py-4  w-full  border-b ">
-                          Share & Refer
-                          <span></span>
+                  ) : (
+                    <Skeleton height="30px" width="30px" />
+                  )}
+                </div>
+                <div className="mx-3">
+                  <button
+                    onClick={handleMakeOffer}
+                    className="text-center bg-brand-light/90 transition text-white hover:bg-brand-light hover:text-white rounded my-3   font-bold  text-[16px]  py-3  w-full"
+                  >
+                    Make an Offer
+                  </button>
+                </div>
+              </article>
+
+              <div className="share ">
+                <div className="bg-slate-100 flex flex-col-reverse border text-[12px] font-medium mt-8 rounded-lg text-brand-text-deep">
+                  <button
+                    onClick={() => createSimilarTask(task)}
+                    className="flex items-center justify-center w-full p-4  space-x-3 "
+                  >
+                    <span>
+                      <MdOutlineAddTask size={20} />
+                    </span>
+                    <span>Post a similar task</span>
+                  </button>
+
+                  <button
+                    onClick={handleFlag}
+                    disabled={!isLoggedIn}
+                    className="flex items-center justify-center  w-full p-4 space-x-3  border-b  "
+                  >
+                    <span>
+                      <AiOutlineFlag size={20} />
+                    </span>
+                    <span>Report this task</span>
+                  </button>
+                  <button
+                    onClick={handleAlertCreate}
+                    className="flex items-center justify-center  w-full p-4 space-x-3  border-b "
+                  >
+                    <span>
+                      <MdAlarmOn size={20} />
+                    </span>
+                    <span>Set up Alerts </span>
+                  </button>
+                </div>
+              </div>
+              <article className="w-full  mt-4  rounded-lg more options ">
+                <div className="share ">
+                  <div className="  text-[12px] font-medium mt-8 rounded-lg">
+                    <article className="w-full more options">
+                      <p className="px-2 text-[.8rem] font-semibold mb-4">
+                        Know someone who can do this ?{" "}
+                      </p>
+                      <div className="text-[16px] flex flex-row gap-x-8 justify-center items-center   p-2 my-1  border rounded   ">
+                        <button className=" p-2 text-white bg-blue-600 rounded-full  align-middle space-x-2 flex items-center">
+                          <FaFacebookF size={15} className="text-white" />
                         </button>
-                        <article className="more options  w-full">
-                          <div className="text-[16px] flex flex-row justify-center items-center space-x-5  bg-gray-50 p-2 my-1   ">
-                            <button className="p-2 rounded-full bg-blue-600 text-white">
-                              <FaFacebookF />
-                            </button>
-                            <button className="p-2 rounded-full bg-green-600 text-white">
-                              <AiOutlineWhatsApp />
-                            </button>
-                            <button className="p-2 rounded-full bg-[#00aced] text-white">
-                              <AiOutlineTwitter />
-                            </button>
-                            <button className="p-2 rounded-full bg-[#1c6ed1] text-white">
-                              <FaLinkedinIn />
-                            </button>
-                          </div>
-                        </article>
+                        <button className="p-2 bg-green-500 text-white  rounded-full align-middle space-x-2 flex items-center">
+                          <AiOutlineWhatsApp size={15} className="text-white" />
+                        </button>
+                        <button className="p-2 bg-[#00aced]  text-white rounded-full align-middle  flex items-center">
+                          <AiOutlineTwitter size={15} className="text-white" />
+                        </button>
+                        <button className="p-2 bg-[#0869d8]  text-white   rounded-full align-middle flex items-center">
+                          <FaLinkedin size={15} className="text-white" />
+                        </button>
                       </div>
-                    </div>
-                  </article>
-                </article>
-              </section>
-            </aside>
-          </motion.section>
-        </>
-      ) : null}
-    </>
+                    </article>
+                  </div>
+                </div>
+              </article>
+            </article>
+          </section>
+        </aside>
+      </motion.section>
+    </SkeletonTheme>
   );
 };
 

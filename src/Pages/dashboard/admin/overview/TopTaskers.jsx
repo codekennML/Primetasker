@@ -53,7 +53,7 @@ const TopTaskers = () => {
                   </span>{" "}
                   <span className="text-gray-400">Complete</span>
                 </p>
-                <p className="text-[20px] text-green-600"> &middot; </p>
+                <p className="text-[20px] text-brand-light"> &middot; </p>
                 <p className="text-gray-700 font-semibold  pr-2 flex flex-row space-x-1">
                   <span className="text-center text-green-500">
                     {" "}
@@ -64,7 +64,7 @@ const TopTaskers = () => {
                   </span>{" "}
                   <span className="text-gray-400">Revenue</span>
                 </p>
-                <p className="text-[20px] text-green-600"> &middot; </p>
+                <p className="text-[20px] text-brand-light"> &middot; </p>
                 <p className="text-gray-700 font-semibold  pr-2 flex flex-row space-x-1">
                   <span className="text-center text-orange-500">
                     {" "}

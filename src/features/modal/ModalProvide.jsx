@@ -12,6 +12,10 @@ import VideoModal from "../../components/VideoModal";
 import CommentImage from "../../components/CommentImage";
 import PostTask from "../tasks/pages/PostTask/PostTaskForm";
 import NewFlag from "../flags/pages/NewFlag";
+import TaskVerify from "../tasks/pages/TaskVerify";
+import Pay from "../payment/Pay";
+import AlertCreate from "../../Pages/dashboard/User/AlertCreate";
+import SkillModal from "../../Pages/dashboard/User/SkillModal";
 
 const ModalProvider = ({ children }) => {
   let modalTitle;
@@ -28,7 +32,8 @@ const ModalProvider = ({ children }) => {
       break;
     case "offerModal":
       modalTitle = "Make Offer";
-      content = <OfferModal modalTitle={`Make Offer`} />;
+      const taskId = modalData;
+      content = <OfferModal modalTitle={`Make Offer`} taskId={taskId} />;
       break;
     case "OfferChat":
       modalTitle = "Send Message";
@@ -37,12 +42,13 @@ const ModalProvider = ({ children }) => {
       break;
     case "homepageVideo":
       modalTitle = "videoModal";
-      content = <VideoModal modalTitle={`hOW it workd`} />;
+      content = <VideoModal modalTitle={`How it works`} />;
       break;
     case "CommentImages":
       const files = modalData;
       content = <CommentImage files={files} modalTitle="View Images" />;
       break;
+
     case "similarTask":
       const task = modalData;
       content = <PostTask initialValues={task} modalTitle="" />;
@@ -52,6 +58,22 @@ const ModalProvider = ({ children }) => {
       const flagDetails = modalData;
       modalTitle = "Make a report ";
       content = <NewFlag flagDetails={flagDetails} />;
+      break;
+
+    case "TaskVerifyModal":
+      content = <TaskVerify />;
+      break;
+
+    case "Pay":
+      content = <Pay />;
+      break;
+
+    case "createAlert":
+      content = <AlertCreate />;
+      break;
+
+    case "skillModal":
+      content = <SkillModal />;
       break;
 
     default:
@@ -77,24 +99,8 @@ const ModalProvider = ({ children }) => {
               opacity: currentModal ? 1 : 0,
               transition: { delay: 0, duration: 0.6 },
             }}
-            className="rounded-lg bg-white"
+            className="rounded-lg bg-white min-h-[50vh] max-h-screen min-w-[30vw]  max-w-screen-md "
           >
-            {modalTitle !== "videoModal" && (
-              <div className="flex justify-between bg-white items-center pt-3 rounded-t pb-1 px-6 dark:border-gray-600 border-b">
-                <h3 className="text-lg font-semibold text-purple-800 dark:text-white mt-1 mb-1.5">
-                  {modalTitle}
-                </h3>
-                <button
-                  onClick={() => dispatch(hideModal())}
-                  type="button"
-                  className="text-purple-900 text-[18px] bg-transparent hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-toggle="defaultModal"
-                >
-                  <FaTimes />
-                  <span className="sr-only">Close modal</span>
-                </button>
-              </div>
-            )}
             {content}
           </motion.div>
         </div>

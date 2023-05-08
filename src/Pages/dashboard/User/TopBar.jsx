@@ -12,9 +12,9 @@ const TopBar = ({ headerText }) => {
     dispatch(setDarkMode());
   };
   return (
-    <article className="flex items-center justify-between px-4   pb-3 bg-purple-700 dark:bg-gray-700 py-4 sticky top-0 z-50   border-gray-900 dark:border-gray-500 dark:border rounded-r-lg ">
+    <article className="flex items-center justify-between px-4   pb-3 bg-white dark:bg-gray-700 py-4 sticky top-0 z-50   border-gray-900 dark:border-gray-500 dark:border rounded-r-lg ">
       <div className="flex space-x-2 items-center  ">
-        <h2 className=" capitalize text-white font-medium font-sans text-xl dark:text-gray-100 font-sans">
+        <h2 className=" capitalize text-gray-800 font-medium text-[1.5rem] dark:text-gray-100 font-heading ">
           {headerText}
         </h2>
       </div>
@@ -25,7 +25,7 @@ const TopBar = ({ headerText }) => {
             <FaSun />
           </button>
         </div>
-        <div className="bg-gradient-to-tr from-pink-300 via-green-300 to-orange-300 p-1 rounded-full  ">
+        <div className="border  p-1 rounded-full  ">
           <img src={avatar} alt="" className="w-[40px] h-[40px] rounded-full" />
         </div>
       </div>

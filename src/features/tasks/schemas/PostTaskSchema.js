@@ -1,20 +1,14 @@
 import * as yup from "yup";
 
 const maxSize = 5 * 1024 * 1024; //5MB
-const allowedFileTypes = [
-  "image/jpeg",
-  "image/png",
-  "image/gif",
-  "image/jpg",
-  "image/jfif",
-];
+const allowedFileTypes = ["image/jpeg", "image/png", "image/gif", "image/jpg"];
 
 const numberConstraint = /^[0-9]*/;
 
 const fields = {
   title: "",
   budget: "",
-  date: { before: "", on: "" },
+  date: { onDate: "", beforeDate: "" },
   category: "",
   taskType: "",
   location: "",
@@ -23,35 +17,20 @@ const fields = {
   budget: "",
 };
 
-const options = [
-  "Pedicure & Manicure",
-  "Facials",
-  "Massage",
-  "Bead Making",
-  "Graphic Design",
-  "Data Analysis",
-  "Content Creation",
-  "Bricklaying",
-  "Homework",
-  "",
-];
-
 export const FirstStepValidator = yup.object().shape({
   title: yup
     .string()
-    .min(10, "Must be at least 12 characters")
+    .min(12, "Must be at least 12 characters")
     .required("This field is required"),
-  date: yup.array(
-    yup.object().shape({
-      endDate: yup
-        .date()
-        .min(yup.ref("startDate"), "Before date is not valid")
-        .required("Please specify your task 'on or before' date"),
-      startDate: yup
-        .date()
-        .required("Please specify your task 'on or before' date"),
-    })
-  ),
+
+  date: yup.object().shape({
+    onDate: yup.date().nullable(),
+    beforeDate: yup.date().when("onDate", {
+      is: (value) => !value,
+      then: yup.date().required("Task Date is required "),
+      otherwise: yup.date(),
+    }),
+  }),
 
   taskTime: yup
     .string()
@@ -60,23 +39,21 @@ export const FirstStepValidator = yup.object().shape({
 });
 
 export const SecondStepValidator = yup.object().shape({
-  category: yup
-    .string()
-    .required("This field is required")
-    .oneOf([...options], "Please select a valid category"),
+  categoryId: yup.number().required("This field is required"),
+  // .oneOf([...options], "Please select a valid category"),
 
   taskType: yup
     .string()
     .max(15)
     .required("This field is required")
-    .oneOf(["Remote", "Physical", "Hybrid"], "Please enter a valid task type"),
+    .oneOf(["Remote", "Physical"], "Please enter a valid task type"),
 
   location: yup.object().when("taskType", {
     is: "Physical",
     then: yup.object().shape({
-      place: yup.string().required(),
-      lng: yup.number().required(),
-      lat: yup.number().required(),
+      place: yup.string().required("Please select address"),
+      lng: yup.number().required("Please select address"),
+      lat: yup.number().required("Please select address"),
     }),
   }),
 });
@@ -84,8 +61,10 @@ export const SecondStepValidator = yup.object().shape({
 export const ThirdStepValidator = yup.object().shape({
   details: yup
     .string()
-    .min(20, "Must be at least 20 Characters")
-    .required("This field is required"),
+    .strict(true)
+    .required("This field is required")
+    .min(20, "Must be at least 20 Characters"),
+
   files: yup.array(
     yup.object().shape({
       file: yup.string().nullable(true),
@@ -93,22 +72,12 @@ export const ThirdStepValidator = yup.object().shape({
       url: yup.string().nullable(true),
     })
   ),
-  // .of(
-  // yup
-  //   .mixed()
-  //   .test("fileSize", "File must be less than 5MB", (value) => {
-  //     return value && value.size <= maxSize;
-  //   })
-  //   .test("fileType", "File is not an image", (value) => {
-  //     return value && allowedFileTypes.includes(value.type);
-  //   })
-  // ),
 });
 
 export const LastStepValidator = yup.object().shape({
   budget: yup
     .number()
+    .required("This field is required")
     .min(5000, "Budget cannot be less than 5000")
-    .max(1000000, "Budget cannot be more  than 1000,000")
-    .required("This field is required"),
+    .max(1000000, "Budget cannot be more  than 1,000,000"),
 });

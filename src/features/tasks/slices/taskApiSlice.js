@@ -4,93 +4,133 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../../app/apiSlice";
-import { store } from "../../../app/Store";
 
-import { setPageInfo } from "../../pagination/paginate";
-
-var apiKey = "jv-QDg.oU-NBw:Oi8XM3YqxkmjlOL_S5QDt8JnyMAjtgv5aS9mUY58Ppw";
-var url =
-  "https://realtime.ably.io/event-stream?channels=tasks&v=1.2&key=" + apiKey;
-var eventSource = new EventSource(url);
-
-eventSource.onmessage = function (event) {
-  var message = JSON.parse(event.data);
-  console.log("Message: " + message.name + " - " + message.data);
-};
-
-export const tasksAdapter = createEntityAdapter({
-  //   Sort tasks according by most recent based on date created
-
-  selectId: (task) => task._id,
+const tasksAdapter = createEntityAdapter({
+  selectId: (task) => task.id,
+  sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
 });
 
-// unpopulated initial  state of adapter
-export const initialState = tasksAdapter.getInitialState({
+const initialState = tasksAdapter.getInitialState({
   pageData: {},
   newCount: 0,
 });
 
-// EndPoints injected to our api for everything tasks
-export const tasksApiCalls = apiSlice.injectEndpoints({
+const taskSlice = createSlice({
+  name: "tasks",
+  initialState: initialState,
+  reducers: {
+    addTask: (state, action) => {
+      const task = JSON.parse(action.payload);
+      console.log(task);
+      state = {
+        ...state,
+        ids: state.ids.unshift(task._id),
+        entities: { [task._id]: task, ...state.entities },
+        newCount: state.newCount + 1,
+      };
+    },
+
+    clearCount: (state, action) => {
+      state = initialState;
+    },
+  },
+});
+
+const tasksApiCalls = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // Gets everything associated with the baseUrl/tasks Endpoint
     getTasks: builder.query({
       query: (query) => {
+        const filterParams = JSON.stringify(query);
         return {
-          url: `tasks`,
+          url: "tasks",
           method: "GET",
           params: {
-            ...query,
+            filterParams,
           },
+          // skipToken: true,
         };
       },
-
-      transformResponse: (responseData) => {
-        // console.log(responseData);
-        const { tasks, meta } = responseData.data;
-
-        const loadedtasks = tasks.map((task) => {
+      transformResponse: (response) => {
+        const { meta, tasks } = response.data;
+        const loadedTasks = tasks.map((task) => {
           task.id = task._id;
           return task;
         });
-
         return tasksAdapter.setAll(
-          { ...initialState, pageData: meta, newCount: 0 },
-          loadedtasks
+          { ...initialState, pageData: meta, newCount: 3 },
+          loadedTasks
         );
-        // tasksAdapter.setAll(initialState, loadedtasks);
       },
+      providesTags: ["tasks"],
+      //   async onCacheEntryAdded(
+      //     arg,
+      //     { getState, cacheDataLoaded, cacheEntryRemoved, updateCachedData }
+      //   ) {
+      //     try {
+      //       await cacheDataLoaded;
 
-      async onCacheEntryAdded(
-        arg,
-        { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
-      ) {
-        const eventSource = new EventSource(url);
+      //       console.log(getState());
 
-        try {
-          await cacheDataLoaded;
+      //       dispatch(getState())
 
-          eventSource.onmessage = function (event) {
-            var message = JSON.parse(event.data);
-            console.log("Message: " + message.name + " - " + message.data);
+      //       socket.on("message_received", (message) => {
+      //         message?.chat._id === arg
+      //           ? updateCachedData((draft) => {
+      //               chatAdapter.upsertOne(draft, message);
+      //             })
+      //           : null;
+      //       });
+      //     } catch {}
 
-            updateCachedData((draft) => {
-              draft.newCount += 1;
-            });
-          };
-        } catch {
-          console.log("error");
-        }
+      //     await cacheEntryRemoved;
+      //   },
+    }),
 
-        await cacheEntryRemoved;
-        eventSource.close();
+    getUserTasks: builder.query({
+      query: (userId) => {
+        return {
+          url: `tasks/user/?${userId}`,
+          method: "GET",
+          params: {
+            filterParams,
+          },
+          // skipToken: true,
+        };
       },
+      transformResponse: (response) => {
+        const { meta, tasks } = response.data;
+        const loadedTasks = tasks.map((task) => {
+          task.id = task._id;
+          return task;
+        });
+        return tasksAdapter.setAll(
+          { ...initialState, pageData: meta, newCount: 3 },
+          loadedTasks
+        );
+      },
+      providesTags: ["tasks"],
+      //   async onCacheEntryAdded(
+      //     arg,
+      //     { getState, cacheDataLoaded, cacheEntryRemoved, updateCachedData }
+      //   ) {
+      //     try {
+      //       await cacheDataLoaded;
 
-      // Use response to granulate lookup tags for caching and invalidation
-      providesTag: (result, error, arg) => [
-        { type: "Task", id: "id" },
-        ...result.ids.map((id) => ({ type: "Task", id })),
-      ],
+      //       console.log(getState());
+
+      //       dispatch(getState())
+
+      //       socket.on("message_received", (message) => {
+      //         message?.chat._id === arg
+      //           ? updateCachedData((draft) => {
+      //               chatAdapter.upsertOne(draft, message);
+      //             })
+      //           : null;
+      //       });
+      //     } catch {}
+
+      //     await cacheEntryRemoved;
+      //   },
     }),
 
     //Get all tasks by an Individual task
@@ -126,7 +166,7 @@ export const tasksApiCalls = apiSlice.injectEndpoints({
         body: {
           fields: initialTask,
         },
-        invalidatesTags: (result, error, arg) => [{ type: "Task", id: arg }],
+        invalidatesTags: (result, error, arg) => ["POST"],
       }),
     }),
 
@@ -181,3 +221,11 @@ export const {
   selectById: selectTaskById,
   selectIds: selectTaskIds,
 } = tasksAdapter.getSelectors((state) => state.tasks ?? initialState);
+
+export const selectStreamedTasks = (state) => state.tasks;
+
+console.log(selectStreamedTasks);
+
+export const { clearCount, addTask } = taskSlice.actions;
+
+export default taskSlice.reducer;

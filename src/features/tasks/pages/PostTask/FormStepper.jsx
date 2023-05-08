@@ -24,6 +24,7 @@ export const FormikStepper = ({
   const location = useLocation();
 
   const { isLoggedIn: userLoggedIn } = useAuth();
+
   const navigate = useNavigate();
 
   const childrenArray = React.Children.toArray(children);
@@ -35,10 +36,16 @@ export const FormikStepper = ({
   };
 
   const handleSubmit = async (values) => {
-    values.taskEarliestDone = new Date(values.date[0].startDate);
-    values.taskDeadline = new Date(values.date[0].endDate);
+    if (values.date && values.date.onDate !== "") {
+      values.taskEarliestDone = new Date(values.date?.onDate);
+    } else {
+      values.taskDeadline = new Date(values.date.beforeDate);
+    }
+
     delete values["date"];
     delete values["forsook"];
+
+    console.log(values);
 
     //page is protected, user has to login to post
     navigate("/create/post-task-success", {
@@ -46,26 +53,41 @@ export const FormikStepper = ({
     });
   };
 
+  // const onNext = () => {
+  //   console.log("You");
+  //   setCurrentStep((prev) => prev + 1);
+  //   saveTaskLocal(false);
+  //   setStep((prev) => prev + 1);
+  // };
+
   return (
     <Formik
       enableReinitialize={true}
       initialValues={initialData}
+      validateOnMount={true}
+      validateOnBlur
       validationSchema={currentChild.props.validationSchema}
       {...props}
-      onSubmit={(values) => {
+      onSubmit={(values, formikBag) => {
+        // console.log(bag);
         if (isLastStep()) {
           handleSubmit(values);
         } else {
+          setCurrentStep((prev) => prev + 1);
+          saveTaskLocal(false);
           setStep((prev) => prev + 1);
+          formikBag.setTouched({});
         }
       }}
     >
       {({ isValid, values }) => {
         return (
-          <Form autoComplete="off" className="relative">
-            <div>{React.cloneElement(currentChild, { values })}</div>
+          <Form autoComplete="off" className="relative  flex flex-col ">
+            <div className=" px-4 min-h-screen pt-16 ">
+              {React.cloneElement(currentChild, { values })}
+            </div>
 
-            <div className="fixed   bottom-0  w-[35%] flex space-x-6 ">
+            <div className="sticky w-full bottom-0 py-2  flex space-x-6 bg-white z-20 px-4">
               {step <= 0 ? null : (
                 <button
                   disabled={uploading}
@@ -75,7 +97,7 @@ export const FormikStepper = ({
                     setCurrentStep((prev) => prev - 1);
                   }}
                   type="button"
-                  className="mt-6 bg-gray-200 hover:bg-gray-300  rounded-full text-purple-800 text-sm text-[18px] mb-4 px-8 py-4 right-0 max-w-1/3 w-full float-right font-semibold disabled:bg-gradient-to-r disabled:from-blue-200 disabled:via-purple-200 disabled:to-blue-200"
+                  className=" bg-slate-100 hover:bg-slate-200/70  rounded-full text-brand-text  text-[1rem]  px-8 py-3 lg:py-4 right-0 max-w-1/3 w-full float-right font-semibold "
                 >
                   Previous
                 </button>
@@ -83,11 +105,8 @@ export const FormikStepper = ({
               {showDraftForm ? null : (
                 <button
                   disabled={!isValid || uploading}
-                  onClick={() => {
-                    setCurrentStep((prev) => prev + 1);
-                    saveTaskLocal(false);
-                  }}
-                  className="mt-6  bg-purple-800 hover:bg-purple-900  rounded-full text-white text-sm text-[18px] mb-4 px-8 py-4 right-0 max-w-1/3 w-full float-right font-medium disabled:bg-gray-200 disabled:text-gray-800 disabled:hover:bg-gray-300"
+                  // onClick={!isLastStep() ? onNext : null}
+                  className="  bg-brand-light  rounded-full text-white  px-8 py-3 lg:py-4  text-[1rem] right-0 w-full float-right font-semibold disabled:bg-slate-100 disabled:text-brand-text-deep disabled:hover:bg-slate-200"
                   type="submit"
                 >
                   {isLastStep() ? "Post Task " : "Continue"}

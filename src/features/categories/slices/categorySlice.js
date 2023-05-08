@@ -1,28 +1,20 @@
-import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
-import { apiSlice } from "../../../app/apiSlice";
+import { createSlice } from "@reduxjs/toolkit";
 
-const categoryAdapter = createEntityAdapter({
-  selectId: (category) => category._id,
-});
-const initialState = categoryAdapter.getInitialState();
+const initialState = {
+  categories: [],
+};
 
-const categoryApiSlice = apiSlice.injectEndpoints({
-  endpoints: (builder) => ({
-    getTopCategories: builder.query({
-      query: () => `/stats/top-categories`,
-      transformResponse: (responseData) => {
-        const categoryStat = responseData.map((response) => {
-          response.id = response._id;
-          return response;
-        });
-        return categoryAdapter.setAll(initialState, categoryStat);
-      },
-      providesTag: (result, error, arg) => [
-        { type: "Category", id: "id" },
-        ...result.ids.map((id) => ({ type: "Category", id })),
-      ],
-    }),
-  }),
+const categorySlice = createSlice({
+  name: "categories",
+  initialState,
+  reducers: {
+    setCategories: (state, action) => {
+      state.categories = action.payload;
+    },
+  },
 });
 
-export const { useGetTopCategoriesQuery } = categoryApiSlice;
+export const allTaskCategories = (state) => state.category.categories;
+
+export const { setCategories } = categorySlice.actions;
+export default categorySlice.reducer;

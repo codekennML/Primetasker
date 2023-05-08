@@ -11,7 +11,7 @@ const ChatSender = () => {
             09:00
           </p>
         </div>
-        <div class="bg-neutral-100 text-gray-600 py-4 px-3 rounded-xl rounded-tl-none w-[450px]">
+        <div class="bg-neutral-100 text-gray-600 py-4 px-3 text-[.8rem] rounded-xl rounded-tl-none w-[350px] font-medium">
           <p>
             Hi there. How are you ? Lorem ipsum, dolor sit amet consectetur
             adipisicing elit. Libero odio, lloloolkiol

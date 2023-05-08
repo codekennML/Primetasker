@@ -32,14 +32,14 @@ const DescCards = ({ Data }) => {
               <div class="inline-flex flex-row font-sans items-center space-x-2 ">
                 <p class="inline-flex items-center text-gray-500 space-x-1">
                   <span>
-                    <FaArrowRight class="-rotate-45 text-xs text-green-600 " />
+                    <FaArrowRight class="-rotate-45 text-xs text-brand-light " />
                   </span>
                   <span class="font-medium">16.5% </span>
                 </p>
 
                 <p class="text-[15px]  inline-flex items-center text-xs text-gray-600 font-medium space-x-1">
                   <span>
-                    <FaArrowUp class="text-xs text-green-600 " />
+                    <FaArrowUp class="text-xs text-brand-light " />
                   </span>
                   <span>&#x20A6;89k today</span>
                 </p>
@@ -68,14 +68,14 @@ const DescCards = ({ Data }) => {
               <div class="inline-flex flex-row font-sans items-center space-x-2 ">
                 <p class="inline-flex items-center text-gray-500 space-x-1">
                   <span>
-                    <FaArrowRight class="-rotate-45 text-xs text-green-600 " />
+                    <FaArrowRight class="-rotate-45 text-xs text-brand-light " />
                   </span>
                   <span class="font-medium">16.5% </span>
                 </p>
 
                 <p class="text-[15px]  inline-flex items-center text-xs text-gray-600 font-medium space-x-1">
                   <span>
-                    <FaArrowUp class="text-xs text-green-600 " />
+                    <FaArrowUp class="text-xs text-brand-light " />
                   </span>
                   <span>&#x20A6;89k today</span>
                 </p>
@@ -109,14 +109,14 @@ const DescCards = ({ Data }) => {
               <div class="inline-flex flex-row font-sans items-center space-x-2 ">
                 <p class="inline-flex items-center text-gray-500 space-x-1">
                   <span>
-                    <FaArrowRight class="-rotate-45 text-xs text-green-600 " />
+                    <FaArrowRight class="-rotate-45 text-xs text-brand-light " />
                   </span>
                   <span class="font-medium">16.5% </span>
                 </p>
 
                 <p class="text-[15px]  inline-flex items-center text-xs text-gray-600 font-medium space-x-1">
                   <span>
-                    <FaArrowUp class="text-xs text-green-600 " />
+                    <FaArrowUp class="text-xs text-brand-light " />
                   </span>
                   <span>15 today</span>
                 </p>
@@ -145,14 +145,14 @@ const DescCards = ({ Data }) => {
               <div class="inline-flex flex-row font-sans items-center space-x-2 ">
                 <p class="inline-flex items-center text-gray-500 space-x-1">
                   <span>
-                    <FaArrowRight class="-rotate-45 text-xs text-green-600 " />
+                    <FaArrowRight class="-rotate-45 text-xs text-brand-light " />
                   </span>
                   <span class="font-medium">16.5% </span>
                 </p>
 
                 <p class="text-[15px]  inline-flex items-center text-xs text-gray-600 font-medium space-x-1">
                   <span>
-                    <FaArrowUp class="text-xs text-green-600 " />
+                    <FaArrowUp class="text-xs text-brand-light " />
                   </span>
                   <span>2 today</span>
                 </p>

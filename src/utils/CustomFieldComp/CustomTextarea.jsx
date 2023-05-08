@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { useField } from "formik";
 
 const CustomTextarea = ({
@@ -6,15 +6,20 @@ const CustomTextarea = ({
   placeholder,
   labelStyle,
   inputStyle,
-
   ...props
 }) => {
-  const [field, meta, helpers] = useField(props);
+  const [field, meta, helpers] = useField(props.name);
+  console.log(props);
+
+  console.log(field, meta);
+
+  const invalid = meta.error && meta.touched;
+  console.log(meta);
 
   return (
     <div>
       <label
-        htmlFor="message"
+        htmlFor={props.name}
         className={`${
           labelStyle
             ? labelStyle
@@ -26,11 +31,16 @@ const CustomTextarea = ({
       <textarea
         {...field}
         {...props}
-        className={` ${
-          inputStyle ? inputStyle : null
-        } block p-2.5 w-full text-sm  bg-gray-50 rounded-lg border focus:outline-violet-500 border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+        className={` ${inputStyle ? inputStyle : null} p-3 rounded-lg  ${
+          invalid
+            ? "border-2 border-red-500 focus:outline-red-500"
+            : " focus:outline-brand-light "
+        }`}
         placeholder={placeholder}
-      ></textarea>
+      />
+      {invalid && (
+        <div className="text-red-600 text-xs  py-2"> {meta.error}</div>
+      )}
     </div>
   );
 };
