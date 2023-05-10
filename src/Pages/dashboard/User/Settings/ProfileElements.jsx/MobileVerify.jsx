@@ -7,13 +7,9 @@ const MobileVerify = () => {
       {(values) => {
         return (
           <Form className="max-w-lg">
-            {/* <div className="flex justify-between items-center space-x-3  py-3 px-4 rounded"> */}
-            {/* <div className="flex items-center space-x-3  "> */}
             <h2 className="text-brand-text text-[.95rem] font-semibold">
               Verify your phone number{" "}
             </h2>
-            {/* </div> */}
-            {/* </div> */}
 
             <div className="  ">
               <div className="py-3     rounded-lg">

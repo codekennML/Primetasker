@@ -65,7 +65,7 @@ const CustomText = ({
             className={
               props.adornment
                 ? props.adornment
-                : `text-[18px] text-violet-600  absolute top-[40%] right-[5%] `
+                : `text-[18px] text-brand-light  absolute top-[40%] right-[5%] `
             }
           >
             {passwordVisible ? <AiOutlineEyeInvisible /> : imgAfter}

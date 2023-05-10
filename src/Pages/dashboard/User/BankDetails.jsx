@@ -27,7 +27,7 @@ const BankDetails = () => {
                     type="text"
                     name="bankName"
                     value={values.bankName}
-                    inputstyle="py-3 border-0 font-medium  rounded-lg placeholder:text-[15px] placeholder:text-gray-500 focus:outline-green-400 text-base text-gray-600 bg-slate-200 indent-1 w-full rounded auto my-2 "
+                    inputstyle="py-3 border-0 font-medium  rounded-lg placeholder:text-[15px] placeholder:text-gray-500 focus:outline-brand-light text-base text-gray-600 bg-brand-secondary  indent-1 w-full rounded auto my-2 "
                     placeholder="Bank Name"
                     adornment="absolute top-6 left-2 text-[15px] font-bold text-gray-600 "
                   />
@@ -39,7 +39,7 @@ const BankDetails = () => {
                     type="text"
                     name="accountName"
                     value={values.accountName}
-                    inputstyle="py-3 border-0 font-medium  rounded-lg placeholder:text-[15px] placeholder:text-gray-500 focus:outline-green-400 text-base text-gray-600 bg-slate-200 indent-1 w-full rounded auto my-2"
+                    inputstyle="py-3 border-0 font-medium  rounded-lg placeholder:text-[15px] placeholder:text-gray-500 focus:outline-brand-light text-base text-gray-600 bg-brand-secondary  indent-1 w-full rounded auto my-2"
                     placeholder="Account Name"
                     adornment="absolute top-6 left-2 text-[15px] font-bold text-gray-600 "
                   />
@@ -51,7 +51,7 @@ const BankDetails = () => {
                     type="text"
                     name="accountNumber"
                     value={values.accountNumber}
-                    inputstyle="py-3 border-0 font-medium  rounded-lg placeholder:text-[15px] placeholder:text-gray-500 focus:outline-green-400 text-base text-gray-600 bg-slate-200 indent-1 w-full rounded auto my-2 "
+                    inputstyle="py-3 border-0 font-medium  rounded-lg placeholder:text-[15px] placeholder:text-gray-500 focus:outline-brand-light text-base text-gray-600 bg-brand-secondary indent-1 w-full rounded auto my-2 "
                     placeholder="Account Number"
                     adornment="absolute top-6 left-2 text-[15px] font-bold text-gray-600 "
                   />

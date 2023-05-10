@@ -1,4 +1,11 @@
-import React, { useRef, useState, useEffect, useId, useCallback } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useId,
+  useCallback,
+  useMemo,
+} from "react";
 import {
   AiOutlineFlag,
   AiOutlineEnvironment,
@@ -37,6 +44,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { MdAlarmOn, MdNewLabel, MdOutlineAddTask } from "react-icons/md";
 import { useMatch } from "react-router-dom";
+import ManageTaskAlert from "./ManageTaskAlert";
 
 const TaskMainDisplay = () => {
   const [
@@ -51,7 +59,7 @@ const TaskMainDisplay = () => {
 
   const location = useLocation();
   const urlId = location?.pathname.split("-").slice(-1)[0];
-  console.log(urlId);
+  // console.log(urlId);
 
   // console.log(urlId);
   const [showMap, setShowMap] = useState(true);
@@ -100,7 +108,7 @@ const TaskMainDisplay = () => {
 
   // let text = task?.description;
 
-  const { userLoggedIn: isLoggedIn, canMakeOffer } = useAuth();
+  const { userLoggedIn: isLoggedIn, canMakeOffer, id: userId } = useAuth();
 
   const ref = useRef();
   const dispatch = useDispatch();
@@ -287,6 +295,7 @@ const TaskMainDisplay = () => {
         className="bg-white absolute top-0 bottom-0 right-0  left-0 w-full flex px-2.5 md:px-4 lg:px-6 py-4 overflow-y-scroll z-5 lg:flex  max-h-screen  scrollbar-thin scrollbar-thumb-gray-300/30 scrollbar-track-gray-200  scrollbar-thumb-rounded-full overflow-x-hidden  scrollbar-track-rounded-full z-5 "
       >
         <div className="w-full h-full px-3 lg:w-[60%] ">
+          <ManageTaskAlert />
           <div className="flex items-center ">
             <div className="flex-1 ">
               <ul className="flex flex-row justify-between md:justify-start my-2 space-x-6 md:my-5">
@@ -510,12 +519,21 @@ const TaskMainDisplay = () => {
               </div>
             </div>
             <div className="mx-3">
-              <button
-                onClick={handleMakeOffer}
-                className="text-center bg-green-500 hover:bg-brand-light rounded-full my-3  text-white font-bold  text-[16px]  py-3  w-full"
-              >
-                Make an Offer
-              </button>
+              {task.creator?._id === userId ? (
+                <button
+                  onClick={handleMakeOffer}
+                  className="text-center bg-green-500 hover:bg-brand-light rounded-full my-3  text-white font-bold  text-[16px]  py-3  w-full"
+                >
+                  Cancel task
+                </button>
+              ) : (
+                <button
+                  onClick={handleMakeOffer}
+                  className="text-center bg-green-500 hover:bg-brand-light rounded-full my-3  text-white font-bold  text-[16px]  py-3  w-full"
+                >
+                  Make an Offer
+                </button>
+              )}
             </div>
           </article>
 
@@ -672,12 +690,13 @@ const TaskMainDisplay = () => {
                   )}
                 </div>
                 <div className="mx-3">
-                  <button
+                  {/* <button
                     onClick={handleMakeOffer}
                     className="text-center bg-brand-light/90 transition text-white hover:bg-brand-light hover:text-white rounded my-3   font-bold  text-[16px]  py-3  w-full"
                   >
                     Make an Offer
-                  </button>
+                  </button> */}
+                  {() => renderButton(task)}
                 </div>
               </article>
 

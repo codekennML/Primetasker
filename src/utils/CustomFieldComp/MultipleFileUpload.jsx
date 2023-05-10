@@ -19,8 +19,9 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
 
   const fileFormat = {
     "image/png": [".png", ".jpg", ".jpeg"],
+    "application/pdf": [".pdf"],
   };
-  console.log(props.acceptableFileFormats || fileFormat);
+
   const [file, setFile] = useState();
 
   const openDropzoneRef = useRef();
@@ -44,8 +45,16 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
 
   const { setValue } = helpers;
 
-  const { cloudAddress, setCloudAddress, preview, setPreview, setProgress } =
-    props;
+  const {
+    cloudAddress,
+    setCloudAddress,
+    preview,
+    setPreview,
+    setProgress,
+    acceptableFileFormats,
+  } = props;
+
+  console.log(cloudAddress);
 
   const maxSize = 5242880;
 
@@ -55,9 +64,11 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
       dispatch(uploading);
 
       //Create Preview for dropped file
+      const fileType = file.type.split("/")[0];
 
       const fileWithPreview = Object.assign(file, {
         preview: URL.createObjectURL(file),
+        fileType: fileType,
       });
       setPreview((prev) => {
         return [...prev, fileWithPreview];
@@ -66,6 +77,7 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
       let filetoUpload = [];
 
       const { name } = file;
+
       const data = new FormData();
 
       data.append("file", file);
@@ -73,7 +85,7 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
       filetoUpload.push(data);
       filetoUpload.push(name);
 
-      Upload(filetoUpload, name);
+      Upload(filetoUpload, name, fileType);
     });
 
     rejectedFiles.map(({ errors }) => {
@@ -90,7 +102,7 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
     });
   };
 
-  async function Upload(fileToUpload, name) {
+  async function Upload(fileToUpload, name, type) {
     const response = await addNewFile(fileToUpload);
 
     setProgress((prev) => {
@@ -98,12 +110,15 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
     });
 
     const assetData = JSON.parse(response.data.response);
+    console.log(assetData);
 
     setCloudAddress((prev) => {
       return [
         ...prev,
         {
           file: name,
+          tag: assetData.etag,
+          fileType: type,
           url: assetData.secure_url,
         },
       ];
@@ -112,7 +127,7 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
   }
 
   const { getRootProps, getInputProps, acceptedFiles, open } = useDropzone({
-    accept: props.acceptableFileFormats || fileFormat,
+    accept: acceptableFileFormats ?? fileFormat,
     noDrag: true,
     onDrop,
     minSize: 0,

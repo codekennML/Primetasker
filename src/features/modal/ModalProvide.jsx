@@ -99,7 +99,7 @@ const ModalProvider = ({ children }) => {
               opacity: currentModal ? 1 : 0,
               transition: { delay: 0, duration: 0.6 },
             }}
-            className="rounded-lg bg-white min-h-[50vh] max-h-screen min-w-[30vw]  max-w-screen-md "
+            className=" md:rounded-lg bg-white h-screen md:max-h-[80vh] lg:max-h-[80vh] xl:max-h-[75vh] w-screen md:w-[60vw] lg:w-[40vw] xl:w-[30vw]  min-w-[30vw]  max-w-screen-md overflow-hidden"
           >
             {content}
           </motion.div>

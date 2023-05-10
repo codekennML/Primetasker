@@ -19,25 +19,19 @@ const StatCard = ({
   ];
   return (
     <div
-      className="tab cards border-2 
-  rounded-xl py-4 bg-white dark:bg-gray-800 dark:border-gray-600  p-2 text-sm text-gray-600  px-3"
+      className="
+  rounded-xl py-4 bg-brand-secondary dark:bg-gray-800 dark:border-gray-200  p-2 text-sm text-gray-600  px-3"
     >
       <article className="flex flex-row justify-between items-center text-gray-500  ">
-        <div className="  text-brand-light p-2 rounded-xl ">
-          {Svg ? Svg : ""}
-        </div>
-
         <div className="flex-1 w-full px-2">
           <article className="flex items-center justify-between">
-            <h3 className="font-semibold text-lg text-brand-text-deep dark:text-gray-400">
+            <h3 className="font-semibold text-lg text-brand-text dark:text-gray-400 text-[1.2rem]">
               {title}
             </h3>
 
             <Menu as="div" className="relative   ">
-              <Menu.Button className="p-2  rounded-full text-purple-800">
-                {/* <button > */}
+              <Menu.Button className="p-2  rounded-full text-brand-text">
                 <FaEllipsisV />
-                {/* </button> */}
               </Menu.Button>
               <Transition
                 as={Fragment}
@@ -62,7 +56,7 @@ const StatCard = ({
                         <button
                           className={`w-full  px-3 py-1 text-sm font-medium ${
                             active
-                              ? "bg-violet-100 text-gray-600 text-left "
+                              ? "bg-brand-secondary text-gray-600 text-left "
                               : "bg-white text-black text-left"
                           }`}
                         >

@@ -74,7 +74,6 @@ import Showcase from "./Pages/dashboard/User/Showcase";
 import Alerts from "./Pages/dashboard/User/Alerts";
 import CreateAlert from "./Pages/dashboard/User/CreateAlert";
 
-const lib = ["places"];
 // AIzaSyDdYME_PrW_WGGcJOdDpGLym58HFmFpdBw"
 // AIzaSyDdYME_PrW_WGGcJOdDpGLym58HFmFpdBw
 //AIzaSyDdYME_PrW_WGGcJOdDpGLym58HFmFpdBw
@@ -142,7 +141,7 @@ function App() {
                   <Route index element={<Create />} />
                   <Route path="create-alert" element={<CreateAlert />} />
                 </Route>
-                <Route path="verify" element={<Verify />} />
+                {/* <Route path="verify" element={<Verify />} /> */}
                 <Route path="messages" element={<Notes />} />
                 <Route path="messages" element={<Notes />} />
                 <Route path="transactions" element={<Transaction />} />
@@ -154,7 +153,6 @@ function App() {
                   <Route path="my-alert-settings" element={<Alerts />} />
                 </Route>
               </Route>
-
               <Route path="my-tasks/" element={<MyTasksInfiniteScroll />}>
                 <Route path=":id" element={<MyTasksView />} />
               </Route>

@@ -18,6 +18,8 @@ import Nav from "../../../components/Navbar";
 const Login = () => {
   const idRef = useRef;
 
+  const navigate = useNavigate();
+
   const location = useLocation();
   console.log(location);
   const redirectUri = location?.state?.redirectUri;
@@ -37,7 +39,6 @@ const Login = () => {
     };
   }, []);
 
-  const navigate = useNavigate();
   const [persist, setPersist] = usePersist();
   const [dispatchLogin, { isLoading, isSuccess, isError, error }] =
     useDispatchLoginMutation();
@@ -84,7 +85,7 @@ const Login = () => {
   return (
     <section>
       <section className="flex  justify-center items-center relative">
-        <div className="max-w-lg lg:max-w-lg w-full   lg:px-12 pt-4 pb-2 rounded-lg ">
+        <div className="max-w-md lg:max-w-md w-full px-3  h-full lg:px-12 pt-4 pb-2  border bg-white">
           <div>
             <div className="flex flex-wrap items-center justify-center mb-6">
               <div className="w-auto ">
@@ -114,21 +115,21 @@ const Login = () => {
               {(values, actions) => (
                 <Form>
                   <CustomText
-                    label="E-mail Address"
+                    // label="E-mail Address"
                     labelstyle={`font-bold lg:font-normal lg:text-[15px]  text-gray-600 py-3 `}
                     name="email"
                     type="text"
-                    placeholder="Enter your email address"
-                    inputstyle="text-[14px] py-3.5  my-2.5  border-2 border-violet-200/90 placeholder:text-[12px] lg:placeholder:text-[15px] placeholder:text-gray-600 focus:outline-violet-500 lg:text-base text-gray-600 bg-white indent-2 w-full rounded"
+                    placeholder="Email address"
+                    inputstyle="text-[14px] py-3  my-2.5  bg-brand-secondary placeholder:text-[12px] lg:placeholder:text-[15px] placeholder:text-gray-600 focus:outline-brand-light lg:text-base text-gray-600 bg-white indent-2 w-full rounded"
                   />
 
                   <CustomText
-                    label="Password"
+                    // label="Password"
                     labelstyle={`font-bold lg:font-normal  lg:text-[15px] lg:text-base  text-gray-600 py-3 `}
                     name="password"
                     type="password"
                     placeholder="Password (8+ characters)"
-                    inputstyle="text-[14px] py-3 my-2.5 indent-2 placeholder:text-gray-500  border-2 border-violet-200/90 placeholder:text-[12px] lg:placeholder:text-[15px] focus:outline-violet-500 lg:text-base w-full rounded"
+                    inputstyle="text-[14px] py-3 my-2.5 indent-2 placeholder:text-gray-500  bg-brand-secondary   placeholder:text-[12px] lg:placeholder:text-[15px] focus:outline-brand-lightlg:text-base w-full rounded"
                     imgAfter={<AiOutlineEye />}
                   />
 
@@ -142,12 +143,12 @@ const Login = () => {
                       }}
                       name="rememberUser"
                       label={`Remember Me`}
-                      className=" mt-0 accent-violet-700 w-3 h-3 lg:w-4 lg:h-4 "
+                      className=" mt-0 accent-brand-light w-3 h-3 lg:w-4 lg:h-4 "
                     />
 
                     <div className="flex-1 ">
                       <Link
-                        className="hidden lg:block text-violet-800 text-[12px] lg:text-[14px] font-medium cursor-pointer float-right "
+                        className="hidden lg:block text-brand-text text-[12px] text-primary font-medium cursor-pointer float-right "
                         to="/forgot-password"
                       >
                         Forgot Password?
@@ -156,7 +157,7 @@ const Login = () => {
                   </div>
 
                   <button
-                    className="bg-purple-800 hover:bg-purple-900 mt-6 rounded  text-white text-sm text-[17px] lg:text-[18px] mb-4 px-8 py-3 lg:py-4 w-full  font-semibold"
+                    className="bg-brand-light/90 hover:bg-brand-light mt-12 rounded  text-white text-sm text-[1rem] lg:text-[1rem] mb-4 px-8 py-2.5 lg:py-3 w-full  font-semibold "
                     type="submit"
                   >
                     Login
@@ -169,7 +170,7 @@ const Login = () => {
           <div className="text-gray-500 text-[12px] lg:text-[13px] font-medium text-center mt-3 ">
             <Link to="/signup">
               Don't have an account?{" "}
-              <span className="text-purple-500"> Sign up </span>
+              <span className="text-brand-text"> Sign up </span>
             </Link>
           </div>
 

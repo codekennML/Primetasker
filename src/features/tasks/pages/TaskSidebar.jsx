@@ -326,12 +326,6 @@ const TaskSidebar = () => {
         <p className="text-gray-700 text-[.85rem] md:text-[.9rem] text-center font-semibold whitespace-pre-wrap mt-6 ">
           No matching tasks was found. Try widening your search
         </p>
-        {/* <Link
-          to="/tasks"
-          className="text-primary text-white bg-brand-light/80 hover:bg-brand-light rounded-md py-2 px-4 mt-4 w-3/4 mx-auto "
-        >
-          Reset
-        </Link> */}
       </div>
     ) : null;
 
@@ -926,7 +920,7 @@ const TaskSidebar = () => {
                     <button
                       onClick={handleRefresh}
                       type="button"
-                      className=" text-white w-48 bg-green-500 font-semibold py-2 text-[.8rem]  rounded uppercase    "
+                      className=" text-white w-48 bg-brand-light font-semibold py-2 text-[.8rem]  rounded uppercase    "
                     >
                       <span>{newTaskCount} new tasks</span>
                     </button>

@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import useAuth from "../hooks/useAuth";
+import { useDispatchLogoutMutation } from "../features/auth/slices/authApiSlice";
 
 const categories = [
   {
@@ -41,6 +42,18 @@ const categories = [
 ];
 
 const Nav = () => {
+  const [dispatchLogout, { isLoading, isSuccess, isError, error }] =
+    useDispatchLogoutMutation();
+
+  const handleLogout = () => dispatchLogout();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) navigate("/");
+  }, [isSuccess, navigate]);
+  if (isLoading) return <p>Logging Out....</p>;
+  if (isError) return <>{console.log("cant logout")}</>;
+
   const { avatar, userLoggedIn: isLoggedIn } = useAuth();
   const [showNav, setShowNav] = useState(false);
   const [isScroll, setIsScroll] = useState(false);
@@ -75,9 +88,9 @@ const Nav = () => {
         <div className="w-full px-2">
           <div className="flex justify-between items-center lg:w-[70%] lg:mx-auto ">
             <div className="ml-1">
-              <Link to="/" className="cursor-pointer ">
+              {/* <Link to="/" className="cursor-pointer ">
                 <Logo />
-              </Link>
+              </Link> */}
             </div>
 
             {/* Nav links */}
