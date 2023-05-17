@@ -18,8 +18,8 @@ const TextVisibility = ({ text, files, type = "offer" }) => {
       {text ? (
         <div
           className={`relative   flex flex-col ${
-            type === "comment" ? "bg-yellow-100/10" : ""
-          }  pt-2  rounded  pl-2 text-sm   `}
+            type === "comment" ? "" : ""
+          }  pt-2  rounded   text-sm  `}
         >
           <SmoothCollapse
             expanded={isOpen}
@@ -27,7 +27,7 @@ const TextVisibility = ({ text, files, type = "offer" }) => {
             heightTransition=".5s ease"
           >
             <div className="">
-              <p className="whitespace-pre-wrap py-2 text-brand-text-deep  font-medium font-inter  text-justify px-2 text-[.8rem]  tracking-normal leading-relaxed ">
+              <p className="whitespace-pre-wrap py-2 text-brand-text-deep   font-medium font-inter  text-justify px-4 text-[.8rem]  tracking-normal leading-relaxed ">
                 {text}
               </p>
             </div>
@@ -47,7 +47,7 @@ const TextVisibility = ({ text, files, type = "offer" }) => {
             <div className="pl-2 text-left bg-transparent ">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-[.8rem] font-semibold text-brand-light"
+                className="text-[.8rem] font-semibold text-brand-light px-2"
               >
                 {text ? buttonText : null}
               </button>

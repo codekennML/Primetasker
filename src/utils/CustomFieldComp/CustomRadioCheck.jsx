@@ -72,4 +72,5 @@ function CheckIcon(props) {
     </svg>
   );
 }
-export default CustomRadio;
+
+export default React.memo(CustomRadio);

@@ -49,7 +49,6 @@ const PostTask = () => {
           value: entities[id]?.categoryId,
         })),
       ];
-      console.log(categoryArray);
 
       localStorage.setItem("categories", JSON.stringify(categoryArray));
     }

@@ -31,18 +31,6 @@ const UserSidebar = () => {
   const { username, email, status, avatar } = useAuth();
   const navigate = useNavigate();
 
-  console.log(avatar);
-
-  const [dispatchLogout, { isLoading, isSuccess, isError, error }] =
-    useDispatchLogoutMutation();
-  const handleLogout = () => dispatchLogout();
-
-  useEffect(() => {
-    if (isSuccess) navigate("/");
-  }, [isSuccess, navigate]);
-  if (isLoading) return <p>Logging Out....</p>;
-  if (isError) return <>{console.log("cant logout")}</>;
-
   const [selected, setSelected] = useState(undefined);
 
   const dashLinks = [
@@ -130,7 +118,6 @@ const UserSidebar = () => {
   // }
 
   const renderLink = (items, isChild = false) => {
-    console.log(isChild);
     const content = (
       <Link
         to={items.link}

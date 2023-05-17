@@ -29,7 +29,7 @@ const Example = ({
   };
 
   const prefix = (name) => {
-    console.log(name);
+    // console.log(name);
     switch (name) {
       case "onDate":
         return "On";

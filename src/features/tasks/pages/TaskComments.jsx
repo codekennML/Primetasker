@@ -1,22 +1,45 @@
 import { formatDistance } from "date-fns";
-import React, { useEffect, useRef, useState } from "react";
-import { AiFillStar } from "react-icons/ai";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { AiFillCheckCircle, AiFillStar } from "react-icons/ai";
 import { FaImage, FaPaperclip, FaRegFlag } from "react-icons/fa";
 import { HiReply } from "react-icons/hi";
-import { motion, AnimatePresence } from "framer-motion";
+
 import { useDispatch } from "react-redux";
 import { showModal } from "../../modal/modalSlice";
 import useAuth from "../../../hooks/useAuth";
 import TextVisibility from "../../../components/TextVisibility";
 import Skeleton from "react-loading-skeleton";
+import Button from "../../../ui/Button";
+import { useAssignTaskMutation } from "../slices/taskApiSlice";
 
-const TaskComments = ({ comment, type = "" }) => {
+const TaskComments = ({ comment, creator, status, type = "", assigneeId }) => {
+  console.log(comment);
   const { id: userId, userLoggedIn: isLoggedIn } = useAuth();
   const dispatch = useDispatch();
 
   const handleReply = (comment) => {
     dispatch(showModal({ currentModal: "OfferChat", modalData: comment }));
   };
+
+  const [assignTask] = useAssignTaskMutation();
+
+  const handleAssignTask = useCallback(async () => {
+    console.log(comment._id);
+
+    const assignmentDetails = {
+      taskId: comment.taskId,
+      assigneeId: comment.createdBy._id,
+      offerId: comment._id,
+    };
+
+    try {
+      const response = await assignTask(assignmentDetails).unwrap();
+    } catch (err) {
+      console.log(err);
+    }
+  }, [creator, comment]);
+
+  console.log(comment);
 
   const handleFlag = (values) => {
     !isLoggedIn
@@ -30,40 +53,78 @@ const TaskComments = ({ comment, type = "" }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative border rounded-lg ">
       <div
-        className={` pl-3 pt-3 h-full  rounded-t-lg   flex flex-row items-center space-x-2  ${
-          type === "comment" ? "bg-gray-50" : "bg-gray-50"
+        className={` px-3 py-2 h-full  rounded-t-lg   flex flex-row items-center justify-between space-x-2 rounded-lg border-b ${
+          type === "comment" ? "bg-gray-50" : ""
         } }`}
       >
-        <div>
-          <img
-            src={comment?.createdBy?.Avatar}
-            alt=""
-            className="w-[40px] h-[40px] rounded-full object-cover object-center mb-1"
-          />
+        <div className="flex flex-row gap-x-2">
+          <div>
+            <img
+              src={comment?.createdBy?.avatar}
+              alt=""
+              className="w-[40px] h-[40px] rounded-full object-cover object-center mb-1"
+            />
+          </div>
+
+          <div className="flex flex-col items-start text-[13px] font-medium text-center ">
+            <h3 className="text-brand-text font-brand text-primary text-[.85rem]">
+              {`${
+                comment?.createdBy?.firstname
+              } ${comment.createdBy?.lastname.charAt(0)}.`}
+            </h3>
+
+            {type === "offer" ? (
+              <p className="flex items-center space-x-1 py-1">
+                <span className="text-[16px] text-yellow-500">
+                  <AiFillStar />
+                </span>
+                <span className="text-gray-800/70 font-semibold text-[.85rem]">
+                  5.0 (95){" "}
+                </span>
+              </p>
+            ) : null}
+          </div>
         </div>
 
-        <div className="flex flex-col items-start text-[13px] font-medium text-center ">
-          <h3 className="text-brand-text-deep font-semibold text-[.85rem]">
-            {`${
-              comment?.createdBy?.firstname
-            } ${comment.createdBy?.lastname.charAt(0)}.`}
-          </h3>
+        {userId === creator._id &&
+          status === "Open" &&
+          status !== "Assigned" && (
+            <div className="space-y-.5 border p-2 rounded-md bg-gray-50 ">
+              <p className="text-brand-accent px-5 text-primary">Offer</p>
+              <p className="text-primary text-[.9rem] text-center">
+                ₦ {`${comment?.offerAmount}`}
+              </p>
+            </div>
+          )}
 
-          {type === "offer" ? (
-            <p className="flex items-center space-x-1 py-1">
-              <span className="text-[16px] text-yellow-500">
-                <AiFillStar />
-              </span>
-              <span className="text-gray-800/70 font-semibold text-[.85rem]">
-                5.0 (95){" "}
-              </span>
-            </p>
-          ) : null}
-        </div>
+        {(userId === creator._id || userId === assigneeId) &&
+          status === "Assigned" &&
+          comment.createdBy._id === assigneeId && (
+            <div>
+              <p className="text-primary text-[.75rem] flex items-center px-4 py-1.5 text-brand-accent bg-green-100 rounded-full ">
+                <span>Assigned</span>
+                <span className="text-brand-accent">
+                  <AiFillCheckCircle size={15} />
+                </span>
+              </p>
+            </div>
+          )}
       </div>
-      <div>
+
+      {userId === creator._id && status === "Open" && status !== "Assigned" && (
+        <div className="bg-brand-light flex justify-center ">
+          <button
+            onClick={handleAssignTask}
+            className=" text-primary text-white py-2   "
+          >
+            Assign task
+          </button>
+        </div>
+      )}
+
+      <div className="py-2">
         <TextVisibility
           text={comment?.body || comment?.offerMessage}
           files={comment?.files}

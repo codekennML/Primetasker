@@ -45,6 +45,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { MdAlarmOn, MdNewLabel, MdOutlineAddTask } from "react-icons/md";
 import { useMatch } from "react-router-dom";
 import ManageTaskAlert from "./ManageTaskAlert";
+import Button from "../../../ui/Button";
+import { useDeleteOfferMutation } from "../../Offers/slices/OfferApiSlice";
 
 const TaskMainDisplay = () => {
   const [
@@ -59,7 +61,7 @@ const TaskMainDisplay = () => {
 
   const location = useLocation();
   const urlId = location?.pathname.split("-").slice(-1)[0];
-  // console.log(urlId);
+  console.log(urlId);
 
   // console.log(urlId);
   const [showMap, setShowMap] = useState(true);
@@ -88,6 +90,7 @@ const TaskMainDisplay = () => {
   // console.log(taskId);
 
   const [clearValues, setClearValues] = useState(false);
+  const [content, setContent] = useState();
   const [task, setTask] = useState([]);
   const navigate = useNavigate();
 
@@ -105,11 +108,17 @@ const TaskMainDisplay = () => {
   const [taskComments, setTaskComments] = useState([]);
   const [taskOffers, setTaskOffers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [taskSummary, setTaskSummary] = useState();
 
   // let text = task?.description;
 
-  const { userLoggedIn: isLoggedIn, canMakeOffer, id: userId } = useAuth();
+  const {
+    userLoggedIn: isLoggedIn,
+    id: userId,
+    //  canMakeOffer,
+  } = useAuth();
 
+  let canMakeOffer = true;
   const ref = useRef();
   const dispatch = useDispatch();
 
@@ -190,7 +199,7 @@ const TaskMainDisplay = () => {
     const similarTaskPost = {
       title: task.title,
       details: task.description,
-      budget: task.budget,
+      budget: task.budget.initialBudget,
       taskType: task.taskType,
       category: task?.category,
       date: [{ startDate: new Date(), endDate: new Date() }],
@@ -221,7 +230,7 @@ const TaskMainDisplay = () => {
     } else if (isLoggedIn && !canMakeOffer) {
       dispatch(
         showModal({
-          currentModal: "TaskVerifyModal",
+          currentModal: "unverifiedModal",
           modalData: null,
         })
       );
@@ -246,6 +255,7 @@ const TaskMainDisplay = () => {
 
     // navigate("")
   };
+  console.log(taskId);
 
   const {
     data: selectedTask,
@@ -273,6 +283,131 @@ const TaskMainDisplay = () => {
     setTaskId(undefined);
   }, []);
 
+  const [deleteOffer] = useDeleteOfferMutation();
+
+  const handleManageTask = useCallback(() => {
+    dispatch(
+      showModal({
+        currentModal: "TaskVerifyModal",
+        modalData: task,
+      })
+    );
+  }, [task]);
+
+  const handleCancelTask = () => {};
+  const handleCompletedTask = () => {};
+
+  const handleDeleteOffer = async (taskId) => {
+    try {
+      await deleteOffer({ taskId }).unwrap();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (userId === task?.creator?._id && task.status === "Assigned") {
+      setTaskSummary(
+        <>
+          {" "}
+          <p>{`You have assigned ${task.assigned.assigneeFirstname} ${task.assigned.assigneeLastname} to help with this task.  `}</p>
+        </>
+      );
+    } else if (userId === task?.assigned?.assigneeId) {
+      setTaskSummary(
+        <>
+          {" "}
+          <p>{`You have been  assigned by ${task?.creator?.firstname} ${task?.creator?.lastname} to help with this task.  `}</p>
+        </>
+      );
+    } else if (
+      task.status === "Assigned" &&
+      userId === !task?.assigned?.assigneeId
+    ) {
+      setTaskSummary(
+        <>
+          {" "}
+          <p>{`${task.creator.firstname} ${task?.creator?.lastname} has assigned ${task.assigned.firstname} ${task.assigned.lastname}   to help with this task.  `}</p>
+        </>
+      );
+    } else {
+      setTaskSummary();
+    }
+  }, [task]);
+
+  useEffect(() => {
+    const hasMadeOffer = task?.offers?.find(
+      (offer) => offer?.createdBy?._id === userId
+    );
+
+    if (
+      (task.status === "Assigned" || task.status === "Appeal") &&
+      (task.creator._id === userId || task.assigned?.assigneeId === userId)
+    ) {
+      setContent(
+        <Button
+          onClick={handleManageTask}
+          text="Manage task"
+          rounded
+          primary
+          fullWidth
+          style={"py-3 bg-brand-accent"}
+        />
+      );
+    } else if (task.status === "Open" && task.creator._id === userId) {
+      setContent(
+        <Button
+          onClick={handleCancelTask}
+          text="Cancel task"
+          primary
+          rounded
+          fullWidth
+          style={"py-3 "}
+        />
+      );
+    } else if (task.status === "Completed") {
+      setContent(
+        <div className="bg-slate-200 text-primary w-full py-2.5 text-center border rounded-full text-muted cursor-pointer ">
+          {" "}
+          <p className="text-brand-accent">Completed</p>
+        </div>
+      );
+    } else if (hasMadeOffer) {
+      setContent(
+        <Button
+          onClick={() => handleDeleteOffer(task._id)}
+          text="Delete Offer"
+          primary
+          rounded
+          fullWidth
+          style={"py-3 "}
+        />
+      );
+    } else if (
+      task.status === "Assigned" &&
+      task.assigned?.assigneeId !== userId
+    ) {
+      setContent(
+        <div className="bg-slate-200 text-primary w-full py-2.5 text-center border rounded-full text-muted cursor-default ">
+          {" "}
+          <p className="text-slate-500">Assigned</p>
+        </div>
+      );
+    } else {
+      setContent(
+        <Button
+          onClick={handleMakeOffer}
+          text="Make Offer"
+          primary
+          fullWidth
+          rounded
+          style={"py-3"}
+        />
+      );
+    }
+    // return () => setContent(undefined);
+  }, [task]);
+  console.log(task);
   return (
     <SkeletonTheme baseColor="#f7f9fb">
       {/* {!taskLoading && !taskError ? ( */}
@@ -292,16 +427,27 @@ const TaskMainDisplay = () => {
             transition: { duration: 0.5 },
           },
         }}
-        className="bg-white absolute top-0 bottom-0 right-0  left-0 w-full flex px-2.5 md:px-4 lg:px-6 py-4 overflow-y-scroll z-5 lg:flex  max-h-screen  scrollbar-thin scrollbar-thumb-gray-300/30 scrollbar-track-gray-200  scrollbar-thumb-rounded-full overflow-x-hidden  scrollbar-track-rounded-full z-5 "
+        className="bg-white absolute top-0 bottom-0 right-0  left-0 w-full flex  md:px-4 lg:px-6 py-4 overflow-y-scroll z-5 lg:flex  max-h-screen  scrollbar-thin scrollbar-thumb-gray-300/30 scrollbar-track-gray-200  scrollbar-thumb-rounded-full overflow-x-hidden  scrollbar-track-rounded-full z-5 "
       >
         <div className="w-full h-full px-3 lg:w-[60%] ">
-          <ManageTaskAlert />
+          {taskSummary && (
+            <div className="bg-brand-secondary p-4 rounded-md  text-primary text-[.8rem] h-28">
+              {taskSummary}
+            </div>
+          )}
+
           <div className="flex items-center ">
             <div className="flex-1 ">
-              <ul className="flex flex-row justify-between md:justify-start my-2 space-x-6 md:my-5">
-                <li className="flex items-center justify-between w-full md:w-max">
+              <ul className="flex flex-row justify-between md:justify-start my-2 md:space-x-4 md:my-5 text-[.7rem] text-brand-text">
+                <li className="flex items-center justify-between  md:w-max">
                   {!taskLoading && !taskError ? (
-                    <button className="py-1 px-3 font-bold text-[0.9rem] rounded-full bg-brand-accent uppercase text-white">
+                    <button
+                      className={` py-1 px-3 font-bold rounded-full  uppercase ${
+                        task.status === "Assigned" || task.status === "Open"
+                          ? "bg-green-100"
+                          : ""
+                      } `}
+                    >
                       Open
                     </button>
                   ) : (
@@ -310,9 +456,12 @@ const TaskMainDisplay = () => {
                 </li>
 
                 <li className="hidden md:block">
-                  {/* <button className="py-1 px-3 font-semibold text-[0.9rem] rounded-full uppercase text-slate-400"> */}
                   {!taskLoading && !taskError ? (
-                    <button className=" text-slate-400 py-1 px-3 font-bold text-[0.9rem] rounded-full  uppercase ">
+                    <button
+                      className={` py-1 px-3 font-bold rounded-full  uppercase ${
+                        task.status === "Assigned" ? "bg-green-100" : ""
+                      } `}
+                    >
                       Assigned
                     </button>
                   ) : (
@@ -322,9 +471,12 @@ const TaskMainDisplay = () => {
                 </li>
 
                 <li className="hidden md:block">
-                  {/* <button className="py-1 px-3 font-semibold text-[0.9rem] rounded-full uppercase text-slate-400"> */}
                   {!taskLoading && !taskError ? (
-                    <button className=" text-slate-400 py-1 px-3 font-bold text-[0.9rem] rounded-full  uppercase ">
+                    <button
+                      className={` py-1 px-3 font-bold rounded-full  uppercase ${
+                        task.status === "Completed" ? "bg-green-100" : ""
+                      } `}
+                    >
                       Completed
                     </button>
                   ) : (
@@ -335,7 +487,7 @@ const TaskMainDisplay = () => {
 
                 <li className="md:hidden">
                   {!taskLoading && !taskError ? (
-                    <button className=" text-slate-400 py-1 px-3 font-medium text-[0.8rem] rounded-full brand-text-deep md:hidden ">
+                    <button className=" text-slate-400 py-1 font-medium text-[0.8rem] rounded-full brand-text-deep md:hidden ">
                       4 hours ago
                     </button>
                   ) : (
@@ -367,7 +519,7 @@ const TaskMainDisplay = () => {
                   {!taskLoading && !taskError ? "Back to tasks" : <Skeleton />}
                 </button>
 
-                <p className="text-xs font-medium text-brand-text">
+                <p className="text-xs hidden md:block font-medium text-brand-text">
                   about 4 hours ago
                 </p>
               </div>
@@ -511,30 +663,15 @@ const TaskMainDisplay = () => {
                 </p>
                 <p className="text-[40px] ">
                   {task?.budget ? (
-                    millify(Math.floor(Number(task.budget)), 2)
+                    millify(Math.floor(Number(task.budget.initialBudget)), 2)
                   ) : (
                     <Skeleton height="60px" width="40px" />
                   )}
                 </p>
               </div>
             </div>
-            <div className="mx-3">
-              {task.creator?._id === userId ? (
-                <button
-                  onClick={handleMakeOffer}
-                  className="text-center bg-green-500 hover:bg-brand-light rounded-full my-3  text-white font-bold  text-[16px]  py-3  w-full"
-                >
-                  Cancel task
-                </button>
-              ) : (
-                <button
-                  onClick={handleMakeOffer}
-                  className="text-center bg-green-500 hover:bg-brand-light rounded-full my-3  text-white font-bold  text-[16px]  py-3  w-full"
-                >
-                  Make an Offer
-                </button>
-              )}
-            </div>
+
+            <div className="mx-3">{content}</div>
           </article>
 
           {/* END OF BUDGET BAR  */}
@@ -558,7 +695,13 @@ const TaskMainDisplay = () => {
                     if (!offer.userDeleted) {
                       return (
                         <li key={idx} className="list-none">
-                          <TaskComments comment={offer} type="offer" />
+                          <TaskComments
+                            creator={task.creator}
+                            assigneeId={task?.assigned?.assigneeId}
+                            status={task.status}
+                            comment={offer}
+                            type="offer"
+                          />
                         </li>
                       );
                     }
@@ -614,14 +757,14 @@ const TaskMainDisplay = () => {
             </div>
           </article>
 
-          <div className="pb-60 ">
-            <div className="pt-6 mt-6 ml-4 space-y-8 border-t">
+          <div className="pb-40 md:pb-60 ">
+            <div className="pt-6 mt-6  border-t">
               <h3 className=" text-gray-900/80 font-bold  mb-2 text-[.7rem] uppercase">
                 {`Questions (${task?.comments?.length} )` || (
                   <Skeleton height="" />
                 )}
               </h3>
-              <p className="text-[.85rem] text-brand-text font-medium">
+              <p className="text-[.85rem] text-brand-text font-medium my-4">
                 Please don't share personal info - insurance won't apply to
                 tasks not done through Primetasker!
               </p>
@@ -667,7 +810,7 @@ const TaskMainDisplay = () => {
           <section className="w-[250px]   left-0 bottom-0 top-0 mx-auto  ">
             <article className="relative ">
               <article className=" rounded-lg  mb-5  bg-slate-100 pb-[0.5rem]  ">
-                <div className=" text-[30px]      border-b   ">
+                <div className=" text-[30px]  ">
                   <div>
                     <p className="text-[12px] uppercase text-center pt-3 pb-1 font-medium text-gray-500">
                       Task Budget
@@ -675,29 +818,16 @@ const TaskMainDisplay = () => {
                   </div>
                   {task?.budget ? (
                     <div className="flex flex-row items-center justify-center font-bold text-gray-700 ">
-                      <p className="text-[4.2rem]">
-                        {/* <Naira style={`w-8 h-8 font-medium`} /> */}
-                      </p>
-                      <p className="text-[35px] text-brand-text-deep ">
-                        {/* {millify(Math.floor(Number(task.budget)), 2)} */}
-                        {/* {task.budget} */}
-                        {/* &#8358;1M */}
-                        &#8358;100K
+                      <p className="text-[4.2rem]"></p>
+                      <p className="text-[35px] font-brand text-brand-text ">
+                        &#8358;{task.budget.initialBudget}
                       </p>
                     </div>
                   ) : (
                     <Skeleton height="30px" width="30px" />
                   )}
                 </div>
-                <div className="mx-3">
-                  {/* <button
-                    onClick={handleMakeOffer}
-                    className="text-center bg-brand-light/90 transition text-white hover:bg-brand-light hover:text-white rounded my-3   font-bold  text-[16px]  py-3  w-full"
-                  >
-                    Make an Offer
-                  </button> */}
-                  {() => renderButton(task)}
-                </div>
+                <div className="mx-3 mt-5">{content}</div>
               </article>
 
               <div className="share ">

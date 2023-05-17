@@ -16,6 +16,7 @@ import TaskVerify from "../tasks/pages/TaskVerify";
 import Pay from "../payment/Pay";
 import AlertCreate from "../../Pages/dashboard/User/AlertCreate";
 import SkillModal from "../../Pages/dashboard/User/SkillModal";
+import OfferGate from "../Offers/pages/OfferGate";
 
 const ModalProvider = ({ children }) => {
   let modalTitle;
@@ -61,7 +62,12 @@ const ModalProvider = ({ children }) => {
       break;
 
     case "TaskVerifyModal":
-      content = <TaskVerify />;
+      const taskData = modalData;
+      content = <TaskVerify task={taskData} />;
+      break;
+
+    case "unverifiedModal":
+      content = <OfferGate />;
       break;
 
     case "Pay":
@@ -86,9 +92,12 @@ const ModalProvider = ({ children }) => {
         onClick={() => dispatch(hideModal())}
         className={`${
           currentModal ? "" : "hidden"
-        } fixed z-50 w-full h-screen bg-gray-900/50 flex justify-center items-center transition-transform duration-1000 ease-in delay-700`}
+        } fixed z-50 inset-0 bg-gray-900/70  transition-transform duration-1000 ease-in delay-700 flex `}
       >
-        <div onClick={(e) => e.stopPropagation()}>
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="fixed w-full  max-w-full md:absolute  md:max-w-[500px]  z-5  md:left-1/2 md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2  "
+        >
           <motion.div
             initial={{
               y: currentModal ? 0 : -100,
@@ -99,7 +108,7 @@ const ModalProvider = ({ children }) => {
               opacity: currentModal ? 1 : 0,
               transition: { delay: 0, duration: 0.6 },
             }}
-            className=" md:rounded-lg bg-white h-screen md:max-h-[80vh] lg:max-h-[80vh] xl:max-h-[75vh] w-screen md:w-[60vw] lg:w-[40vw] xl:w-[30vw]  min-w-[30vw]  max-w-screen-md overflow-hidden"
+            className=" bg-white  rounded-2xl  "
           >
             {content}
           </motion.div>

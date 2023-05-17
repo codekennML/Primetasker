@@ -6,7 +6,7 @@ import {
 import { apiSlice } from "../../../app/apiSlice";
 
 const tasksAdapter = createEntityAdapter({
-  selectId: (task) => task.id,
+  selectId: (task) => task._id,
   sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
 });
 
@@ -52,13 +52,13 @@ const tasksApiCalls = apiSlice.injectEndpoints({
       },
       transformResponse: (response) => {
         const { meta, tasks } = response.data;
-        const loadedTasks = tasks.map((task) => {
-          task.id = task._id;
-          return task;
-        });
+        // const loadedTasks = tasks.map((task) => {
+        //   task.id = task._id;
+        //   return task;
+        // });
         return tasksAdapter.setAll(
           { ...initialState, pageData: meta, newCount: 3 },
-          loadedTasks
+          tasks
         );
       },
       providesTags: ["tasks"],
@@ -87,25 +87,28 @@ const tasksApiCalls = apiSlice.injectEndpoints({
     }),
 
     getUserTasks: builder.query({
-      query: (userId) => {
+      query: (query) => {
+        console.log(query);
+
+        const { userId } = query;
         return {
-          url: `tasks/user/?${userId}`,
+          url: `tasks/user/`,
           method: "GET",
-          params: {
-            filterParams,
-          },
           // skipToken: true,
+          params: query,
         };
       },
+
       transformResponse: (response) => {
-        const { meta, tasks } = response.data;
-        const loadedTasks = tasks.map((task) => {
-          task.id = task._id;
-          return task;
-        });
+        const { tasks, meta } = response.data;
+
+        // const loadedTasks = tasks.map((task) => {
+        //   task.id = task._id;
+        //   return task;
+        // });
         return tasksAdapter.setAll(
           { ...initialState, pageData: meta, newCount: 3 },
-          loadedTasks
+          tasks
         );
       },
       providesTags: ["tasks"],
@@ -139,12 +142,10 @@ const tasksApiCalls = apiSlice.injectEndpoints({
       query: (id) => `/tasks/${id}`,
       transformResponse: (response) => {
         // console.log(response);
-        var { task } = response.data;
-        const loadedtask = task.map((task) => {
-          task.id = task._id;
-          return task;
-        });
-        return tasksAdapter.setAll(initialState, loadedtask);
+
+        var task = response.data.task;
+
+        return tasksAdapter.setAll(initialState, task);
       },
 
       providesTags: (result, error, arg) => {
@@ -166,6 +167,16 @@ const tasksApiCalls = apiSlice.injectEndpoints({
         body: {
           fields: initialTask,
         },
+        invalidatesTags: (result, error, arg) => ["POST"],
+      }),
+    }),
+
+    assignTask: builder.mutation({
+      query: (assignDetails) => ({
+        url: "/tasks/assign",
+        method: "POST",
+        body: assignDetails,
+
         invalidatesTags: (result, error, arg) => ["POST"],
       }),
     }),
@@ -197,6 +208,8 @@ const tasksApiCalls = apiSlice.injectEndpoints({
 
 // RTK provides useHooks for each request which begins with 'use' and ends with 'Query', the gettasks is exported for use on dispactch
 export const {
+  useGetUserTasksQuery,
+  useAssignTaskMutation,
   useGetTasksQuery,
   useGetTaskByIdQuery,
   useCreateTaskMutation,

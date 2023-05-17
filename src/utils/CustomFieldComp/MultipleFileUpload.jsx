@@ -54,7 +54,7 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
     acceptableFileFormats,
   } = props;
 
-  console.log(cloudAddress);
+  // console.log(cloudAddress);
 
   const maxSize = 5242880;
 
@@ -89,7 +89,7 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
     });
 
     rejectedFiles.map(({ errors }) => {
-      console.log(errors);
+      // console.log(errors);
       let error;
       error =
         errors[0].code == "file-invalid-type"
@@ -110,7 +110,7 @@ const MultipleFileUpload = forwardRef(({ ...props }, ref) => {
     });
 
     const assetData = JSON.parse(response.data.response);
-    console.log(assetData);
+    // console.log(assetData);
 
     setCloudAddress((prev) => {
       return [

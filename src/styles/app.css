@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;1,300&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Rammetto+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -52,6 +53,13 @@ pre {
   font-family: "Noto Sans", sans-serif;
 }
 
+.style-module_emptyIcons__Bg-FZ {
+  display: flex !important;
+}
+
+.filled-icons {
+  display: -webkit-inline-box !important;
+}
 .arrow-down {
   width: 0;
   height: 0;

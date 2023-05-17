@@ -55,6 +55,8 @@ const Nav = () => {
   if (isError) return <>{console.log("cant logout")}</>;
 
   const { avatar, userLoggedIn: isLoggedIn } = useAuth();
+
+  console.log(avatar);
   const [showNav, setShowNav] = useState(false);
   const [isScroll, setIsScroll] = useState(false);
 

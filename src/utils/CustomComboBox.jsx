@@ -20,8 +20,8 @@ export default function AutoCompleteCombobox({
   const [selected, setSelected] = useState(
     field.value ? categories[field.value - 1] : categories[0]
   );
-  console.log(categories);
-  console.log(field.value);
+  // console.log(categories);
+  // console.log(field.value);
   const [query, setQuery] = useState("");
 
   const filteredCategory =

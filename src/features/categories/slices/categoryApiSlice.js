@@ -43,11 +43,9 @@ export const categoryApiSlice = apiSlice.injectEndpoints({
           })),
         ];
 
-        // console.log(primetaskerTaskCategories);
-
         store.dispatch(setCategories(primetaskerTaskCategories));
 
-        // return categoryAdapter.setAll(initialState, categories);
+        return categoryAdapter.setAll(initialState, categories);
       },
       providesTag: (result, error, arg) => [
         { type: "Category", id: "id" },

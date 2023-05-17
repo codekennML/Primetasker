@@ -22,7 +22,6 @@ const taskType = [
 
 const AlertCreate = () => {
   const categories = useSelector(allTaskCategories);
-  console.log(categories);
 
   return (
     <div>

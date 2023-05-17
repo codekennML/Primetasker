@@ -1,13 +1,13 @@
 import React, { useRef, useState, useEffect, useId, useCallback } from "react";
 import {
-  AiOutlineFlag,
+  // AiOutlineFlag,
   AiOutlineEnvironment,
-  AiOutlineCalendar,
-  AiOutlineTwitter,
-  AiOutlineWhatsApp,
-  AiOutlineCopy,
-  AiOutlineClockCircle,
-  AiOutlineBell,
+  // AiOutlineCalendar,
+  // AiOutlineTwitter,
+  // AiOutlineWhatsApp,
+  // AiOutlineCopy,
+  // AiOutlineClockCircle,
+  // AiOutlineBell,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { CiTimer } from "react-icons/ci";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
-import { FaFacebookF, FaLinkedin, FaLinkedinIn } from "react-icons/fa";
+// import { FaFacebookF, FaLinkedin, FaLinkedinIn } from "react-icons/fa";
 import millify from "millify";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import TaskComments from "../../../features/tasks/pages/TaskComments";
@@ -26,8 +26,9 @@ import useAuth from "../../../hooks/useAuth";
 import { useGetTaskByIdQuery } from "../../../features/tasks/slices/taskApiSlice";
 import { formatDate } from "../../../utils/formatDate";
 import TextVisibility from "../../../components/TextVisibility";
-import { showModal } from "../../../features/modal/modalSlice";
+
 import "react-loading-skeleton/dist/skeleton.css";
+import ManageTaskAlert from "../../../features/tasks/pages/ManageTaskAlert";
 
 const MyTasksView = () => {
   const [
@@ -54,7 +55,7 @@ const MyTasksView = () => {
 
   useEffect(() => {
     console.log(typeof urlId);
-    if (urlId !== "/tasks") {
+    if (urlId !== "/my-tasks") {
       setTaskId(urlId);
       setShowTaskSidebar(false);
     } else {
@@ -237,6 +238,8 @@ const MyTasksView = () => {
         className="bg-white absolute top-0 bottom-0 right-0  left-0 w-full flex px-2.5 md:px-4 lg:px-6 py-4 overflow-y-scroll z-5 lg:flex  max-h-screen  scrollbar-thin scrollbar-thumb-gray-300/30 scrollbar-track-gray-200  scrollbar-thumb-rounded-full overflow-x-hidden  scrollbar-track-rounded-full "
       >
         <div className="w-full h-full px-3 lg:w-[60%] ">
+          {task.status === "Assigned" && <ManageTaskAlert task={task} />}
+
           <div className="flex items-center ">
             <div className=" ">
               <ul className="flex flex-row justify-between md:justify-start my-2 space-x-6 md:my-5">
@@ -474,7 +477,10 @@ const MyTasksView = () => {
                       </p>
                       <p className="text-[40px] ">
                         {task?.budget ? (
-                          millify(Math.floor(Number(task.budget)), 2)
+                          millify(
+                            Math.floor(Number(task.budget.initialBudget)),
+                            2
+                          )
                         ) : (
                           <Skeleton height="60px" width="40px" />
                         )}
@@ -496,7 +502,7 @@ const MyTasksView = () => {
 
           {/* END OF BUDGET BAR  */}
 
-          <div className="py-2 md:py-6 ">
+          <div className="py-2 md:pb-44 ">
             <h3 className="mb-4 font-bold text-slate-900/80 text-md md:px-2">
               Task Details
             </h3>

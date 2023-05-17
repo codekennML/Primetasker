@@ -72,10 +72,10 @@ const offerApiSlice = apiSlice.injectEndpoints({
 
     // ---------Delete Individual Task
     deleteOffer: builder.mutation({
-      query: ({ id }) => ({
-        url: "offers",
+      query: (offerDetails) => ({
+        url: "offers/",
         method: "DELETE",
-        body: { id },
+        body: offerDetails,
 
         invalidatesTags: (result, error, arg) => ["Offer"],
       }),

@@ -8,8 +8,8 @@ const ModalHead = ({ title }) => {
   return (
     <>
       <div className="w-full border-b flex justify-between bg-white items-center pt-3 rounded-t pb-1 px-6 dark:border-gray-600 ">
-        <div className="flex-1 overflow-x-hidden px-4 pt-3 md:pt-0">
-          <h3 className="text-[1rem]  md:text-[1.2rem] font-medium text-brand-text dark:text-white mt-1 mb-1.5">
+        <div className="flex-1 overflow-x-hidden px-4  md:pt-0">
+          <h3 className="text-[1rem]  md:text-[1.2rem] font-medium text-brand-text dark:text-white  mb-1.5">
             {title}
           </h3>
         </div>
