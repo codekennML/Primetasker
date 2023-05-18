@@ -9,12 +9,12 @@ const CustomTextarea = ({
   ...props
 }) => {
   const [field, meta, helpers] = useField(props.name);
-  console.log(props);
+  // console.log(props);
 
-  console.log(field, meta);
+  // console.log(field, meta);
 
   const invalid = meta.error && meta.touched;
-  console.log(meta);
+  // console.log(meta);
 
   return (
     <div>

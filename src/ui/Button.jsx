@@ -10,7 +10,8 @@ const Button = ({
   onClick,
   rounded,
   isSubmitting = false,
-  submissionText = "",
+  submissionText = "Please Wait",
+  type,
 }) => {
   return (
     <button
@@ -29,6 +30,7 @@ const Button = ({
     flex flex-row items-center justify-center gap-x-4 
     disabled:cursor-default disabled:bg-brand-light/40 disabled:hover:bg-brand-light/40
   `}
+      type={type}
     >
       <span> {isSubmitting ? submissionText : text}</span>
       <span className={isSubmitting ? "animate-spin" : "hidden"}>

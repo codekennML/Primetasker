@@ -159,7 +159,8 @@ function App() {
             </Route>
 
             <Route
-              element={<RequireAuth allowedRoles={["Manager", "Admin"]} />}
+            // element={<RequireAuth allowedRoles={["Manager", "Admin"]}
+            // />}
             >
               <Route path="admin-dashboard" element={<Sidebar />}>
                 <Route index element={<Analytics />} />

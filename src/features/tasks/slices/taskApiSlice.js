@@ -193,6 +193,33 @@ const tasksApiCalls = apiSlice.injectEndpoints({
       }),
     }),
 
+    setFinalBudget: builder.mutation({
+      query: (updatedOffer) => ({
+        url: "tasks/",
+        method: "PATCH",
+        body: updatedOffer,
+        invalidatesTags: (result, error, arg) => ["Offer"],
+      }),
+    }),
+
+    lockTaskBudget: builder.mutation({
+      query: (taskId) => ({
+        url: "tasks/user",
+        method: "PATCH",
+        body: taskId,
+        invalidatesTags: (result, error, arg) => ["Offer"],
+      }),
+    }),
+
+    cancelTask: builder.mutation({
+      query: (cancellationDetails) => ({
+        url: "/tasks/user",
+        method: "POST",
+        body: cancellationDetails,
+        invalidatesTags: (result, error, arg) => [{ type: "Task", id: arg }],
+      }),
+    }),
+
     // ---------Delete Individual Task
     deleteTask: builder.mutation({
       query: ({ id }) => ({
@@ -210,9 +237,12 @@ const tasksApiCalls = apiSlice.injectEndpoints({
 export const {
   useGetUserTasksQuery,
   useAssignTaskMutation,
+  useLockTaskBudgetMutation,
+  useSetFinalBudgetMutation,
   useGetTasksQuery,
   useGetTaskByIdQuery,
   useCreateTaskMutation,
+  useCancelTaskMutation,
   useUpdateTaskMutation,
   useDeleteTaskMutation,
 } = tasksApiCalls;

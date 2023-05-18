@@ -95,11 +95,20 @@ const TaskCard = ({
         <div className=" border-t border-green-100  mt-2 flex justify-between items-center px-4 sm:px-7 py-2.5">
           <ul className="flex items-center text-[.9rem] font-medium text-gray-500 space-x-2  ">
             <li className="flex items-center ">
-              <p className=" text-primary text-brand-accent">{task.status}</p>
+              <p
+                className={
+                  task?.status === "Cancelled"
+                    ? "text-primary text-rose-600"
+                    : "text-primary text-brand-accent"
+                }
+              >
+                {task.status}
+              </p>
             </li>
-            {task?.offerCount > 0 ? (
+            {task?.offerCount > 0 && task?.status !== "Cancelled" ? (
               <>
                 <li className="text-[20px]">&middot;</li>
+
                 <li className="text-primary text-slate-600 text-[.75rem] ">
                   {task?.offerCount || 0}{" "}
                   {task.offerCount === 1 ? "offer" : "offers"}

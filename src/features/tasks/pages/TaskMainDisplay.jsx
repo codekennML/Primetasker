@@ -341,7 +341,9 @@ const TaskMainDisplay = () => {
     );
 
     if (
-      (task.status === "Assigned" || task.status === "Appeal") &&
+      (task.status === "Assigned" ||
+        task.status === "Appeal" ||
+        task.status === "Processing") &&
       (task.creator._id === userId || task.assigned?.assigneeId === userId)
     ) {
       setContent(
@@ -372,7 +374,11 @@ const TaskMainDisplay = () => {
           <p className="text-brand-accent">Completed</p>
         </div>
       );
-    } else if (hasMadeOffer) {
+    } else if (
+      hasMadeOffer &&
+      task?.status !== "Completed" &&
+      task?.status !== "Cancelled"
+    ) {
       setContent(
         <Button
           onClick={() => handleDeleteOffer(task._id)}
@@ -391,6 +397,13 @@ const TaskMainDisplay = () => {
         <div className="bg-slate-200 text-primary w-full py-2.5 text-center border rounded-full text-muted cursor-default ">
           {" "}
           <p className="text-slate-500">Assigned</p>
+        </div>
+      );
+    } else if (task.status === "Cancelled") {
+      setContent(
+        <div className="bg-rose-100  text-primary w-full py-2.5 text-center border rounded-full text-muted cursor-default  ">
+          {" "}
+          <p className="text-rose-500">Cancelled</p>
         </div>
       );
     } else {

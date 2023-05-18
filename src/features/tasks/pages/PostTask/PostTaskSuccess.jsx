@@ -37,7 +37,7 @@ const PostTaskSuccess = () => {
     }
     return () => {
       isSubmitted.current = true;
-      clearTimeout(timeoutId);
+      // clearTimeout(timeoutId);
     };
 
     // eslint-disable-next-line

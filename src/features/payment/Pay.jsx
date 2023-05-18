@@ -27,14 +27,15 @@ const Pay = () => {
       return navigate("/login");
     }
 
-    const payData = Object.assign(values, { userId: userId });
+    console.log(values);
 
-    const response = await createDeposit(payData).unwrap();
+    const response = await createDeposit(values).unwrap();
+    console.log(response);
 
     if (response && response.status === 201) {
-      return notifySuccess(createdData?.data?.message);
+      return notifySuccess(response.message);
     } else {
-      return notifyErr("Something went wrong", createdData?.data.message);
+      return notifyErr("Something went wrong", response.message);
     }
   };
 

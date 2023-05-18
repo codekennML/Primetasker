@@ -60,22 +60,20 @@ const offerApiSlice = apiSlice.injectEndpoints({
 
     // ---------Update Individual Task
     updateOffer: builder.mutation({
-      query: (offer) => ({
+      query: (updatedOffer) => ({
         url: "offers",
         method: "PATCH",
-        body: {
-          ...initialTask,
-        },
+        body: updatedOffer,
         invalidatesTags: (result, error, arg) => ["Offer"],
       }),
     }),
 
     // ---------Delete Individual Task
     deleteOffer: builder.mutation({
-      query: (offerDetails) => ({
+      query: (taskId) => ({
         url: "offers/",
         method: "DELETE",
-        body: offerDetails,
+        body: taskId,
 
         invalidatesTags: (result, error, arg) => ["Offer"],
       }),
