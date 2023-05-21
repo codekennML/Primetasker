@@ -27,7 +27,7 @@ const TaskCard = ({
   return (
     <li
       // onClick={handleTaskDisplay}
-      className="bg-white   rounded-lg cursor-pointer pt-4 border-l-[1px] shadow-md border hover:shadow-lg shadow-gray-50  "
+      className="bg-brand-secondary/10   rounded-lg cursor-pointer pt-4 border-l-[1px] shadow-md border hover:shadow-lg shadow-gray-50  "
       key={idx}
     >
       <Link
@@ -40,7 +40,7 @@ const TaskCard = ({
       >
         <div className="px-4 sm:px-7 ">
           <div>
-            <p className="text-[.98rem] font-roboto  text-brand-light  font-medium  text-left  tracking-tight">
+            <p className="text-[.93rem] font-roboto  text-[#023101]  font-medium  text-left  tracking-tight">
               {task.title}
             </p>
           </div>
@@ -51,7 +51,7 @@ const TaskCard = ({
                 <p>
                   <AiOutlineCalendar className="text-gray-500" />
                 </p>
-                <p className="text-[.8rem] capitalize">
+                <p className="text-[.75rem] capitalize">
                   {formatDate(
                     new Date(
                       task?.taskDeadline
@@ -62,17 +62,17 @@ const TaskCard = ({
                   )}
                 </p>
               </li>
-              <li className="rounded-lg flex items-center text-gray-500/90 font-medium space-x-2 text-[.95rem] ">
+              <li className="rounded-lg flex items-center text-gray-500/90 font-medium space-x-2 text-[.85rem] ">
                 <p>
                   <AiOutlineClockCircle className="text-gray-500" />
                 </p>
-                <p className="text-[.8rem]  capitalize">{task.taskTime}</p>
+                <p className="text-[.75rem]  capitalize">{task.taskTime}</p>
               </li>
-              <li className="rounded-lg flex items-center text-gray-500/90 font-medium space-x-2 text-[.95rem] ">
+              <li className="rounded-lg flex items-center text-gray-500/90 font-medium space-x-2 text-[.85rem] ">
                 <p>
                   <AiOutlineEnvironment className="text-gray-500" />
                 </p>
-                <p className="text-[.8rem]  capitalize ">
+                <p className="text-[.75rem]  capitalize ">
                   {task.taskType === "Physical" ? task.taskAddress : "Remote"}
                 </p>
               </li>
@@ -117,7 +117,7 @@ const TaskCard = ({
             ) : null}
           </ul>
           <p className="justify-end text-[.95rem] text-brand-light font-semibold text-center inline-flex items-center">
-            &#8358;{Number(task.budget.initialBudget)}
+            &#8358;{Number(task.budget.initialBudget).toLocaleString()}
           </p>
         </div>
       </Link>

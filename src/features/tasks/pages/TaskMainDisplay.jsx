@@ -28,7 +28,10 @@ import { FaFacebookF, FaLinkedin, FaLinkedinIn } from "react-icons/fa";
 // import { formatDate } from "../utils/formatDate";
 import millify from "millify";
 import TaskComments from "./TaskComments";
-import { useGetTaskByIdQuery } from "../slices/taskApiSlice";
+import {
+  useCancelTaskMutation,
+  useGetTaskByIdQuery,
+} from "../slices/taskApiSlice";
 import useAuth from "../../../hooks/useAuth";
 import { showModal } from "../../modal/modalSlice";
 import MemoizedImageForm from "../../../components/ImageForm";
@@ -47,6 +50,7 @@ import { useMatch } from "react-router-dom";
 import ManageTaskAlert from "./ManageTaskAlert";
 import Button from "../../../ui/Button";
 import { useDeleteOfferMutation } from "../../Offers/slices/OfferApiSlice";
+import { notifyErr, notifySuccess } from "../../../hooks/NotifyToast";
 
 const TaskMainDisplay = () => {
   const [
@@ -110,6 +114,7 @@ const TaskMainDisplay = () => {
   const [loading, setLoading] = useState(true);
   const [taskSummary, setTaskSummary] = useState();
 
+  const [cancelTask] = useCancelTaskMutation();
   // let text = task?.description;
 
   const {
@@ -255,7 +260,6 @@ const TaskMainDisplay = () => {
 
     // navigate("")
   };
-  console.log(taskId);
 
   const {
     data: selectedTask,
@@ -294,7 +298,38 @@ const TaskMainDisplay = () => {
     );
   }, [task]);
 
-  const handleCancelTask = () => {};
+  const handleCancelTask = async () => {
+    let who;
+    console.log("Lol", task.creator, userId);
+    if (userId === task.creator._id) {
+      who = "Host ";
+    } else if (userId === task?.assigned?.assigneeId) {
+      who = "Assignee";
+    } else {
+      who = undefined;
+    }
+
+    let cancellationDetails = {
+      who: who,
+      initiatorId: userId,
+      taskId: task._id,
+      status: task.status,
+    };
+
+    try {
+      const response = await cancelTask(cancellationDetails).unwrap();
+
+      console.log(response);
+      if (response && response.status === 200) notifySuccess("Task cancelled");
+      else {
+        throw new Error("Something went wrong");
+      }
+    } catch (err) {
+      console.log(err);
+      // notifyErr(err);
+    }
+  };
+
   const handleCompletedTask = () => {};
 
   const handleDeleteOffer = async (taskId) => {
@@ -313,7 +348,11 @@ const TaskMainDisplay = () => {
           <p>{`You have assigned ${task.assigned.assigneeFirstname} ${task.assigned.assigneeLastname} to help with this task.  `}</p>
         </>
       );
-    } else if (userId === task?.assigned?.assigneeId) {
+    } else if (
+      userId === task?.assigned?.assigneeId &&
+      task.status !== "Completed" &&
+      task.status !== "Cancelled"
+    ) {
       setTaskSummary(
         <>
           {" "}
@@ -330,6 +369,13 @@ const TaskMainDisplay = () => {
           <p>{`${task.creator.firstname} ${task?.creator?.lastname} has assigned ${task.assigned.firstname} ${task.assigned.lastname}   to help with this task.  `}</p>
         </>
       );
+    } else if (task.status === "Cancelled") {
+      setTaskSummary(
+        <>
+          {" "}
+          <p>{`This task has been cancelled by ${task.creator.firstname} ${task?.creator?.lastname}  `}</p>
+        </>
+      );
     } else {
       setTaskSummary();
     }
@@ -339,6 +385,8 @@ const TaskMainDisplay = () => {
     const hasMadeOffer = task?.offers?.find(
       (offer) => offer?.createdBy?._id === userId
     );
+    console.log(task);
+    console.log(hasMadeOffer);
 
     if (
       (task.status === "Assigned" ||
@@ -377,6 +425,7 @@ const TaskMainDisplay = () => {
     } else if (
       hasMadeOffer &&
       task?.status !== "Completed" &&
+      task.status === "Open" &&
       task?.status !== "Cancelled"
     ) {
       setContent(
@@ -390,8 +439,8 @@ const TaskMainDisplay = () => {
         />
       );
     } else if (
-      task.status === "Assigned" &&
-      task.assigned?.assigneeId !== userId
+      task.status === "Assigned" ||
+      (task.status === "Processing" && task.assigned?.assigneeId !== userId)
     ) {
       setContent(
         <div className="bg-slate-200 text-primary w-full py-2.5 text-center border rounded-full text-muted cursor-default ">
@@ -420,7 +469,7 @@ const TaskMainDisplay = () => {
     }
     // return () => setContent(undefined);
   }, [task]);
-  console.log(task);
+
   return (
     <SkeletonTheme baseColor="#f7f9fb">
       {/* {!taskLoading && !taskError ? ( */}
@@ -572,7 +621,7 @@ const TaskMainDisplay = () => {
               </p>
             </div>
 
-            <ul className="text-[13px] mt-6 flex flex-col sm:flex-row sm:justify-between lg:flex-col lg:items-start sm:gap-x-4 items-start gap-y-5  md:space-y-0 md:items-center   md:space-x-3 md:border-y rounded-lg py-4  ">
+            {/* <ul className="text-[13px] mt-6 flex flex-col sm:flex-row sm:justify-between lg:flex-col lg:items-start sm:gap-x-4 items-start gap-y-5  md:space-y-0 md:items-center   md:space-x-3 md:border-y rounded-lg py-4  ">
               <li className="xs:w-full sm:max-w-max lg:w-full">
                 <div className="flex flex-col justify-between gap-5 mr-8 sm:justify-between md:space-x-3 md xs:flex-row lg:w-full ">
                   <li className="  py-1 rounded-full flex items-center lg:items-start text-gray-700/90 font-medium space-x-2 lg:space-x-0 text-[12px] md:px-3 gap-x-3">
@@ -588,7 +637,7 @@ const TaskMainDisplay = () => {
                         )}
                       </h3>
                       <p className="text-[.85rem] text-brand-accent font-bold capitalize">
-                        {task?.taskDeadline ? (
+                        {task?.taskDeadline  ? (
                           ` ${formatDate(task?.taskDeadline, "eee dd LLL")}`
                         ) : (
                           <Skeleton height="20px" width="60px" />
@@ -658,7 +707,7 @@ const TaskMainDisplay = () => {
                   </p>
                 </div>
               </li>
-            </ul>
+            </ul> */}
           </div>
 
           {/* BUDGET BAR SMALL SCREENS */}

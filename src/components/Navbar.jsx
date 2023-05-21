@@ -90,9 +90,9 @@ const Nav = () => {
         <div className="w-full px-2">
           <div className="flex justify-between items-center lg:w-[70%] lg:mx-auto ">
             <div className="ml-1">
-              {/* <Link to="/" className="cursor-pointer ">
+              <Link to="/" className="cursor-pointer ">
                 <Logo />
-              </Link> */}
+              </Link>
             </div>
 
             {/* Nav links */}

@@ -399,7 +399,7 @@ const TaskSidebar = () => {
                           name="search"
                           labelstyle={`sr-only`}
                           wrapperclass={`relative `}
-                          inputstyle={`w-full   py-2.5 md:py-3 rounded md:rounded  outline-none text-[12px]  h-full  caret-indigo-400 dark:caret-gray-300 bg-slate-100  pr-8 dark:bg-gray-700  outline-none  border-purple-100 dark:border-gray-600  dark:text-gray-400 placeholder:text-[12px] placeholder:md:text-[14px] placeholder:text-gray-500 indent-3  w-full text-xs font-medium text-gray-700 border   `}
+                          inputstyle={`w-full   py-2.5 md:py-3 rounded md:rounded  outline-none text-[12px]  h-full  caret-indigo-400 dark:caret-gray-300 bg-slate-100  pr-8 dark:bg-gray-700  outline-none  dark:border-gray-600  dark:text-gray-400 placeholder:text-[12px] placeholder:md:text-[14px] placeholder:text-gray-500 indent-3  w-full text-xs font-medium text-gray-700 border outline-0 border-2 border-green-700 `}
                           placeholder="Search for tasks"
                           adornment={`text-[0.8rem]  lg:block text-gray-400 font-thin dark:text-gray-400 absolute top-[37%] right-[4.5%]  z-10  `}
                         />
@@ -911,7 +911,7 @@ const TaskSidebar = () => {
                 id="scrollableDiv"
                 className={`${
                   showTaskSidebar ? " " : "absolute -left-[100vw] md:left-0"
-                } w-full md:w-1/2 lg:w-1/3  h-[calc(100vh_-_20px)] bg-[#f3f5f7] md:bg-transparent z-5 pb-[120px]  md:relative  lg:block    scrollbar-thin scrollbar-thumb-gray-300/30 scrollbar-track-gray-200 overflow-x-hidden scrollbar-thumb-rounded-full scrollbar-track-rounded-full px-2 lg:pl-6 lg:pr-3 space-y-4  `}
+                } w-full md:w-1/2 lg:w-1/3  h-[calc(100vh_-_20px)] bg-[#f3f5f7] md:bg-transparent z-5 pb-[120px]  md:relative  lg:block    scrollbar-thin scrollbar-thumb-gray-500/30 scrollbar-track-gray-200 overflow-x-hidden scrollbar-thumb-rounded-full scrollbar-track-rounded-full px-2 lg:pl-6 lg:pr-3 space-y-4  `}
               >
                 {/* <TaskFilters /> */}
 

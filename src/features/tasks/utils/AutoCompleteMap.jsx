@@ -14,9 +14,8 @@ const AutoCompleteMap = ({
   const [selectedPlaceId, setSelectedPlaceId] = useState();
   const [showLocationDropdown, setShowLocationDropdown] = useState(true);
 
-  const [userLocation, setUserLocation] = useState(field.value.place.name);
-
-  console.log(field);
+  console.log(field.value);
+  const [userLocation, setUserLocation] = useState(field.value.name);
 
   const handleClick = useCallback(
     (addressInfo) => {
@@ -40,6 +39,7 @@ const AutoCompleteMap = ({
   // const [value, setValue] = useState("");
 
   useEffect(() => {
+    console.log(selectedPlaceId);
     if (selectedPlaceId) {
       placesService?.getDetails(
         {
@@ -48,13 +48,10 @@ const AutoCompleteMap = ({
         (placeDetails) => {
           const lat = placeDetails.geometry.location.lat();
           const lng = placeDetails.geometry.location.lng();
-          const place = {
-            name: placeDetails.name,
-            placeId: placeDetails.place_id,
-          };
+          const place = placeDetails.name;
 
           setValue({
-            place: place,
+            name: place,
             lat: lat,
             lng: lng,
           });
@@ -64,9 +61,6 @@ const AutoCompleteMap = ({
       );
     }
   }, [selectedPlaceId]);
-  {
-    console.log(field.value);
-  }
 
   return (
     <div className="relative ">
@@ -79,7 +73,7 @@ const AutoCompleteMap = ({
         onChange={(e) => {
           setUserLocation(e.target.value);
           getPlacePredictions({
-            input: e.target.value ?? field.value.place.name,
+            input: e.target.value ?? field.value.name,
             types: placeType,
             componentRestrictions: { country: "ng" },
           });

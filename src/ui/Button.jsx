@@ -17,7 +17,7 @@ const Button = ({
     <button
       disabled={isSubmitting || disabled}
       onClick={onClick}
-      className={`
+      className={`py-2.5
     ${fullWidth ? "w-full" : "w-max"}
     ${
       primary

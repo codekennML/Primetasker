@@ -36,11 +36,8 @@ const PostTask = () => {
     isError,
   } = useGetCategoriesQuery();
 
-  console.log(categories);
-
   useEffect(() => {
     if (categories?.ids) {
-      console.log(categories, "Hiii");
       const { ids, entities } = categories;
       const categoryArray = [
         ...ids.map((id) => ({
@@ -66,9 +63,7 @@ const PostTask = () => {
     taskType: "",
 
     location: {
-      place: {
-        name: "",
-      },
+      name: "",
     },
 
     files: [],

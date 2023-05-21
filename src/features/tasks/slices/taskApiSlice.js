@@ -88,8 +88,6 @@ const tasksApiCalls = apiSlice.injectEndpoints({
 
     getUserTasks: builder.query({
       query: (query) => {
-        console.log(query);
-
         const { userId } = query;
         return {
           url: `tasks/user/`,
@@ -193,12 +191,40 @@ const tasksApiCalls = apiSlice.injectEndpoints({
       }),
     }),
 
+    appealTask: builder.mutation({
+      query: (query) => {
+        const { taskId } = query;
+        return {
+          url: `tasks/${taskId}`,
+          method: "PATCH",
+        };
+      },
+    }),
+
     setFinalBudget: builder.mutation({
       query: (updatedOffer) => ({
         url: "tasks/",
         method: "PATCH",
         body: updatedOffer,
-        invalidatesTags: (result, error, arg) => ["Offer"],
+        invalidatesTags: (result, error, arg) => ["Task"],
+      }),
+    }),
+
+    markCompleteRequestPay: builder.mutation({
+      query: (releaseDetails) => ({
+        url: "tasks/complete/",
+        method: "GET",
+        params: releaseDetails,
+        invalidatesTags: (result, error, arg) => ["Task"],
+      }),
+    }),
+
+    markCompleteReleasePay: builder.mutation({
+      query: (releaseDetails) => ({
+        url: "tasks/complete",
+        method: "POST",
+        body: releaseDetails,
+        invalidatesTags: (result, error, arg) => ["Task"],
       }),
     }),
 
@@ -207,7 +233,7 @@ const tasksApiCalls = apiSlice.injectEndpoints({
         url: "tasks/user",
         method: "PATCH",
         body: taskId,
-        invalidatesTags: (result, error, arg) => ["Offer"],
+        invalidatesTags: (result, error, arg) => ["Task"],
       }),
     }),
 
@@ -237,8 +263,11 @@ const tasksApiCalls = apiSlice.injectEndpoints({
 export const {
   useGetUserTasksQuery,
   useAssignTaskMutation,
+  useAppealTaskMutation,
   useLockTaskBudgetMutation,
   useSetFinalBudgetMutation,
+  useMarkCompleteReleasePayMutation,
+  useMarkCompleteRequestPayMutation,
   useGetTasksQuery,
   useGetTaskByIdQuery,
   useCreateTaskMutation,

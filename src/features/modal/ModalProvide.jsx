@@ -17,6 +17,7 @@ import Pay from "../payment/Pay";
 import AlertCreate from "../../Pages/dashboard/User/AlertCreate";
 import SkillModal from "../../Pages/dashboard/User/SkillModal";
 import OfferGate from "../Offers/pages/OfferGate";
+import AssignTask from "../tasks/pages/AssignTask";
 
 const ModalProvider = ({ children }) => {
   let modalTitle;
@@ -59,6 +60,12 @@ const ModalProvider = ({ children }) => {
       const flagDetails = modalData;
       modalTitle = "Make a report ";
       content = <NewFlag flagDetails={flagDetails} />;
+      break;
+
+    case "AssignTask":
+      const offer = modalData;
+      console.log(offer);
+      content = <AssignTask offer={offer} />;
       break;
 
     case "TaskVerifyModal":

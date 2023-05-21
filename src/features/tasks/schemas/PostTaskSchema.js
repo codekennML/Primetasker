@@ -51,7 +51,7 @@ export const SecondStepValidator = yup.object().shape({
   location: yup.object().when("taskType", {
     is: "Physical",
     then: yup.object().shape({
-      place: yup.string().required("Please select address"),
+      name: yup.string().required("Please select address"),
       lng: yup.number().required("Please select address"),
       lat: yup.number().required("Please select address"),
     }),

@@ -11,35 +11,35 @@ import TextVisibility from "../../../components/TextVisibility";
 import Skeleton from "react-loading-skeleton";
 import Button from "../../../ui/Button";
 import { useAssignTaskMutation } from "../slices/taskApiSlice";
+import { notifySuccess } from "../../../hooks/NotifyToast";
+import useAuthRedirect from "../../../utils/functions/redirect";
+import { useLocation } from "react-router-dom";
 
 const TaskComments = ({ comment, creator, status, type = "", assigneeId }) => {
-  console.log(comment);
+  const redirect = useAuthRedirect();
+  const { pathname } = useLocation();
   const { id: userId, userLoggedIn: isLoggedIn } = useAuth();
   const dispatch = useDispatch();
+
+  console.log(pathname);
 
   const handleReply = (comment) => {
     dispatch(showModal({ currentModal: "OfferChat", modalData: comment }));
   };
 
-  const [assignTask] = useAssignTaskMutation();
-
-  const handleAssignTask = useCallback(async () => {
-    console.log(comment._id);
-
-    const assignmentDetails = {
-      taskId: comment.taskId,
-      assigneeId: comment.createdBy._id,
-      offerId: comment._id,
-    };
-
-    try {
-      const response = await assignTask(assignmentDetails).unwrap();
-    } catch (err) {
-      console.log(err);
+  const handleAssignTask = () => {
+    console.log(comment);
+    if (isLoggedIn) {
+      dispatch(showModal({ currentModal: "AssignTask", modalData: comment }));
+    } else {
+      navigate("/login", {
+        state: {
+          redirectUri: path,
+          data: null,
+        },
+      });
     }
-  }, [creator, comment]);
-
-  console.log(comment);
+  };
 
   const handleFlag = (values) => {
     !isLoggedIn
@@ -56,18 +56,18 @@ const TaskComments = ({ comment, creator, status, type = "", assigneeId }) => {
     <div className="relative border rounded-lg ">
       <div
         className={` px-3 py-2 h-full  rounded-t-lg   flex flex-row items-center justify-between space-x-2 rounded-lg border-b ${
-          type === "comment" ? "bg-gray-50" : ""
+          type === "comment" ? "bg-gray-50" : "bg-brand-secondary"
         } }`}
       >
         <div className="flex flex-row gap-x-2">
           <div>
             <img
-              src={comment?.createdBy?.avatar}
+              src={comment?.createdBy?.Avatar}
               alt=""
               className="w-[40px] h-[40px] rounded-full object-cover object-center mb-1"
             />
           </div>
-
+          {console.log(comment.createdBy)}
           <div className="flex flex-col items-start text-[13px] font-medium text-center ">
             <h3 className="text-brand-text font-brand text-primary text-[.85rem]">
               {`${
@@ -103,7 +103,7 @@ const TaskComments = ({ comment, creator, status, type = "", assigneeId }) => {
           status === "Assigned" &&
           comment.createdBy._id === assigneeId && (
             <div>
-              <p className="text-primary text-[.75rem] flex items-center px-4 py-1.5 text-brand-accent bg-green-100 rounded-full ">
+              <p className="text-primary text-[.75rem] flex items-center px-4 py-1.5 text-brand-accent bg-green-100 rounded-full gap-x-2 ">
                 <span>Assigned</span>
                 <span className="text-brand-accent">
                   <AiFillCheckCircle size={15} />

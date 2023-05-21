@@ -47,7 +47,7 @@ const TextVisibility = ({ text, files, type = "offer" }) => {
             <div className="pl-2 text-left bg-transparent ">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-[.8rem] font-semibold text-brand-light px-2"
+                className="text-[.8rem] font-semibold text-brand-accent px-2"
               >
                 {text ? buttonText : null}
               </button>

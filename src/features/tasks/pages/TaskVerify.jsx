@@ -1,8 +1,15 @@
 import { Formik, Form, validateYupSchema } from "formik";
-import React, { useState, useRef, useMemo, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useMemo,
+  useEffect,
+  useCallback,
+} from "react";
 import {
   AiFillCheckCircle,
   AiFillPlusCircle,
+  AiOutlineCheckCircle,
   AiOutlineEnvironment,
   AiOutlinePlusCircle,
 } from "react-icons/ai";
@@ -32,12 +39,16 @@ import Ratings from "../../../utils/CustomFieldComp/Rating";
 import Button from "../../../ui/Button";
 import { notifyErr, notifySuccess } from "../../../hooks/NotifyToast";
 import {
+  useAppealTaskMutation,
   useCancelTaskMutation,
   useLockTaskBudgetMutation,
+  useMarkCompleteReleasePayMutation,
+  useMarkCompleteRequestPayMutation,
   useSetFinalBudgetMutation,
 } from "../slices/taskApiSlice";
 import { useUpdateOfferMutation } from "../../Offers/slices/OfferApiSlice";
 import { getUserLocation } from "../../geolocate/navigator";
+import { useCreateOtpQuery } from "../../otp/slices/otpApiSlice";
 
 const TaskVerify = ({ task }) => {
   const [role, setRole] = useState();
@@ -45,6 +56,7 @@ const TaskVerify = ({ task }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [commenceCode, setCommenceCode] = useState("-");
   const [decision, setDecision] = useState();
+  const [otpId, setOtpId] = useState();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,6 +65,22 @@ const TaskVerify = ({ task }) => {
   const [updateBudget] = useSetFinalBudgetMutation();
   const [lockBudget] = useLockTaskBudgetMutation();
   const [cancelTask] = useCancelTaskMutation();
+  const [requestPayment] = useMarkCompleteRequestPayMutation();
+  const [releasePayment] = useMarkCompleteReleasePayMutation();
+  const [appealTask] = useAppealTaskMutation();
+
+  const { data: smsOTP } = useCreateOtpQuery(otpId, {
+    skip: !otpId,
+  });
+
+  console.log(smsOTP);
+
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [isRequesting, setIsRequesting] = useState(false);
+  const [isReleasing, setIsReleasing] = useState(false);
+  const [isAppealing, setIsAppealing] = useState(false);
+  const [seconds, setSeconds] = useState(0);
+  // const [isCancelling, setIsCancelling] =  useState(false)
 
   const redirect = useAuthRedirect();
 
@@ -90,6 +118,20 @@ const TaskVerify = ({ task }) => {
     redirect("/dashboard/messages", null, true);
   };
 
+  useEffect(() => {
+    if (seconds > 0) {
+      const timer = setTimeout(() => {
+        setSeconds(seconds - 1);
+        if (seconds === 1) {
+          clearTimeout(timer);
+        }
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [seconds]);
+  // console.log(seconds)
+
   const handleUpdateBudget = async (values) => {
     try {
       if (task.assigned?.assigneeId !== userId) {
@@ -107,19 +149,43 @@ const TaskVerify = ({ task }) => {
 
       notifySuccess(response.message);
     } catch (err) {
-      notifyErr(err);
+      console.log(err);
+      // notifyErr(err);
+    } finally {
+      dispatch(hideModal());
     }
   };
 
-  const handleAppeal = async (values) => {};
+  const handleAppeal = async () => {
+    const appealInfo = {
+      taskId: task._id,
+    };
+
+    console.log("Holla");
+
+    try {
+      const response = await appealTask(appealInfo).unwrap();
+
+      console.log(response);
+
+      // if (!response || response.status !== 200)
+      //   throw new Error("Failed to create appeal");
+
+      // notifySuccess(response.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleApproveOffer = async (taskId) => {
     try {
       const response = await lockBudget({
         taskId: task._id,
+        newBudget: task.budget.finalBudget,
       }).unwrap();
 
-      if (response.status !== 200) throw new Error(response.message);
+      if (response && response.status !== 200)
+        throw new Error(response.message);
       notifySuccess(response.message);
     } catch (err) {
       console.log(err);
@@ -127,31 +193,113 @@ const TaskVerify = ({ task }) => {
   };
 
   const handleCancelTask = async (task) => {
-    let cancellationDetails;
+    let cancellationDetails = {
+      initiatorId: userId,
+      taskId: task._id,
+      status: task.status,
+      hostId: task.creator._id,
+    };
 
-    if (userId && userId === task?.creator?._id) {
-      cancellationDetails = {
-        initiator: "Host",
-        hostId: userId,
-        taskId: task._id,
-        assigned: task.status === "Assigned",
-      };
-    }
+    if (userId && userId === task?.creator?._id)
+      cancellationDetails.who = "Host";
+
+    if (
+      userId &&
+      task.status !== "Open" &&
+      task.assigned?.assigneeId === userId
+    )
+      cancellationDetails.who = "Assignee";
 
     try {
-      if (cancellationDetails) {
+      if (cancellationDetails && cancellationDetails.who !== undefined) {
+        setIsCancelling(true);
         const response = await cancelTask(cancellationDetails).unwrap();
-
-        if (response.status !== 200) throw new Error(response.message);
+        console.log(response);
+        if (response && response.status !== 200)
+          throw new Error(response.message);
 
         notifySuccess(response.message);
       } else {
         throw new Error("Failed to cancel task");
       }
     } catch (err) {
+      setIsCancelling(false);
+      //  notifyErr(err)
       console.log(err);
+    } finally {
+      dispatch(hideModal());
     }
   };
+
+  const sendReleaseOTP = useCallback(() => {
+    const taskId = task._id;
+    // setSeconds(60);
+    setOtpId(taskId);
+
+    // try {
+    //   if (taskId) {
+    //     // const response = await sendSMSOTP(taskId).unwrap();
+    //   //   if (!response || response.status !== 200)
+    //   //     throw new Error("Something went wrong");
+    //   //   console.log(response);
+    //   // } else throw new Error("Something went wrong");
+    // } catch (error) {
+    //   setSeconds(0);
+    //   console.log(error);
+    // }
+  }, [task]);
+
+  console.log(otpId);
+
+  const handleReleasePayment = useCallback(
+    async (values) => {
+      console.log(values);
+      const releaseInfo = {
+        taskId: task._id,
+        OTP: values.payOTP,
+        taskerId: task.assigned.assigneeId,
+      };
+
+      try {
+        if (!releaseInfo.OTP) throw new Error(" Release code is required");
+
+        setIsReleasing(true);
+
+        const response = await releasePayment(releaseInfo).unwrap();
+
+        if (response && response.status !== 200)
+          throw new Error(response.message);
+
+        notifySuccess(response.message);
+
+        handleNext(9);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [task]
+  );
+
+  const handleRequestPayment = useCallback(async () => {
+    const paymentInfo = {
+      taskId: task._id,
+    };
+    try {
+      if (!paymentInfo.taskId) throw new Error("OTP is required");
+
+      setIsRequesting(true);
+
+      const response = await requestPayment(paymentInfo).unwrap();
+      if (response && response.status !== 200)
+        throw new Error(response.message);
+
+      notifySuccess(response.message);
+
+      handleNext(5);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [task]);
 
   const handleCodeGeneration = async () => {
     try {
@@ -318,7 +466,7 @@ const TaskVerify = ({ task }) => {
               />
               <div>
                 <p>Are you sure you want to approve Kennayas offer of ? </p>
-                <p className="p-2"> N100,000</p>
+                <p className="p-2"> {task.budget?.finalBudget}</p>
               </div>
 
               <div className=" px-4 w-full bg-white  pb-2  rounded-lg flex flex-col gap-3 items-center ">
@@ -352,10 +500,10 @@ const TaskVerify = ({ task }) => {
             <div className="px-4 text-primary">
               <p>Are you sure you want to cancel this task ? </p>
 
-              <p>A cancellation fee of N300 will be deducted if you cancel</p>
+              <p>A cancellation fee of N600 will be deducted if you cancel</p>
             </div>
 
-            <div className=" px-4 w-full bg-white  pb-2  rounded-lg flex flex-col gap-3 items-center mt-6 ">
+            <div className=" px-4 w-full bg-white  pb-2  rounded-lg flex flex-col sm:flex-row gap-3 items-center mt-6 ">
               <button
                 type="button"
                 onClick={() => handleNext(1)}
@@ -363,13 +511,15 @@ const TaskVerify = ({ task }) => {
               >
                 Go Back
               </button>
-              <button
+              <Button
                 type="button"
+                primary
+                fullWidth
                 onClick={() => handleCancelTask(task)}
-                className="bg-brand-light/90 hover:bg-brand-light text-primary text-white w-full py-2.5 rounded disabled:bg-brand-light/50"
-              >
-                Yes, Cancel task
-              </button>
+                text={`Yes, Cancel task`}
+                submissionText="Cancelling task"
+                isSubmitting={isCancelling}
+              />
             </div>
           </div>
         )}
@@ -379,38 +529,54 @@ const TaskVerify = ({ task }) => {
             <ModalHead title="Validate Arrival" />
 
             <div className="px-4">
+              {console.log(task.assigned)}
               <TaskHeaderSummary
-                name={`${task?.assigned?.firstname} ${task?.assigned?.lastname}`}
+                name={`${task?.assigned?.assigneeFirstname} ${task?.assigned?.assigneeLastname}`}
                 image={`${task?.assigned?.assigneeAvatar}`}
                 isHost={role === "Host"}
                 trackingCode={"4562rt5"}
               />
-
-              <h2>Your tasker has arrived</h2>
-
-              <p>
-                {" "}
-                Please ask {`${task.assigned?.assigneeFirstname}`} for the task
-                commencement code.
-              </p>
               <div>
-                <CustomText />
-              </div>
-              <div>
-                <Button
-                  onClick={handleCodeGeneration}
-                  text={`Confirm Arrival`}
-                  primary
-                  fullWidth
-                  rounded={false}
-                  style={`py-2.5`}
-                />
+                <Formik initialValues={{ code: "" }}>
+                  {({ values }) => (
+                    <Form>
+                      <>
+                        <h2>Your tasker has arrived</h2>
+
+                        <p>
+                          {" "}
+                          Please ask {`${task.assigned?.assigneeFirstname}`} for
+                          the task commencement code.
+                        </p>
+                        <div>
+                          <CustomText
+                            name="code"
+                            type="text"
+                            value={values.code}
+                            placeholder="e.g  Plan a surprise birthday party"
+                            inputstyle="my-4 py-3.5 lg:py-5 p-2 w-full bg-slate-100   indent-4 placeholder:text-[.95rem]  placeholder:text-gray-600 text-brand-text font-medium   rounded-md "
+                          />
+                        </div>
+                        <div>
+                          <Button
+                            onClick={handleCodeGeneration}
+                            text={`Confirm Arrival`}
+                            primary
+                            fullWidth
+                            rounded={false}
+                            style={`py-2.5`}
+                          />
+                        </div>
+                      </>
+                    </Form>
+                  )}
+                </Formik>
               </div>
             </div>
           </>
         )}
 
-        {task.status === "Processing" && (
+        {task.status === "Processing" && currentPage !== 8 && (
           <div className="h-screen">
             <ModalHead title="Task Progress" />
             <TaskHeaderSummary
@@ -434,26 +600,44 @@ const TaskVerify = ({ task }) => {
                 <p className="text-primary"> 12h : 16m : 01s </p>
               </div>
 
-              <div className="mt-4 flex flex-col md:flex-row gap-4 ">
-                <button
+              {task.taskerMarkedComplete && (
+                <div className="flex flex-row items-center text-primary">
+                  <p>
+                    <AiOutlineCheckCircle
+                      size={20}
+                      className="text-green-400"
+                    />
+                  </p>
+                  <p>
+                    {" "}
+                    {task.assigned.assigneeFirstname} has marked this task as
+                    complete{" "}
+                  </p>
+                </div>
+              )}
+
+              <div className="mt-4 flex flex-col sm:flex-row gap-4 ">
+                <Button
+                  text={`Appeal`}
+                  onClick={handleAppeal}
                   type="button"
-                  // onClick={handleHostAppeal}
-                  className="bg-brand-secondary text-primary  w-full py-2.5 border  rounded"
-                >
-                  Appeal
-                </button>
-                <button
+                  fullWidth
+                  primary={false}
+                />
+
+                <Button
+                  text={`Completed, Release payment`}
+                  disabled={!task.taskerMarkedComplete}
                   onClick={() => handleNext(8)}
-                  className="bg-brand-light/90 hover:bg-brand-light text-primary text-white w-full py-2.5 rounded "
-                >
-                  Mark as completed
-                </button>
+                  primary
+                  fullWidth
+                />
               </div>
             </div>
           </div>
         )}
 
-        {task.hostMarkedAppeal && (
+        {/* {task.hostMarkedAppeal && (
           <div className="  h-full flex-flex-col  ">
             <ModalHead title="Make an appeal " />
 
@@ -525,7 +709,7 @@ const TaskVerify = ({ task }) => {
                           Submit Appeal
                         </button>
 
-                        {/* <div class="spinner"></div> */}
+                     
                       </div>
                     </Form>
                   );
@@ -533,7 +717,7 @@ const TaskVerify = ({ task }) => {
               </Formik>
             </div>
           </div>
-        )}
+        )} */}
 
         {task.status === "Appeal" && (
           <div className="  ">
@@ -550,16 +734,17 @@ const TaskVerify = ({ task }) => {
                 <div className="px-6 text-primary pt-3 space-y-3">
                   <p>Dear Primetasker, </p>
                   <p>
-                    Your appeal has been taken and we will get in touch with you
-                    soon.
+                    Your appeal request has been taken and we will get in touch
+                    with you soon.
                   </p>
                   <p>
                     Please note , that appeals may take anytime between 1-3 days
                     to resolve
                   </p>
                   <p>
-                    However , we have opened a conversation between you, your
-                    host and us.
+                    However , we have suspended this task and opened a
+                    conversation between you, {task.assigned.assigneeFirstname}{" "}
+                    and us.
                   </p>
                 </div>
 
@@ -576,11 +761,18 @@ const TaskVerify = ({ task }) => {
           </div>
         )}
 
-        {task.hostMarkedComplete && task.status === "Processing" && (
+        {/* Host is marking task as */}
+        {currentPage === 8 && (
           <div className=" h-screen flex flex-col">
             <ModalHead title="Request Payment" />
             <div class="verification-message flex-1 flex flex-col font-medium space-y-4 text-[.9rem] ">
-              <Formik initialValues={{ payOTP: "" }} onSubmit={(values) => {}}>
+              <Formik
+                initialValues={{ payOTP: "" }}
+                onSubmit={(values) => {
+                  console.log(values);
+                  handleReleasePayment(values);
+                }}
+              >
                 {({ values }) => {
                   return (
                     <Form className="flex flex-col flex-1 justify-between">
@@ -606,8 +798,14 @@ const TaskVerify = ({ task }) => {
                           adornment="absolute top-6 left-2 text-[15px] font-bold text-gray-600 "
                         />
                         <div className="flex justify-end">
-                          <button className="text-brand-accent flex justify-end text-[.8rem]">
-                            Send code
+                          <button
+                            type="button"
+                            onClick={sendReleaseOTP}
+                            className="text-brand-accent flex justify-end text-[.8rem]"
+                          >
+                            {seconds === 0
+                              ? "Send code"
+                              : `Resend code in ${seconds}s`}
                           </button>
                         </div>
                       </ScrollContainer>
@@ -620,13 +818,14 @@ const TaskVerify = ({ task }) => {
                           >
                             Go Back
                           </button> */}
-                        <button
-                          onClick={handleHostReleasePayment}
-                          // disabled
-                          className="bg-brand-light/90 hover:bg-brand-light hover:disabled:bg-brand-light/60 text-primary text-white w-full py-2.5 rounded disabled:bg-brand-light/60"
-                        >
-                          Release Payment
-                        </button>
+                        <Button
+                          text={`Release Payment`}
+                          type="submit"
+                          isSubmitting={isReleasing}
+                          submissionText="Releasing ..."
+                          primary
+                          fullWidth
+                        />
                       </div>
                     </Form>
                   );
@@ -636,54 +835,55 @@ const TaskVerify = ({ task }) => {
           </div>
         )}
 
-        {task.hostReleasedPayment && task.status === "Completed" && (
-          <div className="h-screen">
-            {" "}
-            <article className=" ">
-              <ModalHead title="Review" />
-              <div className="text-[1.2rem] font-bold text-center mt-6">
-                <h2>Rate Your tasker </h2>
-              </div>
+        {currentPage === 9 ||
+          (task.hostReleasedPayment && task.status === "Completed" && (
+            <div className="h-screen">
+              {" "}
+              <article className=" ">
+                <ModalHead title="Review" />
+                <div className="text-[1.2rem] font-bold text-center mt-6">
+                  <h2>Rate Your tasker </h2>
+                </div>
 
-              <Formik
-                enableReinitialize={true}
-                initialValues={{ ratingScore: 5, ratingText: "" }}
-              >
-                {({ values }) => {
-                  return (
-                    <Form className="overflow-y-auto">
-                      <div className=" space-y-4 w-full  mt-6">
-                        <Ratings name="ratingScore" />
-
-                        <div className="mx-6">
-                          <CustomTextarea
-                            name="ratingText"
-                            // label="Please add a comment"
-                            labelStyle={` `}
-                            value={values.ratingText}
-                            placeholder={`Please leave a review for your tasker`}
-                            inputStyle={`my-4  py-6  w-full bg-slate-100 h-32 resize-none  placeholder:text-[.85rem] placeholder:text-brand-text text-brand-text-deep `}
-                          />
-                        </div>
-                      </div>
-                    </Form>
-                  );
-                }}
-              </Formik>
-
-              <div className=" flex flex-col md:flex-row gap-4 mx-6 ">
-                <button
-                  // disabled
-                  onClick={() => handleNext(5)}
-                  className="bg-brand-light/90 hover:bg-brand-light text-primary text-white  w-full py-2.5 rounded disabled:bg-secondary disabled:hover:bg-secondary disabled :text-brand-text/50    "
+                <Formik
+                  enableReinitialize={true}
+                  initialValues={{ ratingScore: 5, ratingText: "" }}
                 >
-                  {/* Mark as completed */}
-                  Finish
-                </button>
-              </div>
-            </article>
-          </div>
-        )}
+                  {({ values }) => {
+                    return (
+                      <Form className="overflow-y-auto">
+                        <div className=" space-y-4 w-full  mt-6">
+                          <Ratings name="ratingScore" />
+
+                          <div className="mx-6">
+                            <CustomTextarea
+                              name="ratingText"
+                              // label="Please add a comment"
+                              labelStyle={` `}
+                              value={values.ratingText}
+                              placeholder={`Please leave a review for your tasker`}
+                              inputStyle={`my-4  py-6  w-full bg-slate-100 h-32 resize-none  placeholder:text-[.85rem] placeholder:text-brand-text text-brand-text-deep `}
+                            />
+                          </div>
+                        </div>
+                      </Form>
+                    );
+                  }}
+                </Formik>
+
+                <div className=" flex flex-col md:flex-row gap-4 mx-6 ">
+                  <button
+                    // disabled
+                    onClick={() => handleNext(5)}
+                    className="bg-brand-light/90 hover:bg-brand-light text-primary text-white  w-full py-2.5 rounded disabled:bg-secondary disabled:hover:bg-secondary disabled :text-brand-text/50    "
+                  >
+                    {/* Mark as completed */}
+                    Finish
+                  </button>
+                </div>
+              </article>
+            </div>
+          ))}
       </>
     );
     return content;
@@ -923,54 +1123,67 @@ const TaskVerify = ({ task }) => {
           </>
         )}
 
-        {task?.status === "Processing" && currentPage !== 4 && (
-          <div className="">
-            <ModalHead title="Task Progress" />
-            <TaskHeaderSummary
-              name={`${task?.creator?.firstname} ${task?.creator?.lastname}`}
-              image={`${task?.creator?.Avatar}`}
-              isHost={role === "Host"}
-              trackingCode={task.assigned?.trackingCode}
-            />
-            <div className="px-4">
-              <div className="bg-brand-secondary p-4 text-center text-primary rounded-md ">
-                <h className="primary font-semibold text-brand-accent">
-                  Approved Budget
-                </h>
-                <p className="text-[1.2rem]">{task.budget?.finalBudget}</p>
-              </div>
-              <div className="  text-center py-2 bg-brand-secondary ">
-                <p className="text-primary">Deadline </p>
-                <p className="text-[1.1rem] font-bold text-brand-text">
-                  Fri, 18 May 2023
-                </p>
-                <p className="text-primary"> 12h : 16m : 01s </p>
-              </div>
+        {task?.status === "Processing" &&
+          currentPage !== 4 &&
+          !task.taskerMarkedComplete && (
+            <div className="">
+              <ModalHead title="Task Progress" />
+              <TaskHeaderSummary
+                name={`${task?.creator?.firstname} ${task?.creator?.lastname}`}
+                image={`${task?.creator?.Avatar}`}
+                isHost={role === "Host"}
+                trackingCode={task.assigned?.trackingCode}
+              />
+              <div className="px-4">
+                <div className="bg-brand-secondary p-4 text-center text-primary rounded-md ">
+                  <h className="primary font-semibold text-brand-accent">
+                    Approved Budget
+                  </h>
+                  <p className="text-[1.2rem]">{task.budget?.finalBudget}</p>
+                </div>
+                <div className="  text-center py-2 bg-brand-secondary ">
+                  <p className="text-primary">Deadline </p>
+                  <p className="text-[1.1rem] font-bold text-brand-text">
+                    Fri, 18 May 2023
+                  </p>
+                  <p className="text-primary"> 12h : 16m : 01s </p>
+                </div>
 
-              <div className="mt-4 flex flex-col md:flex-row gap-4 ">
-                <button
-                  type="button"
-                  onClick={() => handleNext(10)}
-                  className="bg-brand-secondary text-primary  w-full py-2.5 border  rounded"
-                >
-                  Appeal
-                </button>
-                <button
-                  onClick={() => handleNext(4)}
-                  className="bg-brand-light/90 hover:bg-brand-light text-primary text-white w-full py-2.5 rounded "
-                >
-                  Mark as completed
-                </button>
+                <div className="mt-4 flex flex-col sm:flex-row gap-4 ">
+                  <Button
+                    type="button"
+                    onClick={handleAppeal}
+                    primary={false}
+                    fullWidth
+                    isSubmitting={isAppealing}
+                    submissionText="Appealing..."
+                  />
+
+                  <Button
+                    type="button"
+                    text={` Completed, Notify Host`}
+                    onClick={handleRequestPayment}
+                    primary
+                    fullWidth
+                    isSubmitting={isRequesting}
+                    submissionText={`Processing`}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {currentPage === 4 && task?.status === "Processing" && (
+        {/* {currentPage === 4 && task?.status === "Processing" && (
           <div className=" flex flex-col">
             <ModalHead title="Request Payment" />
             <div class="verification-message flex-1 flex flex-col font-medium space-y-4 text-[.9rem] px-12 ">
-              <Formik initialValues={{ payOTP: "" }} onSubmit={(values) => {}}>
+              <Formik
+                initialValues={{ payOTP: "" }}
+                onSubmit={(values, { resetForm }) => {
+                  handleRequestPayment(values);
+                  resetForm();
+                }}
+              >
                 {({ values }) => {
                   return (
                     <Form className="flex flex-col flex-1 justify-between">
@@ -995,19 +1208,24 @@ const TaskVerify = ({ task }) => {
                         adornment="absolute top-6 left-2 text-[15px] font-bold text-gray-600 "
                       />
                       <div className="flex justify-end">
-                        <button className="text-brand-accent flex justify-end text-[.8rem]">
+                        <button
+                          type="button"
+                          onClick={sendReleaseOTP}
+                          className="text-brand-accent flex justify-end text-[.8rem]"
+                        >
                           Send code
                         </button>
                       </div>
 
                       <div className=" w-full bg-white   pb-2 pt-3 rounded-lg flex flex-col gap-3 items-center py-1 ">
-                        <button
-                          onClick={() => handleNext(9)}
-                          // disabled
-                          className="bg-brand-light/90 hover:bg-brand-light hover:disabled:bg-brand-light/60 text-primary text-white w-full py-2.5 rounded disabled:bg-brand-light/60"
-                        >
-                          Request Payment
-                        </button>
+                        <Button
+                          text={`Request payment`}
+                          isSubmitting={isRequesting}
+                          submissionText="Requesting..."
+                          primary
+                          fullWidth
+                          type="submit"
+                        />
                       </div>
                     </Form>
                   );
@@ -1015,53 +1233,54 @@ const TaskVerify = ({ task }) => {
               </Formik>
             </div>
           </div>
-        )}
+        )} */}
 
-        {task?.taskerMarkedComplete && task?.taskerRequestPayment && (
-          <>
-            <div>
-              <h3 className="text-[1.4rem]  font-bold text-brand-light py-1 text-center">
-                Request Success
-              </h3>
-            </div>
-            <div className=" flex flex-col justify-between flex-1">
-              <ScrollContainer style={`min-h-[calc(78vh_-_100px)]`}>
-                <div class="verification-message py-12 font-medium space-y-4 text-[.9rem] px-6">
-                  <p>Your payment request has been sent.</p>
-                  <p>
-                    Approved funds will be deposited to your account once your
-                    host approves your payment.
-                  </p>
-                  <div></div>
-                  <div className="">
-                    <h2 className="text-primary text-[.85rem] text-brand-accent pt-4">
-                      What would you like to do next ?
-                    </h2>
-                  </div>
-                </div>
-              </ScrollContainer>
-
-              <div className=" px-6 md:px-12 w-full bg-white h-full  pb-6 pt-3 rounded-lg flex flex-col md:flex-row gap-3 items-center py-1 ">
-                <button
-                  onClick={() => {
-                    dispatch(hideModal());
-                  }}
-                  className="bg-brand-light/90 hover:bg-brand-light text-primary text-center text-white w-full py-2.5 rounded "
-                >
-                  Close
-                </button>
+        {currentPage === 5 ||
+          (task?.taskerMarkedComplete && task?.taskerRequestPayment && (
+            <>
+              <div>
+                <h3 className="text-[1.4rem]  font-bold text-brand-light py-1 text-center">
+                  Request Success
+                </h3>
               </div>
-            </div>
-          </>
-        )}
+              <div className=" flex flex-col justify-between flex-1">
+                <ScrollContainer style={`min-h-[calc(78vh_-_100px)]`}>
+                  <div class="verification-message py-12 font-medium space-y-4 text-[.9rem] px-6">
+                    <p>Your payment request has been sent.</p>
+                    <p>
+                      Approved funds will be deposited to your account once your
+                      host approves your payment.
+                    </p>
+                    <div></div>
+                    <div className="">
+                      <h2 className="text-primary text-[.85rem] text-brand-accent pt-4">
+                        What would you like to do next ?
+                      </h2>
+                    </div>
+                  </div>
+                </ScrollContainer>
 
-        {task?.taskerMarkedAppeal && (
+                <div className=" px-6 md:px-12 w-full bg-white h-full  pb-6 pt-3 rounded-lg flex flex-col md:flex-row gap-3 items-center py-1 ">
+                  <button
+                    onClick={() => {
+                      dispatch(hideModal());
+                    }}
+                    className="bg-brand-light/90 hover:bg-brand-light text-primary text-center text-white w-full py-2.5 rounded "
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </>
+          ))}
+
+        {/* {task?.taskerMarkedAppeal && (
           <div className="  h-full flex-flex-col  ">
             <ModalHead title="Make an appeal " />
 
             <div className=" flex-1 ">
               <Formik
-                initialValues={{ title: "", description: "", files: [] }}
+                initialValues={{ title: "", reason: "", files: [] }}
                 onSubmit={(values) => {
                   console.log(values);
                 }}
@@ -1127,7 +1346,6 @@ const TaskVerify = ({ task }) => {
                           Submit Appeal
                         </button>
 
-                        {/* <div class="spinner"></div> */}
                       </div>
                     </Form>
                   );
@@ -1135,7 +1353,7 @@ const TaskVerify = ({ task }) => {
               </Formik>
             </div>
           </div>
-        )}
+        )} */}
 
         {task?.status === "Appeal" && (
           <div className="  ">
@@ -1151,18 +1369,38 @@ const TaskVerify = ({ task }) => {
               <div className="flex flex-col  justify-between flex-1">
                 <div className="px-6 text-primary pt-3 space-y-3">
                   <p>Dear Primetasker, </p>
-                  <p>
-                    Your appeal has been taken and we will get in touch with you
-                    soon.
-                  </p>
-                  <p>
-                    Please note , that appeals may take anytime between 1-3 days
-                    to resolve
-                  </p>
-                  <p>
-                    However , we have opened a conversation between you, your
-                    host and us.
-                  </p>
+                  {task.taskerMarkedAppeal && (
+                    <div>
+                      <p>
+                        Your appeal has been taken and we will get in touch with
+                        you soon.
+                      </p>
+                      <p>
+                        Please note , that appeals may take anytime between 1-3
+                        days to resolve
+                      </p>
+                      <p>
+                        However , we have opened a conversation between you,{" "}
+                        {task.creator?.firstname} and us.
+                      </p>
+                    </div>
+                  )}
+
+                  {task.hostMarkedAppeal}
+                  <div>
+                    <p>
+                      Your host, {task.creator?.firstname} has raised an appeal
+                      for this task
+                    </p>
+                    <p>
+                      Please note , that appeals may take anytime between 1-3
+                      days to resolve
+                    </p>
+                    <p>
+                      However , we have opened a conversation between you,{" "}
+                      {task.creator?.firstname} and us.
+                    </p>
+                  </div>
                 </div>
 
                 <div className="px-4 md:px-8 flex flex-col md:flex-row gap-4 w-full mt-auto py-4 bg-white sticky left-0 bottom-0  ">
@@ -1184,7 +1422,7 @@ const TaskVerify = ({ task }) => {
             <article className=" ">
               <ModalHead title="Review" />
               <div className="text-[1.2rem] font-bold text-center mt-6">
-                <h2>Rate Your tasker </h2>
+                <h2>Rate Your Host </h2>
               </div>
 
               <Formik
@@ -1229,22 +1467,6 @@ const TaskVerify = ({ task }) => {
       </>
     );
   }
-
-  // if (navigator.geolocation) {
-  //   navigator.geolocation.getCurrentPosition(success, error);
-  // } else {
-  //   console.log("Geolocation not supported");
-  // }
-
-  // function success(position) {
-  //   const latitude = position.coords.latitude;
-  //   const longitude = position.coords.longitude;
-  //   console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-  // }
-
-  // function error() {
-  //   console.log("Unable to retrieve your location");
-  // }
 
   return (
     <section className="max-h-screen h-screen sm:max-h-[calc(90vh_-_100px)] ">
