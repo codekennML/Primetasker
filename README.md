@@ -1,1 +1,1 @@
-This is the frontend code for the admin dashboard of Primetasker
+This is the frontend code of  the primetasker website
